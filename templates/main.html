@@ -1,0 +1,59 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+
+{% block extracss %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'js/jquery-bootstrap-modal-steps.js' %}"></script>
+{% endblock %}
+
+
+
+{% block page-header %}
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <div class="btn-group-xlg btn-group">
+        <!-- Button trigger modal -->
+        <button id="add" class="btn btn-xlg btn-default btn-ghost" data-toggle="modal" data-target="#myModal">Add</button>
+        <button id="look" class="btn btn-xlg btn-default btn-ghost">Look</button>
+    </div>
+</div>
+<!-- Modal -->
+<form class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="js-title-step"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="row hide" data-step="1" data-title="Adding project">
+          <div class="well">As you can see, this is the first std</div>
+        </div>
+        <div class="row hide" data-step="2" data-title="Adding project">
+          <div class="well">As you can see, this is the second and last step</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default js-btn-step pull-left" data-orientation="cancel" data-dismiss="modal"></button>
+        <button type="button" class="btn btn-warning js-btn-step" data-orientation="previous"></button>
+        <button type="button" class="btn btn-success js-btn-step" data-orientation="next"></button>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+    $('#myModal').modalSteps();
+
+
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').focus()
+    })
+</script>
+{% endblock %}
