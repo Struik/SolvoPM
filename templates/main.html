@@ -3,10 +3,13 @@
 
 {% block extracss %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
 {% endblock %}
 
 {% block extrajs %}
 <script src="{% static 'js/jquery-bootstrap-modal-steps.js' %}"></script>
+<script src="{% static 'js/selectize.js' %}"></script>
+<!--script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js"></script-->
 {% endblock %}
 
 
@@ -16,7 +19,7 @@
 
 {% block content %}
 <div class="text-center">
-    <div class="btn-group-xlg btn-group">
+    <div class="btn-group">
         <!-- Button trigger modal -->
         <button id="add" class="btn btn-xlg btn-default btn-ghost" data-toggle="modal" data-target="#myModal">Add</button>
         <button id="look" class="btn btn-xlg btn-default btn-ghost">Look</button>
@@ -24,26 +27,70 @@
 </div>
 <!-- Modal -->
 <form class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="js-title-step"></h4>
-      </div>
-      <div class="modal-body">
-        <div class="row hide" data-step="1" data-title="Adding project">
-          <div class="well">As you can see, this is the first std</div>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="js-title-step"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row hide" data-step="1" data-title="Description">
+                    <div class="form-group col-lg-12">
+                        <!--<label for="select" class="control-label">Template</label>-->
+                        <select class="form-control" id="selectTemplate">
+                            <option>No template</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <!--<label for="projectName" class="control-label">Name</label>-->
+                        <input type="text" class="form-control" id="projectName" placeholder="Project Name">
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label class="control-label">Type</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="Outside" value="option1" checked="">
+                                Outside
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="Inside" value="option2">
+                                Inside
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row hide" data-step="2" data-title="Place">
+                    <div class="form-group col-lg-12">
+                        <select class="form-control" id="selectCountry" placeholder="Select a country" >
+                            <option>Russia</option>
+                            <option>Ukraine</option>
+                            <option>Latvia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-lg-12">
+                        <select class="form-control" id="selectCity" placeholder="Select a city" >
+                            <option>Moscow</option>
+                            <option>Saint-Peterburg</option>
+                            <option>Kiev</option>
+                        </select>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default js-btn-step pull-left" data-orientation="cancel" data-dismiss="modal"></button>
+                <button type="button" class="btn btn-warning js-btn-step" data-orientation="previous"></button>
+                <button id="next" type="button" class="btn btn-success js-btn-step" data-orientation="next"></button>
+            </div>
         </div>
-        <div class="row hide" data-step="2" data-title="Adding project">
-          <div class="well">As you can see, this is the second and last step</div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default js-btn-step pull-left" data-orientation="cancel" data-dismiss="modal"></button>
-        <button type="button" class="btn btn-warning js-btn-step" data-orientation="previous"></button>
-        <button type="button" class="btn btn-success js-btn-step" data-orientation="next"></button>
-      </div>
     </div>
-  </div>
 </form>
 {% endblock %}
 
@@ -51,9 +98,18 @@
 <script>
     $('#myModal').modalSteps();
 
-
     $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').focus()
     })
+
+    $('#selectCountry').selectize({
+        create: true,
+        sortField: 'text'
+    });
+
+    $('#selectCity').selectize({
+        create: true,
+        sortField: 'text'
+    });
 </script>
 {% endblock %}
