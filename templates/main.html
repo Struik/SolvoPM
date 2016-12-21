@@ -10,6 +10,7 @@
 <script src="{% static 'js/jquery-bootstrap-modal-steps.js' %}"></script>
 <script src="{% static 'js/selectize.js' %}"></script>
 <script src="{% static 'js/style.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
 <!--script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js"></script-->
 {% endblock %}
 
@@ -41,7 +42,7 @@
                         </select>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input type="text" class="form-control" id="projectName" placeholder="Project Name">
+                        <input type="text" class="form-control" id="projectName" minlength="2">
                     </div>
                     <div class="form-group col-lg-12">
                         <label class="control-label">Type</label>
@@ -101,12 +102,26 @@
                             <option value="3">Implementation</option>
                         </select>
                     </div>
-                    <div class="form-group col-lg-12">
+                    <!--Struik. For possible future use: in case of need for dynamic stage attributes-->
+                    <!--div class="form-group col-lg-12">
                         <select class="form-control" id="selectAttribute" placeholder="Stage attribute">
                             <option value="">Stage attribute</option>
                             <option value="1">Cost</option>
                             <option value="2">Duration</option>
                             <option value="3">Payment</option>
+                        </select>
+                    </div-->
+                    <div class="form-group col-lg-12">
+                        <input type="text" class="form-control stage-attr" id="Cost" placeholder="Cost">
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <input type="text" class="form-control stage-attr" id="Duration" placeholder="Duration">
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <select class="form-control" id="selectPayment" placeholder="Payment type" >
+                            <option value="">Payment type</option>
+                            <option value="1">Pre</option>
+                            <option value="2">Post</option>
                         </select>
                     </div>
                     <div class="form-group col-lg-12">
@@ -146,6 +161,18 @@ $(document).ready(function(){
         $('#myInput').focus()
     })
 
+    $("#myModal").validate({
+           projectName: {
+    				required: true,
+    				email: true
+    			},
+        });
+
+    $('#next').click(function() {
+        console.log('Next!');
+        console.log($("#myModal").valid());
+    });
+
     $('#selectCountry').selectize({
         create: true,
         sortField: 'text'
@@ -157,13 +184,16 @@ $(document).ready(function(){
     });
 
     $('#selectStage').selectize({
-        /*create: true,*/
+        create: true,
         sortField: 'text',
     });
 
-    $('#selectAttribute').selectize({
+    /*$('#selectAttribute').selectize({
         create: true,
         sortField: 'text',
+    });*/
+
+    $('#selectPayment').selectize({
     });
 
     $('#selectValue').selectize({
@@ -198,5 +228,7 @@ $(document).ready(function(){
                 });
     });
 });
+
+
 </script>
 {% endblock %}
