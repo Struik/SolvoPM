@@ -4,13 +4,16 @@
 {% block extracss %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.steps.css' %}"/>
 {% endblock %}
 
 {% block extrajs %}
 <script src="{% static 'js/jquery-bootstrap-modal-steps.js' %}"></script>
 <script src="{% static 'js/selectize.js' %}"></script>
 <script src="{% static 'js/style.js' %}"></script>
+<script src="{% static 'js/jquery.steps.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js"></script>
 <!--script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js"></script-->
 {% endblock %}
 
@@ -29,7 +32,7 @@
 </div>
 <!-- Modal -->
 <form class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="js-title-step"></h4>
@@ -42,7 +45,7 @@
                         </select>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input type="text" class="form-control" id="projectName" minlength="2">
+                        <input type="text" class="form-control" id="projectName" name="projectName" required>
                     </div>
                     <div class="form-group col-lg-12">
                         <label class="control-label">Type</label>
@@ -150,28 +153,67 @@
         </div>
     </div>
 </form>
+
+<form id="example-basic">
+    <h3>Keyboard</h3>
+    <section>
+        <p>Try the keyboard navigation by clicking arrow left or right!</p>
+        <input type="text" class="form-control" placeholder="price" name="price" required  minlength="5">
+    </section>
+    <h3>Effects</h3>
+    <section>
+        <p>Wonderful transition effects.</p>
+    </section>
+    <h3>Pager</h3>
+    <section>
+        <p>The next and previous buttons help you to navigate through your content.</p>
+    </section>
+</form>
 {% endblock %}
 
 {% block script %}
 <script>
 $(document).ready(function(){
-    $('#myModal').modalSteps();
+    var exForm = $("#example-basic");
 
-    $('#myModal').on('shown.bs.modal', function () {
+    exForm.steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        transitionEffect: "slideLeft",
+        autoFocus: true
+    });
+
+    exForm.validate();
+
+    var projectForm = $('#myModal')
+
+    projectForm.modalSteps();
+
+    projectForm.on('shown.bs.modal', function () {
         $('#myInput').focus()
     })
 
-    $("#myModal").validate({
-           projectName: {
-    				required: true,
-    				email: true
-    			},
-        });
+    projectForm.validate({
+        rules: {
+            'projectName': {
+                required: true,
+                minlength: 3,
+                email: true,
+            }
+        }
+    });
 
     $('#next').click(function() {
         console.log('Next!');
-        console.log($("#myModal").valid());
+        console.log(projectForm.valid());
     });
+
+    $('li').click(function() {
+        console.log($(this));
+        console.log('Next!');
+        console.log(exForm.valid());
+    });
+
 
     $('#selectCountry').selectize({
         create: true,
