@@ -19,3 +19,9 @@
        -moz-border-radius: 8px;
             border-radius: 8px;
 }
+
+.wizard > .content > .title,
+.tabcontrol > .content > .title
+{
+    display: none;
+}

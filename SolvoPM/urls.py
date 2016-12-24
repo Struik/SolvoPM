@@ -19,5 +19,6 @@ from WebPM import views
 
 urlpatterns = [
     url(r'^$', views.index, name='pm'),
+    url(r'^main1/', views.main1, name='pm1'),
     url(r'^admin/', admin.site.urls),
 ]
