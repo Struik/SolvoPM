@@ -4,7 +4,6 @@
 {% block extracss %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.steps1.css' %}"/>
 {% endblock %}
 
 {% block extrajs %}
@@ -34,15 +33,15 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <div class="modal-header">
+            <!--<div class="modal-header">-->
 
-            </div>
-            <div class="modal-body">
-                <form id="example-basic1">
+            <!--</div>-->
+            <!--<div class="modal-body">-->
+
+                <form id="projectAddForm">
                     <h3>Description</h3>
                     <h3>Place</h3>
                     <h3>Stages</h3>
-
 
                     <section>
                         <div class="form-group col-lg-12">
@@ -69,6 +68,7 @@
                             </div>
                         </div>
                     </section>
+
                     <section>
                         <div class="form-group col-lg-12">
                             <input type="text" class="form-control" id="companyName" placeholder="Company Name">
@@ -95,6 +95,7 @@
                             <textarea class="form-control" id="Address" rows="3" placeholder="Address"></textarea>
                         </div>
                     </section>
+
                     <section>
                         <div id="stagesList" class="form-group col-lg-12">
                             <label class="control-label">Current:</label>
@@ -138,154 +139,53 @@
                                 <span class="input-group-addon">$</span>
                                 <input type="text" class="form-control" placeholder="price">
                             </div>
+                        </div>
                     </section>
                 </form>
-                <!--<div class="row hide" data-step="1" data-title="Description">-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<select class="form-control" id="selectTemplate">-->
-                <!--<option>No template</option>-->
-                <!--</select>-->
-                <!--</div>-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<input type="text" class="form-control" id="projectName" name="projectName" required>-->
-                <!--</div>-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<label class="control-label">Type</label>-->
-                <!--<div class="radio">-->
-                <!--<label>-->
-                <!--<input type="radio" name="optionsRadios" id="Outside" value="option1" checked="">-->
-                <!--Outside-->
-                <!--</label>-->
-                <!--</div>-->
-                <!--<div class="radio">-->
-                <!--<label>-->
-                <!--<input type="radio" name="optionsRadios" id="Inside" value="option2">-->
-                <!--Inside-->
-                <!--</label>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</div>-->
 
-
-                <!--<div class="row hide" data-step="2" data-title="Place">-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<input type="text" class="form-control" id="companyName" placeholder="Company Name">-->
-                <!--</div>-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<select class="form-control" id="selectCountry" placeholder="Select a country" >-->
-                <!--<option value="">Select a country</option>-->
-                <!--<option value="1">Russia</option>-->
-                <!--<option value="2">Ukraine</option>-->
-                <!--<option value="3">Latvia</option>-->
-                <!--</select>-->
-                <!--</div>-->
-
-                <!--<div class="form-group col-lg-12">-->
-                <!--<select class="form-control" id="selectCity" placeholder="Select a city" >-->
-                <!--<option value="">Select a city</option>-->
-                <!--<option value="1">Moscow</option>-->
-                <!--<option value="2">Saint-Peterburg</option>-->
-                <!--<option value="3">Kiev</option>-->
-                <!--</select>-->
-                <!--</div>-->
-
-                <!--<div class="form-group col-lg-12">-->
-                <!--<textarea class="form-control" id="Address" rows="3" placeholder="Address"></textarea>-->
-                <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="row hide" data-step="3" data-title="Stages">-->
-                <!--<div id="stagesList" class="form-group col-lg-12">-->
-                <!--<label class="control-label">Current:</label>-->
-                <!--</div>-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<label class="control-label">Add new</label>-->
-                <!--<select class="form-control" id="selectStage" placeholder="Stage name">-->
-                <!--<option value="">Stage name</option>-->
-                <!--<option value="1">Analysis</option>-->
-                <!--<option value="2">Configuration</option>-->
-                <!--<option value="3">Implementation</option>-->
-                <!--</select>-->
-                <!--</div>-->
-                <!--&lt;!&ndash;Struik. For possible future use: in case of need for dynamic stage attributes&ndash;&gt;-->
-                <!--&lt;!&ndash;div class="form-group col-lg-12">-->
-                <!--<select class="form-control" id="selectAttribute" placeholder="Stage attribute">-->
-                <!--<option value="">Stage attribute</option>-->
-                <!--<option value="1">Cost</option>-->
-                <!--<option value="2">Duration</option>-->
-                <!--<option value="3">Payment</option>-->
-                <!--</select>-->
-                <!--</div&ndash;&gt;-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<input type="text" class="form-control stage-attr" id="Cost" placeholder="Cost">-->
-                <!--</div>-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<input type="text" class="form-control stage-attr" id="Duration" placeholder="Duration">-->
-                <!--</div>-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<select class="form-control" id="selectPayment" placeholder="Payment type" >-->
-                <!--<option value="">Payment type</option>-->
-                <!--<option value="1">Pre</option>-->
-                <!--<option value="2">Post</option>-->
-                <!--</select>-->
-                <!--</div>-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<button id="newStage" type="button" class="btn btn-info col-lg-12">Add stage</button>-->
-                <!--</div>-->
-                <!--<div class="form-group col-lg-12">-->
-                <!--<div class="input-group">-->
-                <!--<span class="input-group-addon">$</span>-->
-                <!--<input type="text" class="form-control" placeholder="price">-->
-                <!--</div>-->
-                <!--</div>-->
-
-
-
-
-                <!--</div>-->
-
-
-
-            </div>
-            <div class="modal-footer">
-            </div>
+            <!--</div>-->
+            <!--<div class="modal-footer">-->
+            <!--</div>-->
         </div>
     </div>
 </div>
-
-<form id="example-basic">
-    <h3>Keyboard</h3>
-    <h3>Effects</h3>
-    <h3>Pager</h3>
-
-
-    <section>
-        <p>Try the keyboard navigation by clicking arrow left or right!</p>
-        <input type="text" class="form-control" placeholder="price" name="price" required  minlength="5">
-    </section>
-    <section>
-        <p>Wonderful transition effects.</p>
-    </section>
-    <section>
-        <p>The next and previous buttons help you to navigate through your content.</p>
-    </section>
-</form>
 {% endblock %}
 
 {% block script %}
 <script>
 $(document).ready(function(){
-    var exForm = $("#example-basic1");
+    var exForm = $("#projectAddForm");
 
     exForm.steps({
         headerTag: "h3",
         bodyTag: "section",
-        transitionEffect: "slideLeft",
+        transitionEffect: 1,
         autoFocus: true,
         enableCancelButton: true,
+        labels: {
+            current: "",
+        }
     });
 
+    $('.wizard .steps').addClass("modal-header");
+    $('.wizard .content').addClass("modal-body");
+    $('.wizard .actions').addClass("modal-footer");
+
+    $('.steps1 ul').addClass("modal-title");
+    $('.steps1 ul').addClass("nav-pills");
+    //$(".steps ul li").append("<h4 class='modal-title'>AAAA</h4>");
+    $(".steps ul li").each(function (i) {
+        var title = $(this).find("a").contents().filter(function() {
+            return this.nodeType == 3;
+        }).text();
+        $(this).append("<h4 class='modal-title'>" + title + "</h4>")
+    })
+
+    $('.actions ul').addClass("pager");
     $('a[href="#cancel"]').addClass("pull-left");
+
+
+
 
     /*exForm.validate();*/
 
@@ -312,11 +212,11 @@ $(document).ready(function(){
         /*console.log(projectForm.valid());*/
     });
 
-    $('li').click(function() {
+    /*$('li').click(function() {
         console.log($(this));
         console.log('Next!');
         console.log(exForm.valid());
-    });
+    });*/
 
 
     $('#selectCountry').selectize({

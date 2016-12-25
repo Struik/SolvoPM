@@ -32,8 +32,9 @@ $.fn.extend({
 
     _selectAria: function (select)
     {
+        /*Struik. Changing class current to */
         return (select == null || select) ? 
-            this.addClass("current")._aria("selected", "true") : 
+            this.addClass("current")._aria("selected", "true") :
             this.removeClass("current")._aria("selected", "false");
     },
 
@@ -1054,8 +1055,7 @@ function renderPagination(wizard, options, state)
 {
     if (options.enablePagination)
     {
-        /* Struik. Added bootstrap class "pager" */
-        var pagination = "<{0} class=\"actions {1}\"><ul class=\"pager\" role=\"menu\" aria-label=\"{2}\">{3}</ul></{0}>",
+        var pagination = "<{0} class=\"actions {1}\"><ul role=\"menu\" aria-label=\"{2}\">{3}</ul></{0}>",
             buttonTemplate = "<li><a href=\"#{0}\" role=\"menuitem\">{1}</a></li>",
             buttons = "";
 

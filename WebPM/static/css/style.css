@@ -25,3 +25,30 @@
 {
     display: none;
 }
+
+.pager {
+    margin: 0px;
+}
+
+[role="tablist"]{
+    padding: 0px;
+    margin: 0px;
+}
+
+[role="tablist"] > li
+{
+    list-style-type: none;
+}
+
+[role="tablist"] > li:not(.current)
+{
+    display: none;
+}
+
+[role="tablist"] > li > a
+{
+    display: none;
+}
+
+
+
