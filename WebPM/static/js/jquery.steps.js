@@ -32,8 +32,7 @@ $.fn.extend({
 
     _selectAria: function (select)
     {
-        /*Struik. Changing class current to */
-        return (select == null || select) ? 
+        return (select == null || select) ?
             this.addClass("current")._aria("selected", "true") :
             this.removeClass("current")._aria("selected", "false");
     },

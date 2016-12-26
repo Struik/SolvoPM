@@ -7,12 +7,10 @@
 {% endblock %}
 
 {% block extrajs %}
-<script src="{% static 'js/jquery-bootstrap-modal-steps.js' %}"></script>
 <script src="{% static 'js/selectize.js' %}"></script>
-<script src="{% static 'js/style.js' %}"></script>
 <script src="{% static 'js/jquery.steps.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js"></script>
+<script src="{% static 'js/jquery.validate.js' %}"></script>
+<script src="{% static 'js/additional-methods.js' %}"></script>
 <!--script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js"></script-->
 {% endblock %}
 
@@ -45,7 +43,7 @@
 
                     <section>
                         <div class="form-group col-lg-12">
-                            <select class="form-control" id="selectTemplate">
+                            <select class="form-control fixed-values" id="selectTemplate">
                                 <option>No template</option>
                             </select>
                         </div>
@@ -71,10 +69,10 @@
 
                     <section>
                         <div class="form-group col-lg-12">
-                            <input type="text" class="form-control" id="companyName" placeholder="Company Name">
+                            <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Company Name">
                         </div>
                         <div class="form-group col-lg-12">
-                            <select class="form-control" id="selectCountry" placeholder="Select a country" >
+                            <select class="form-control" id="selectCountry" name="selectCountry" placeholder="Select a country" required>
                                 <option value="">Select a country</option>
                                 <option value="1">Russia</option>
                                 <option value="2">Ukraine</option>
@@ -83,7 +81,7 @@
                         </div>
 
                         <div class="form-group col-lg-12">
-                            <select class="form-control" id="selectCity" placeholder="Select a city" >
+                            <select class="form-control" id="selectCity" name="selectCity" placeholder="Select a city" required>
                                 <option value="">Select a city</option>
                                 <option value="1">Moscow</option>
                                 <option value="2">Saint-Peterburg</option>
@@ -125,7 +123,7 @@
                             <input type="text" class="form-control stage-attr" id="Duration" placeholder="Duration">
                         </div>
                         <div class="form-group col-lg-12">
-                            <select class="form-control" id="selectPayment" placeholder="Payment type" >
+                            <select class="form-control fixed-values" id="selectPayment" placeholder="Payment type" >
                                 <option value="">Payment type</option>
                                 <option value="1">Pre</option>
                                 <option value="2">Post</option>
@@ -156,40 +154,102 @@
 $(document).ready(function(){
     var exForm = $("#projectAddForm");
 
+    //Enabling jquery steps addon on project adding form
     exForm.steps({
         headerTag: "h3",
         bodyTag: "section",
         transitionEffect: 1,
         autoFocus: true,
         enableCancelButton: true,
-        labels: {
+        labels:
+        {
             current: "",
+        },
+        onStepChanging: function (event, currentIndex, newIndex)
+        {
+            // Always allow going backward even if the current step contains invalid fields!
+            if (currentIndex > newIndex)
+            {
+                return true;
+            }
+
+            var form = $(this);
+
+            // Clean up if user went backward before
+            if (currentIndex < newIndex)
+            {
+                // To remove error styles
+                $(".body:eq(" + newIndex + ") label.error", form).remove();
+                $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+            }
+
+            // Disable validation on fields that are disabled or hidden.
+            form.validate().settings.ignore = ":disabled,:hidden";
+
+            // Start validation; Prevent going forward if false
+            return form.valid();
+        },
+        onFinishing: function (event, currentIndex)
+        {
+            var form = $(this);
+
+            // Disable validation on fields that are disabled.
+            // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
+            form.validate().settings.ignore = ":disabled";
+
+            // Start validation; Prevent form submission if false
+            return form.valid();
+        },
+        onFinished: function (event, currentIndex)
+        {
+            var form = $(this);
+
+            // Submit form input
+            //Submit isn't ready yet
+            //form.submit();
         }
     });
 
+    //Enabled dynamic and static (values wise) select tags with selectize plugin
+    $('select.fixed-values').selectize({
+        sortField: 'text'
+    });
+    $('select:not(.fixed-values)').selectize({
+        create: true,
+        sortField: 'text'
+    });
+
+    //Enabling jquery validation addon project adding form
+    exForm.validate({
+        ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+        rules: {
+            projectName: {
+                required: true,
+                minlength: 3,
+            },
+            companyName: {
+                required: true,
+                minlength: 13,
+            },
+        }
+    });
+
+
+    //Enabling bootstrap classes on project adding form
     $('.wizard .steps').addClass("modal-header");
     $('.wizard .content').addClass("modal-body");
     $('.wizard .actions').addClass("modal-footer");
-
     $('.steps1 ul').addClass("modal-title");
     $('.steps1 ul').addClass("nav-pills");
-    //$(".steps ul li").append("<h4 class='modal-title'>AAAA</h4>");
     $(".steps ul li").each(function (i) {
         var title = $(this).find("a").contents().filter(function() {
             return this.nodeType == 3;
         }).text();
         $(this).append("<h4 class='modal-title'>" + title + "</h4>")
     })
-
     $('.actions ul').addClass("pager");
     $('a[href="#cancel"]').addClass("pull-left");
 
-
-
-
-    /*exForm.validate();*/
-
-    var projectForm = $('#myModal')
 
     /*projectForm.modalSteps();
 
@@ -197,55 +257,22 @@ $(document).ready(function(){
         $('#myInput').focus()
     })*/
 
-    /*projectForm.validate({
-        rules: {
-            'projectName': {
-                required: true,
-                minlength: 3,
-                email: true,
-            }
-        }
-    });*/
+
 
     $('#next').click(function() {
         console.log('Next!');
         /*console.log(projectForm.valid());*/
     });
 
-    /*$('li').click(function() {
-        console.log($(this));
+    $('li').click(function() {
         console.log('Next!');
         console.log(exForm.valid());
-    });*/
-
-
-    $('#selectCountry').selectize({
-        create: true,
-        sortField: 'text'
     });
 
-    $('#selectCity').selectize({
-        create: true,
-        sortField: 'text',
-    });
 
-    $('#selectStage').selectize({
-        create: true,
-        sortField: 'text',
-    });
 
-    /*$('#selectAttribute').selectize({
-        create: true,
-        sortField: 'text',
-    });*/
 
-    $('#selectPayment').selectize({
-    });
 
-    $('#selectValue').selectize({
-        create: true,
-        sortField: 'text',
-    });
 
     var stagesQty = 0;
     var stageText;
