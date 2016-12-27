@@ -43,7 +43,7 @@
 
                     <section>
                         <div class="form-group col-lg-12">
-                            <select class="form-control fixed-values" id="selectTemplate">
+                            <select class="form-control fixed-values" id="selectTemplate" name="selectTemplate">
                                 <option>No template</option>
                             </select>
                         </div>
@@ -71,8 +71,9 @@
                         <div class="form-group col-lg-12">
                             <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Company Name">
                         </div>
+
                         <div class="form-group col-lg-12">
-                            <select class="form-control" id="selectCountry" name="selectCountry" placeholder="Select a country" required>
+                            <select class="form-control selectize" id="selectCountry" name="selectCountry" placeholder="Select a country">
                                 <option value="">Select a country</option>
                                 <option value="1">Russia</option>
                                 <option value="2">Ukraine</option>
@@ -81,7 +82,7 @@
                         </div>
 
                         <div class="form-group col-lg-12">
-                            <select class="form-control" id="selectCity" name="selectCity" placeholder="Select a city" required>
+                            <select class="form-control selectize" id="selectCity" name="selectCity" placeholder="Select a city">
                                 <option value="">Select a city</option>
                                 <option value="1">Moscow</option>
                                 <option value="2">Saint-Peterburg</option>
@@ -95,9 +96,6 @@
                     </section>
 
                     <section>
-                        <div id="stagesList" class="form-group col-lg-12">
-                            <label class="control-label">Current:</label>
-                        </div>
                         <div class="form-group col-lg-12">
                             <label class="control-label">Add new</label>
                             <select class="form-control" id="selectStage" placeholder="Stage name">
@@ -132,11 +130,14 @@
                         <div class="form-group col-lg-12">
                             <button id="newStage" type="button" class="btn btn-info col-lg-12">Add stage</button>
                         </div>
-                        <div class="form-group col-lg-12">
-                            <div class="input-group">
-                                <span class="input-group-addon">$</span>
-                                <input type="text" class="form-control" placeholder="price">
-                            </div>
+                        <!--<div class="form-group col-lg-12">-->
+                            <!--<div class="input-group">-->
+                                <!--<span class="input-group-addon">$</span>-->
+                                <!--<input type="text" class="form-control" placeholder="price">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <div id="stagesList" class="form-group col-lg-12">
+                            <label id="stageListLabel" class="control-label hidden">Stages list:</label>
                         </div>
                     </section>
                 </form>
@@ -183,9 +184,6 @@ $(document).ready(function(){
                 $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
             }
 
-            // Disable validation on fields that are disabled or hidden.
-            form.validate().settings.ignore = ":disabled,:hidden";
-
             // Start validation; Prevent going forward if false
             return form.valid();
         },
@@ -204,7 +202,7 @@ $(document).ready(function(){
         {
             var form = $(this);
 
-            // Submit form input
+            //Submit form input
             //Submit isn't ready yet
             //form.submit();
         }
@@ -221,7 +219,9 @@ $(document).ready(function(){
 
     //Enabling jquery validation addon project adding form
     exForm.validate({
+        //Fix to make selectize and validation working together.
         ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+        debug: true,
         rules: {
             projectName: {
                 required: true,
@@ -229,9 +229,20 @@ $(document).ready(function(){
             },
             companyName: {
                 required: true,
-                minlength: 13,
             },
-        }
+            selectCountry: {
+                required: true,
+            },
+            selectCity: {
+                required: true,
+            },
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').addClass("has-error has-danger");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').removeClass("has-error has-danger").addClass("has-success");
+        },
     });
 
 
@@ -281,6 +292,10 @@ $(document).ready(function(){
     $('#newStage').click(function() {
         stageText = $('#selectStage').text()
         stagesQty++;
+        if (stagesQty == 1)
+        {
+            $('#stageListLabel').removeClass('hidden')
+        }
         console.log('Stage adding. Stage name: ' + stageText + '. New stages quantity: ' + stagesQty);
         $('#stagesList').append('<a href="#" class="list-group-item" data-toggle="collapse" data-target="#Stage' + stagesQty + '"'
             + 'data-parent="#menu"><strong>' + stageText + '</strong><span class="glyphicon glyphicon-chevron-down pull-right"></span></a>'
