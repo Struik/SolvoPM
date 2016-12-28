@@ -97,8 +97,7 @@
 
                     <section>
                         <div class="form-group col-lg-12">
-                            <label class="control-label">Add new</label>
-                            <select class="form-control" id="selectStage" placeholder="Stage name">
+                            <select class="form-control" id="selectStage" name="selectStage" placeholder="Stage name">
                                 <option value="">Stage name</option>
                                 <option value="1">Analysis</option>
                                 <option value="2">Configuration</option>
@@ -115,13 +114,13 @@
                         </select>
                         </div-->
                         <div class="form-group col-lg-12">
-                            <input type="text" class="form-control stage-attr" id="Cost" placeholder="Cost">
+                            <input type="text" class="form-control stage-attr" id="cost" name="cost" placeholder="Cost">
                         </div>
                         <div class="form-group col-lg-12">
-                            <input type="text" class="form-control stage-attr" id="Duration" placeholder="Duration">
+                            <input type="text" class="form-control stage-attr" id="duration" name="duration" placeholder="Duration">
                         </div>
                         <div class="form-group col-lg-12">
-                            <select class="form-control fixed-values" id="selectPayment" placeholder="Payment type" >
+                            <select class="form-control fixed-values" id="selectPayment" name="selectPayment" placeholder="Payment type" >
                                 <option value="">Payment type</option>
                                 <option value="1">Pre</option>
                                 <option value="2">Post</option>
@@ -171,6 +170,8 @@ $(document).ready(function(){
             // Always allow going backward even if the current step contains invalid fields!
             if (currentIndex > newIndex)
             {
+                //To remove success styles
+                //$(".body:eq(" + newIndex +  ") .has-success").removeClass("has-success");
                 return true;
             }
 
@@ -179,9 +180,11 @@ $(document).ready(function(){
             // Clean up if user went backward before
             if (currentIndex < newIndex)
             {
-                // To remove error styles
+                // To remove success and error styles
                 $(".body:eq(" + newIndex + ") label.error", form).remove();
                 $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+                $(".body:eq(" + newIndex +  ") .has-error.has-danger").removeClass("has-error has-danger")
+                $(".body:eq(" + newIndex +  ") .has-success").removeClass("has-success");
             }
 
             // Start validation; Prevent going forward if false
@@ -216,12 +219,19 @@ $(document).ready(function(){
         create: true,
         sortField: 'text'
     });
+    //Fix for jquery validate highlightning ("has-success" class). Bootstrap classes "has-success" and "has-error"
+    //require an element to have "form-control" class (or other combo of conditions which are not my case).
+    //Selectize plugin generates own elements including <div> with class "selectize-input" which is shown when any value
+    //is selected. When there is no value selected then <select> is shown which has "form-control" class from the base
+    //html. Thus "has-error" (plus "has-danger") class works correctly and lights borders with red but "has-success"
+    //wasn't visible.
+    $('div .selectize-input').addClass('form-control');
 
     //Enabling jquery validation addon project adding form
     exForm.validate({
         //Fix to make selectize and validation working together.
         ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
-        debug: true,
+        //debug: true,
         rules: {
             projectName: {
                 required: true,
@@ -236,12 +246,51 @@ $(document).ready(function(){
             selectCity: {
                 required: true,
             },
+            selectStage: {
+                required: true,
+            },
+            cost: {
+                required: true,
+                number: true,
+            },
+            duration: {
+                required: true,
+                number: true,
+            },
+            selectPayment: {
+                required: true,
+            },
+
         },
+        //Playing with highlighting error fields. Some effects might be excess and should be removed
         highlight: function (element, errorClass, validClass) {
             $(element).parents('.form-group').addClass("has-error has-danger");
+            $(element).parents('.form-group').removeClass("has-success");
+            if ($(element).hasClass("selectized")){
+                $(element).siblings('.selectize-control').fadeOut(function() {
+                    $(element).siblings('.selectize-control').fadeIn();
+                });
+            }
+            else
+            {
+                $(element).fadeOut(function() {
+                    $(element).fadeIn();
+                });
+            }
         },
+        //Changing red lightning border on corrected error field to green
         unhighlight: function (element, errorClass, validClass) {
             $(element).parents('.form-group').removeClass("has-error has-danger").addClass("has-success");
+        },
+        //Fix for selectized fields so labels with error description are placed under the field
+        errorPlacement: function(error, element) {
+            if (element.hasClass("selectized")){
+                element.parents('.form-group').append(error);
+            }
+            else
+            {
+                error.insertAfter(element);
+            }
         },
     });
 
@@ -278,6 +327,10 @@ $(document).ready(function(){
     $('li').click(function() {
         console.log('Next!');
         console.log(exForm.valid());
+    });
+
+    $('select').change(function() {
+        $(this).valid();
     });
 
 
