@@ -77,6 +77,8 @@ $(document).ready(function(){
         create: true,
         sortField: 'text'
     });
+    //This variables are needed to have possibility to programmatically clear selectized fields.
+    //One variable for each select
     var $selectStage = $('#selectStage').selectize();
     var $selectPayment = $('#selectPayment').selectize();
 
@@ -190,12 +192,15 @@ $(document).ready(function(){
 
     $('li').click(function() {
         console.log('Next!');
-        console.log(exForm.valid());
     });
 
     $('select').change(function() {
-        console.log('atata');
-        $(this).valid();
+        if(stageClearOnClick){
+            stageClearOnClick = false
+        }
+        else {
+            $(this).valid();
+        }
     });
 
 
@@ -205,39 +210,55 @@ $(document).ready(function(){
 
     var stagesQty = 0;
     var stageText;
+    var cost;
+    var duration;
+    var payment;
+    var stageClearOnClick = false;
 
 
     $('#newStage').click(function() {
         if(exForm.valid())
         {
             stageText = $('#selectStage').text()
+            cost = $('#cost').val()
+            duration = $('#duration').val()
+            payment = $('#selectPayment').text()
+
             stagesQty++;
+
+            //Showing "Stages list label after adding the first one"
             if (stagesQty == 1)
             {
                 $('#stageListLabel').removeClass('hidden')
             }
             console.log('Stage adding. Stage name: ' + stageText + '. New stages quantity: ' + stagesQty);
             $('#stagesList').append('<a href="#" class="list-group-item" data-toggle="collapse" data-target="#Stage' + stagesQty + '"'
-                + 'data-parent="#menu"><strong>' + stageText + '</strong><span class="glyphicon glyphicon-chevron-down pull-right"></span></a>'
+                + 'data-parent="#menu"><span class="glyphicon glyphicon-chevron-right"></span>   ' + stageText + '</a>'
                 + '<div id="Stage' + stagesQty + '" class="sublinks collapse">'
-                + '<a class="list-group-item small">Cost: 5000$</a>'
-                + '<a class="list-group-item small">Duration: 5 weeks</a>'
+                + '<a class="list-group-item small">Cost: ' + cost + '$</a>'
+                + '<a class="list-group-item small">Duration: ' + duration + ' weeks</a>'
+                + '<a class="list-group-item small">Payment: ' + payment + '</a>'
                 + '</div>');
             console.log('Stage added');
 
+            //Basic code for changing arrow direction on collapse/uncollapse bootstrap panels. Usually added
+            //in document-ready section of scripts, but for dynamic panels needs to be initialized each time
+            //you add a new element.
             $('.collapse').on('shown.bs.collapse', function(){
-            $(this).parent().find("a[data-target='#" + $(this).attr("id") + "'] span.glyphicon-chevron-down")
-                .removeClass("glyphicon-chevron-down")
+            $(this).parent().find("a[data-target='#" + $(this).attr("id") + "'] span.glyphicon-chevron-right")
+                .removeClass("glyphicon-chevron-right")
                 .addClass("glyphicon-chevron-up");
                 }).on('hidden.bs.collapse', function(){
                     $(this).parent().find(".glyphicon-chevron-up")
                         .removeClass("glyphicon-chevron-up")
-                        .addClass("glyphicon-chevron-down");
+                        .addClass("glyphicon-chevron-right");
                     });
 
+            stageClearOnClick = true;
             $selectStage[0].selectize.clear();
             $('#cost').val('');
             $('#duration').val('');
+            stageClearOnClick = true;
             $selectPayment[0].selectize.clear();
         };
     });
