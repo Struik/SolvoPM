@@ -3,7 +3,7 @@ $(document).ready(function(){
     $.validator.addMethod('uniqueStage', function (value, element, param) {
         //Looks complicated because of selectize which puts select real value in generated nodes
         var selectValue = $(element).siblings().find('div .item').text();
-        if($('#stagesList').find("a strong:contains(" + selectValue + ")").length > 0){
+        if($('#stagesList').find("a:contains(" + selectValue + ")").length > 0){
             return false;
         }
         return true;
@@ -195,8 +195,8 @@ $(document).ready(function(){
     });
 
     $('select').change(function() {
-        if(stageClearOnClick){
-            stageClearOnClick = false
+        if(stageSelectClearOnClick){
+            stageSelectClearOnClick = false
         }
         else {
             $(this).valid();
@@ -213,7 +213,7 @@ $(document).ready(function(){
     var cost;
     var duration;
     var payment;
-    var stageClearOnClick = false;
+    var stageSelectClearOnClick = false;
 
 
     $('#newStage').click(function() {
@@ -254,11 +254,11 @@ $(document).ready(function(){
                         .addClass("glyphicon-chevron-right");
                     });
 
-            stageClearOnClick = true;
+            stageSelectClearOnClick = true;
             $selectStage[0].selectize.clear();
             $('#cost').val('');
             $('#duration').val('');
-            stageClearOnClick = true;
+            stageSelectClearOnClick = true;
             $selectPayment[0].selectize.clear();
         };
     });
