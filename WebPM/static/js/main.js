@@ -89,7 +89,7 @@ $(document).ready(function(){
     //Selectize plugin generates own nodes including <div> with class "selectize-input" which is shown when any value
     //is selected. When there is no value selected then <select> is shown which has "form-control" class from the base
     //html. Thus "has-error" (plus "has-danger") class works correctly and lights borders with red but "has-success"
-    //wasn't visible.
+    //wasn't visible
     $('div .selectize-input').addClass('form-control');
 
     //Enabling jquery validation addon project adding form
