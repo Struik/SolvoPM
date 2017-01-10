@@ -25,6 +25,7 @@ $(document).ready(function(){
         },
         onStepChanging: function (event, currentIndex, newIndex)
         {
+            console.log('2');
             // Always allow going backward even if the current step contains invalid fields!
             if (currentIndex > newIndex)
             {
@@ -51,21 +52,23 @@ $(document).ready(function(){
         onFinishing: function (event, currentIndex)
         {
             var form = $(this);
-
+            console.log('3');
             // Disable validation on fields that are disabled.
             // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
-            form.validate().settings.ignore = ":disabled";
+            //form.validate().settings.ignore = ":disabled";
 
             // Start validation; Prevent form submission if false
-            return form.valid();
+            //return form.valid();
+            return true;
         },
         onFinished: function (event, currentIndex)
         {
             var form = $(this);
+            console.log('4');
 
             //Submit form input
             //Submit isn't ready yet
-            //form.submit();
+            form.submit();
         }
     });
 
@@ -249,7 +252,7 @@ $(document).ready(function(){
                 .removeClass("glyphicon-chevron-right")
                 .addClass("glyphicon-chevron-up");
                 }).on('hidden.bs.collapse', function(){
-                    $(this).parent().find(".glyphicon-chevron-up")
+                    $(this).parent().find("a[data-target='#" + $(this).attr("id") + "'] span.glyphicon-chevron-up")
                         .removeClass("glyphicon-chevron-up")
                         .addClass("glyphicon-chevron-right");
                     });
