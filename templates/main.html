@@ -7,6 +7,28 @@
 {% endblock %}
 
 {% block extrajs %}
+<script>
+    //Variable containing all cities with reference to countries which will be used in main.js
+    //Django variables are only accessible inside the template and can be passed to external javascript only this way
+    var cities = {};
+    {% for query in projectAttrs.Cities %}
+        if(cities['{{query.country.name}}'])
+        {
+            cities['{{query.country.name}}'].push({ 'id': '{{query.id}}', 'name': '{{query.name}}' })
+        }
+        else
+        {
+            cities['{{query.country.name}}']=[]
+            cities['{{query.country.name}}'].push({ 'id': '{{query.id}}', 'name': '{{query.name}}' })
+        }
+    {% endfor %}
+
+    var projectAttrs = '{{projectAttrs.Countries}}';
+    console.log(cities);
+    console.log(cities['Russia']);
+    console.log('aa')
+</script>
+
 <script src="{% static 'js/selectize.js' %}"></script>
 <script src="{% static 'js/jquery.steps.js' %}"></script>
 <script src="{% static 'js/jquery.validate.js' %}"></script>
@@ -48,7 +70,7 @@
                             </select>
                         </div>
                         <div class="form-group col-lg-12">
-                            <input type="text" class="form-control" id="projectName" name="projectName">
+                            <input type="text" class="form-control" id="projectName" name="projectName" value="">
                         </div>
                         <div class="form-group col-lg-12">
                             <label class="control-label">Type</label>
@@ -69,24 +91,29 @@
 
                     <section>
                         <div class="form-group col-lg-12">
-                            <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Company Name">
+                            <select class="form-control selectize" id="companyName" name="companyName" placeholder="Select company">
+                                <option value="">Select a company</option>
+                                {% for query in projectAttrs.Companies %}
+                                    <option value="{{query.id}}">{{query.name}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="form-group col-lg-12">
                             <select class="form-control selectize" id="selectCountry" name="selectCountry" placeholder="Select a country">
                                 <option value="">Select a country</option>
-                                <option value="1">Russia</option>
-                                <option value="2">Ukraine</option>
-                                <option value="3">Latvia</option>
+                                {% for query in projectAttrs.Countries %}
+                                    <option value="{{query.id}}">{{query.name}}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
                         <div class="form-group col-lg-12">
                             <select class="form-control selectize" id="selectCity" name="selectCity" placeholder="Select a city">
                                 <option value="">Select a city</option>
-                                <option value="1">Moscow</option>
-                                <option value="2">Saint-Peterburg</option>
-                                <option value="3">Kiev</option>
+                                {% for query in projectAttrs.Cities %}
+                                    <option value="{{query.id}}">{{query.name}}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
@@ -99,9 +126,9 @@
                         <div class="form-group col-lg-12">
                             <select class="form-control" id="selectStage" name="selectStage" placeholder="Stage name">
                                 <option value="">Stage name</option>
-                                <option value="1">Analysis</option>
-                                <option value="2">Configuration</option>
-                                <option value="3">Implementation</option>
+                                {% for query in projectAttrs.StageTypes %}
+                                    <option value="{{query.id}}">{{query.name}}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <!--Struik. For possible future use: in case of need for dynamic stage attributes-->
@@ -122,8 +149,9 @@
                         <div class="form-group col-lg-12">
                             <select class="form-control fixed-values" id="selectPayment" name="selectPayment" placeholder="Payment type" >
                                 <option value="">Payment type</option>
-                                <option value="1">Pre</option>
-                                <option value="2">Post</option>
+                                {% for query in projectAttrs.PaymentTypes %}
+                                    <option value="{{query.id}}">{{query.name}}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="form-group col-lg-12">

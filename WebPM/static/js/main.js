@@ -76,14 +76,40 @@ $(document).ready(function(){
     $('select.fixed-values').selectize({
         sortField: 'text'
     });
-    $('select:not(.fixed-values)').selectize({
+
+    //Country change need special logic which is called via onChange event
+    //Couldn't find a way to reinitialize it when select node is already selectized
+    $('select:not(.fixed-values):not(#selectCountry)').selectize({
         create: true,
         sortField: 'text'
     });
-    //This variables are needed to have possibility to programmatically clear selectized fields.
+
+    //This variables are needed to have possibility to programmatically clear and update selectized fields.
     //One variable for each select
+    var $selectCity = $('#selectCity').selectize();
     var $selectStage = $('#selectStage').selectize();
     var $selectPayment = $('#selectPayment').selectize();
+
+
+    //Separate selectize initialisation on country select node
+    //Populating cities select with values on country change
+    $('#selectCountry').selectize({
+        onChange: function(value) {
+            console.log('Country changed');
+            if (!value.length) return;
+            var country = $('#selectCountry').text()
+            selectCity.disable();
+            selectCity.clearOptions();
+            for (var i = 0; i < cities[country].length; i++) {
+                selectCity.addOption({value: cities[country][i]['id'], text: cities[country][i]['name']})
+            }
+            selectCity.enable();
+        }
+    });
+
+    selectCity = $selectCity[0].selectize;
+    selectCity.disable();
+
 
 
 
@@ -179,12 +205,6 @@ $(document).ready(function(){
     $('.actions ul').addClass("pager");
     $('a[href="#cancel"]').addClass("pull-left");
 
-
-    /*projectForm.modalSteps();
-
-    projectForm.on('shown.bs.modal', function () {
-        $('#myInput').focus()
-    })*/
 
 
 
