@@ -47,7 +47,8 @@ $(document).ready(function(){
             }
 
             // Start validation; Prevent going forward if false
-            return form.valid();
+            //return form.valid();
+            return true;
         },
         onFinishing: function (event, currentIndex)
         {
@@ -71,6 +72,7 @@ $(document).ready(function(){
             form.submit();
         }
     });
+
 
     //Enabled dynamic and static (values wise) select nodes with selectize plugin
     $('select.fixed-values').selectize({
@@ -125,6 +127,7 @@ $(document).ready(function(){
     exForm.validate({
         //Fix to make selectize and validation working together.
         ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+        onsubmit: false,
         //debug: true,
         rules: {
             projectName: {
@@ -285,6 +288,31 @@ $(document).ready(function(){
             $selectPayment[0].selectize.clear();
         };
     });
+
+        $.fn.serializeObject = function(){
+            console.log('Serializing');
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+    exForm.submit(function() {
+        alert('12312');
+        console.log(exForm.serializeObject());
+        return false;
+    });
+
+
 });
 
 
