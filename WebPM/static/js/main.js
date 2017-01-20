@@ -72,7 +72,7 @@ $(document).ready(function(){
             //form.submit();
 
             $.ajax({
-                type: 'POST',
+                type: 'GET',
                 url: "new_project",
                 data: {'dashboard_id': '22'},
                 success: function (response) {
@@ -104,7 +104,6 @@ $(document).ready(function(){
     var $selectCity = $('#selectCity').selectize();
     var $selectStage = $('#selectStage').selectize();
     var $selectPayment = $('#selectPayment').selectize();
-
 
     //Separate selectize initialisation on country select node
     //Populating cities select with values on country change
@@ -140,6 +139,8 @@ $(document).ready(function(){
             }
         }
     });
+
+    var $selectContractType = $('#selectContractType').selectize();
 
 
 
@@ -223,9 +224,12 @@ $(document).ready(function(){
         unhighlight: function (element, errorClass, validClass) {
             $(element).parents('.form-group').removeClass("has-error has-danger").addClass("has-success");
         },
-        //Fix for selectized fields so labels with error description are placed under the field
+        //Fix for selectized and datepicker fields so labels with error description are placed under the field
         errorPlacement: function(error, element) {
             if (element.hasClass("selectized")){
+                element.parents('.form-group').append(error);
+            }
+            else if (element.hasClass("datepicker")){
                 element.parents('.form-group').append(error);
             }
             else
@@ -253,7 +257,9 @@ $(document).ready(function(){
 
     //Enabling datetimepicker fields
     $('#paymentDatePicker').datetimepicker({
-        format: 'DD.MM.YYYY'
+        format: 'DD.MM.YYYY',
+        minDate: moment(),
+        allowInputToggle: true,
     });
 
 
@@ -312,7 +318,6 @@ $(document).ready(function(){
                 + '<a class="list-group-item small">Duration: ' + duration + ' weeks</a>'
                 + '<a class="list-group-item small">Payment: ' + payment + '</a>'
                 + '</div>');
-            console.log('Stage added');
 
             //Basic code for changing arrow direction on collapse/uncollapse bootstrap panels. Usually added
             //in document-ready section of scripts, but for dynamic panels needs to be initialized each time
@@ -333,21 +338,60 @@ $(document).ready(function(){
             $('#duration').val('');
             stageSelectClearOnClick = true;
             $selectPayment[0].selectize.clear();
+            console.log('Stage added');
         };
     });
 
-    $('#addContract').click(function() {
-        console.log('#addContract clicked');
-        $('#addContract').prop('disabled', true);
-        $('#addAnotherContract').prop('disabled', false);
-        $('.payment-attr').prop('disabled', false);
+    var paymentsQty = 0;
+    var paymentDate;
+    var paymentAmount;
+    var contractName;
+    var contracts = {};
+
+    $('#addPayment').click(function() {
+        if(exForm.valid())
+        {
+            contractName = $('#contractName').val();
+            paymentDate = $('#paymentDate').val();
+            paymentAmount = $('#paymentAmount').val();
+
+            paymentsQty++;
+
+            if (paymentsQty == 1)
+            {
+                contracts[contractName] = [];
+                $('#paymentTable').removeClass('hidden');
+            }
+
+            console.log('Payment adding. Payment date: ' + paymentDate + ', payment amount: ' + paymentAmount +
+            '. New payments quantity: ' + paymentsQty);
+
+            $('#paymentsTableBody').append('<tr id="paymentRow' + paymentsQty + '">'
+                + '<td>' + paymentsQty + '</td>'
+                + '<td>' + paymentDate + '</td>'
+                + '<td>' + paymentAmount + '</td></tr>');
+
+            contracts[contractName].push({'id': paymentsQty, 'date': paymentDate, 'amount': paymentAmount});
+            console.log(contracts[contractName][paymentsQty - 1]);
+            $('#paymentDate').val('');
+            $('#paymentAmount').val('');
+            console.log('Payment added');
+        };
     });
 
     $('#addAnotherContract').click(function() {
         console.log('#addAnotherContract clicked');
-        $('#addContract').prop('disabled', false);
+        $('.contract-attr').prop('disabled', true);
         $('#addAnotherContract').prop('disabled', true);
         $('.payment-attr').prop('disabled', true);
+        stageSelectClearOnClick = true;
+        $selectContractType[0].selectize.clear();
+        $('#contractName').val('');
+        $('#paymentDate').val('');
+        $('#paymentAmount').val('');
+        $('#paymentsTableBody').empty();
+        paymentsQty = 0;
+        console.log(contracts);
     });
 
         $.fn.serializeObject = function(){
