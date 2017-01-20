@@ -69,19 +69,32 @@ $(document).ready(function(){
 
             //Submit form input
             //Submit isn't ready yet
-            form.submit();
+            //form.submit();
+
+            $.ajax({
+                type: 'POST',
+                url: "new_project",
+                data: {'dashboard_id': '22'},
+                success: function (response) {
+                    console.log('New project request returned successfully');
+                    console.log(response);
+                },
+                error: function () {
+                    console.log('New project request failed');
+                },
+            });
         }
     });
 
 
     //Enabled dynamic and static (values wise) select nodes with selectize plugin
-    $('select.fixed-values').selectize({
+    $('.selectize.fixed-values').selectize({
         sortField: 'text'
     });
 
     //Country change need special logic which is called via onChange event
     //Couldn't find a way to reinitialize it when select node is already selectized
-    $('select:not(.fixed-values):not(#selectCountry)').selectize({
+    $('.selectize:not(.fixed-values)').selectize({
         create: true,
         sortField: 'text'
     });
@@ -111,6 +124,20 @@ $(document).ready(function(){
 
     selectCity = $selectCity[0].selectize;
     selectCity.disable();
+
+    $('#selectContractType').selectize({
+        onChange: function(value) {
+            console.log('Contract type changed');
+            if (!value.length){
+                $('.contract-attr').prop('disabled', true);
+                $('#addContract').prop('disabled', true);
+            }
+            else{
+                $('.contract-attr').prop('disabled', false);
+                $('#addContract').prop('disabled', false);
+            }
+        }
+    });
 
 
 
@@ -158,6 +185,20 @@ $(document).ready(function(){
             selectPayment: {
                 required: true,
             },
+            selectContractType: {
+                required: true,
+            },
+            contractName: {
+                required: true,
+            },
+            paymentAmount: {
+                required: true,
+                number: true,
+            },
+            paymentDate: {
+                required: true,
+            },
+
 
         },
         //Playing with highlighting error fields. Some effects might be excess and should be removed
@@ -208,6 +249,10 @@ $(document).ready(function(){
     $('.actions ul').addClass("pager");
     $('a[href="#cancel"]').addClass("pull-left");
 
+    //Enabling datetimepicker fields
+    $('#paymentDatePicker').datetimepicker({
+        format: 'DD.MM.YYYY'
+    });
 
 
 
@@ -242,7 +287,7 @@ $(document).ready(function(){
     var stageSelectClearOnClick = false;
 
 
-    $('#newStage').click(function() {
+    $('#addStage').click(function() {
         if(exForm.valid())
         {
             stageText = $('#selectStage').text()
@@ -289,6 +334,20 @@ $(document).ready(function(){
         };
     });
 
+    $('#addContract').click(function() {
+        console.log('#addContract clicked');
+        $('#addContract').prop('disabled', true);
+        $('#addAnotherContract').prop('disabled', false);
+        $('.payment-attr').prop('disabled', false);
+    });
+
+    $('#addAnotherContract').click(function() {
+        console.log('#addAnotherContract clicked');
+        $('#addContract').prop('disabled', false);
+        $('#addAnotherContract').prop('disabled', true);
+        $('.payment-attr').prop('disabled', true);
+    });
+
         $.fn.serializeObject = function(){
             console.log('Serializing');
             var o = {};
@@ -309,6 +368,7 @@ $(document).ready(function(){
     exForm.submit(function() {
         alert('12312');
         console.log(exForm.serializeObject());
+
         return false;
     });
 

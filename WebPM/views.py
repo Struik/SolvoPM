@@ -1,8 +1,9 @@
 from django.shortcuts import render, render_to_response
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, AttributeTypes, ProjectAttributes
-from WebPM.models import ProjectTypes, PaymentTypes
-import logging
+from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes
+import logging, json
 
 logger = logging.getLogger('WebPM')
 logger.info('started');
@@ -28,7 +29,7 @@ def index(request):
 def getProjectFormAttrs():
     logger.info('Fetching project attributes')
     data = {}
-    projectModels = [Companies, Countries, Cities, StageTypes, PaymentTypes]
+    projectModels = [Companies, Countries, Cities, StageTypes, PaymentTypes, ContractTypes]
     for Model in projectModels:
         data[Model.__name__] = []
         for value in Model.objects.all():
@@ -38,5 +39,9 @@ def getProjectFormAttrs():
     logger.info(data)
     return data
 
-def main1(request):
-    return render_to_response('main_backup.html')
+
+@csrf_exempt
+def new_project(request):
+    logger.info('Got new project request')
+    logger.info(request)
+    return HttpResponse(json.dumps({'chart_model': 'kk'}), content_type='application/json')

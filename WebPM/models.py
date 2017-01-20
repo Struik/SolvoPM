@@ -41,3 +41,16 @@ class ProjectAttributes(models.Model):
     attrType = models.ForeignKey(AttributeTypes)
     attrValue = models.IntegerField
 
+class ContractTypes(models.Model):
+    name =  models.CharField(max_length=200)
+
+class Contracts(models.Model):
+    contractType = models.ForeignKey(ContractTypes)
+    name =  models.CharField(max_length=200)
+    fullPrice = models.IntegerField
+    startDate = models.DateField
+
+class Payments(models.Model):
+    contractId = models.ForeignKey(Contracts)
+    paymentDate = models.DateField
+    paymentAmount = models.IntegerField
