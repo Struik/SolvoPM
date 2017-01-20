@@ -130,11 +130,13 @@ $(document).ready(function(){
             console.log('Contract type changed');
             if (!value.length){
                 $('.contract-attr').prop('disabled', true);
-                $('#addContract').prop('disabled', true);
+                $('#addAnotherContract').prop('disabled', true);
+                $('.payment-attr').prop('disabled', true);
             }
             else{
                 $('.contract-attr').prop('disabled', false);
-                $('#addContract').prop('disabled', false);
+                $('#addAnotherContract').prop('disabled', false);
+                $('.payment-attr').prop('disabled', false);
             }
         }
     });
