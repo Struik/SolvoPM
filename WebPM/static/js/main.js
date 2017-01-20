@@ -71,6 +71,10 @@ $(document).ready(function(){
             //Submit isn't ready yet
             //form.submit();
 
+            var projectData;
+            console.log(exForm.serializeObject());
+
+
             $.ajax({
                 type: 'GET',
                 url: "new_project",
@@ -95,8 +99,10 @@ $(document).ready(function(){
     //Country change need special logic which is called via onChange event
     //Couldn't find a way to reinitialize it when select node is already selectized
     $('.selectize:not(.fixed-values)').selectize({
-        create: true,
-        sortField: 'text'
+        create: function (input, callback){
+            newRefValue(input, callback, this);
+        },
+        sortField: 'text',
     });
 
     //This variables are needed to have possibility to programmatically clear and update selectized fields.
@@ -118,7 +124,10 @@ $(document).ready(function(){
                 selectCity.addOption({value: cities[country][i]['id'], text: cities[country][i]['name']})
             }
             selectCity.enable();
-        }
+        },
+        create: function (input, callback){
+            newRefValue(input, callback, this);
+        },
     });
 
     selectCity = $selectCity[0].selectize;
@@ -398,6 +407,7 @@ $(document).ready(function(){
             console.log('Serializing');
             var o = {};
             var a = this.serializeArray();
+            console.log(a);
             $.each(a, function() {
                 if (o[this.name] !== undefined) {
                     if (!o[this.name].push) {
@@ -418,6 +428,27 @@ $(document).ready(function(){
         return false;
     });
 
+    //Function to add new value in DB references when it's added via select field on the form
+    var newRefValue = function(input, callback, object){
+        var selectId = object.$input[0].id;
+        console.log(selectId);
+        var referenceName = $('#' + selectId).attr('reference_id');
+        var newValue = {'referenceName': referenceName, 'value': input}
+        console.log('Adding new value to the reference');
+        console.log(newValue);
+        $.ajax({
+            type: 'POST',
+            url: "new_ref_value",
+            data: newValue,
+            success: function (result) {
+                console.log('Response on adding new value to reference request:');
+                console.log(result['ref_id']);
+                if (result) {
+                    callback({ 'value': result['ref_id'], 'text': input });
+                }
+            }
+        });
+    };
 
 });
 

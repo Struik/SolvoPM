@@ -3,7 +3,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, AttributeTypes, ProjectAttributes
 from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes
-import logging, json
+import logging, json, WebPM
+
+from WebPM.models import models
 
 logger = logging.getLogger('WebPM')
 logger.info('started');
@@ -45,3 +47,19 @@ def new_project(request):
     logger.info('Got new project request')
     logger.info(request)
     return HttpResponse(json.dumps({'chart_model': 'kk'}), content_type='application/json')
+
+@csrf_exempt
+def new_ref_value(request):
+    logger.info('Got new reference value')
+    logger.info(request)
+    if (request.POST):
+        params = request.POST
+        logger.info('POST request params:')
+        logger.info(params)
+        logger.info(params['referenceName'])
+        model = getattr(WebPM.models, params['referenceName'])
+        logger.info(model)
+        ref = model(name = params['value'])
+        ref.save()
+        logger.info('New reference value id: ' + str(ref.id))
+    return HttpResponse(json.dumps({'ref_id': ref.id}), content_type='application/json')
