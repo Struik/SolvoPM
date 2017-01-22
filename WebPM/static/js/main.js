@@ -71,14 +71,17 @@ $(document).ready(function(){
             //Submit isn't ready yet
             //form.submit();
 
-            var projectData;
-            console.log(exForm.serializeObject());
-
+            var projectData = exForm.serializeObject();
+            projectData['contracts'] = contracts;
+            console.log(projectData);
+            console.log(JSON.stringify(projectData));
 
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: "new_project",
-                data: {'dashboard_id': '22'},
+                data: {'projectData': JSON.stringify(projectData)},
+                dataType: "json",
+//                contentType: "application/json",
                 success: function (response) {
                     console.log('New project request returned successfully');
                     console.log(response);
@@ -146,7 +149,10 @@ $(document).ready(function(){
                 $('#addAnotherContract').prop('disabled', false);
                 $('.payment-attr').prop('disabled', false);
             }
-        }
+        },
+        create: function (input, callback){
+            newRefValue(input, callback, this);
+        },
     });
 
     var $selectContractType = $('#selectContractType').selectize();
@@ -173,7 +179,7 @@ $(document).ready(function(){
                 required: true,
                 minlength: 3,
             },
-            companyName: {
+            selectCompany: {
                 required: true,
             },
             selectCountry: {
@@ -351,16 +357,20 @@ $(document).ready(function(){
         };
     });
 
+    var contractsQty = 0;
     var paymentsQty = 0;
     var paymentDate;
     var paymentAmount;
     var contractName;
-    var contracts = {};
+    var contractType;
+    var contracts = [];
+
 
     $('#addPayment').click(function() {
         if(exForm.valid())
         {
             contractName = $('#contractName').val();
+            contractType = $('#selectContractType').val();
             paymentDate = $('#paymentDate').val();
             paymentAmount = $('#paymentAmount').val();
 
@@ -368,7 +378,9 @@ $(document).ready(function(){
 
             if (paymentsQty == 1)
             {
-                contracts[contractName] = [];
+                contracts.push({'name': contractName, 'type': contractType, 'payments': []});
+                console.log('New contract data created:');
+                console.log(contracts);
                 $('#paymentTable').removeClass('hidden');
             }
 
@@ -380,8 +392,8 @@ $(document).ready(function(){
                 + '<td>' + paymentDate + '</td>'
                 + '<td>' + paymentAmount + '</td></tr>');
 
-            contracts[contractName].push({'id': paymentsQty, 'date': paymentDate, 'amount': paymentAmount});
-            console.log(contracts[contractName][paymentsQty - 1]);
+            contracts[contractsQty]['payments'].push({'id': paymentsQty, 'date': paymentDate, 'amount': paymentAmount});
+            console.log(contracts[contractsQty]['payments'][paymentsQty - 1]);
             $('#paymentDate').val('');
             $('#paymentAmount').val('');
             console.log('Payment added');
@@ -400,6 +412,7 @@ $(document).ready(function(){
         $('#paymentAmount').val('');
         $('#paymentsTableBody').empty();
         paymentsQty = 0;
+        contractsQty++;
         console.log(contracts);
     });
 
@@ -442,9 +455,9 @@ $(document).ready(function(){
             data: newValue,
             success: function (result) {
                 console.log('Response on adding new value to reference request:');
-                console.log(result['ref_id']);
+                console.log(result['refId']);
                 if (result) {
-                    callback({ 'value': result['ref_id'], 'text': input });
+                    callback({ 'value': result['refId'], 'text': input });
                 }
             }
         });

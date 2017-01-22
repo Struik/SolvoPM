@@ -24,33 +24,32 @@ class AttributeTypes(models.Model):
     name = models.CharField(max_length=200)
 
 class Projects(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, null=False)
     company = models.ForeignKey(Companies)
     country = models.ForeignKey(Countries)
     city = models.ForeignKey(Cities)
     address = models.CharField(max_length=200)
-    country = models.ForeignKey(Countries)
 
 class Stages(models.Model):
     name = models.CharField(max_length=200)
     stageType = models.ForeignKey(StageTypes)
-    projectId = models.ForeignKey(Projects)
+    project = models.ForeignKey(Projects)
 
 class ProjectAttributes(models.Model):
-    stageId = models.ForeignKey(Stages)
+    stage = models.ForeignKey(Stages)
     attrType = models.ForeignKey(AttributeTypes)
-    attrValue = models.IntegerField
+    attrValue = models.IntegerField()
 
 class ContractTypes(models.Model):
     name =  models.CharField(max_length=200)
 
 class Contracts(models.Model):
     contractType = models.ForeignKey(ContractTypes)
-    name =  models.CharField(max_length=200)
-    fullPrice = models.IntegerField
-    startDate = models.DateField
+    name =  models.CharField(max_length=200, null=False)
+    fullPrice = models.IntegerField(null=True)
+    startDate = models.DateField(null=True)
 
 class Payments(models.Model):
-    contractId = models.ForeignKey(Contracts)
-    paymentDate = models.DateField
-    paymentAmount = models.IntegerField
+    contract = models.ForeignKey(Contracts)
+    paymentDate = models.DateField()
+    paymentAmount = models.IntegerField()
