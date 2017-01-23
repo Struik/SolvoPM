@@ -6,9 +6,12 @@ from datetime import datetime
 from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, AttributeTypes, ProjectAttributes
 from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments
 from itertools import groupby
+from operator import itemgetter, methodcaller
 import logging, json, WebPM
 
+
 from WebPM.models import models
+
 
 logger = logging.getLogger('WebPM')
 logger.info('started');
@@ -90,41 +93,58 @@ def new_ref_value(request):
 
 
 #Page with projects info. Table with all the data from DB
-def projects(request):
+def getProjectData(request):
     logger.info('Projects page requested')
     logger.info('Preparing projects data')
 
-    paymentsObject = Payments.objects.order_by('paymentDate')
+    paymentsObject = Payments.objects.order_by('contract', 'paymentDate')
     paymentsByMonth = {}
 
     minDate = min(payment.paymentDate for payment in paymentsObject)
     maxDate = max(payment.paymentDate for payment in paymentsObject)
     logger.info('Date period from ' + minDate.strftime('%d.%m.%Y') + ' to ' + maxDate.strftime('%d.%m.%Y'))
 
-    monthList = getMonthList(minDate, maxDate)
-    logger.info(monthList)
+    monthDict = getMonthList(minDate, maxDate)
+    logger.info(monthDict)
+    monthCount = len(monthDict)
 
     paymentPeriod = (maxDate.year - minDate.year)*12 + maxDate.month - minDate.month + 1
     logger.info('Payment period is ' + str(paymentPeriod))
 
     paymentsData = []
+    counter = 0
 
-    for payment in paymentsObject:
-
-        paymentsData.append([payment.contract.project.name, 'Ahmetshin', 'Configuration', payment.contract.contractType.name, payment.contract.name])
+    for (key, group) in groupby(paymentsObject, lambda x: [x.contract.project.name, 'Ahmetshin', 'Configuration',
+                                                           x.contract.contractType.name, x.contract.name]):
+        paymentDates = [''] * len(monthDict)
+        logger.info(paymentDates)
+        for item in group:
+            logger.info(item.paymentDate)
+            monthNum = monthDict[item.paymentDate.strftime('%B %y')]
+            logger.info(monthNum)
+            paymentDates[monthNum] = item.paymentAmount
+        paymentsData.append(key + paymentDates)
 
     logger.info(paymentsData)
+    columns = [{ 'title':'Project name' }, { 'title':'Manager' }, { 'title':'Current state' },
+               { 'title':'Contract type' }, { 'title':'Contract name'}]
 
-    for (grouping_type, group) in groupby(paymentsObject, lambda x: x.paymentDate.strftime('%B')):
-        logger.info(grouping_type)
-        logger.info(group)
-    return render_to_response('projects.html', {'payments': paymentsObject})
+    monthList = list(monthDict.items())
+    monthList.sort(key = lambda x: x[1])
+    logger.info(monthList)
+    for month in monthList:
+        columns.append({'title': month[0]})
+
+    logger.info(columns)
+    return render_to_response('projects.html', {'payments': paymentsData, 'columns': columns})
 
 
 def getMonthList(minDate, maxDate):
     totalMonths = lambda dt: dt.month + 12 * dt.year
-    monthList = []
+    monthDict = {}
+    i = 0
     for monthsRange in range(totalMonths(minDate)-1, totalMonths(maxDate)):
         y, m = divmod(monthsRange, 12)
-        monthList.append(datetime(y, m+1, 1).strftime("%B %y"))
-    return monthList
+        monthDict[(datetime(y, m + 1, 1).strftime('%B %y'))] = i
+        i += 1
+    return monthDict

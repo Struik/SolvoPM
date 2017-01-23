@@ -13,22 +13,14 @@
 <script>
     //Variable containing all cities with reference to countries which will be used in main.js
     //Django variables are only accessible inside the template and can be passed to external javascript only this way
-    var paymentsData = [];
-    {% for payment in payments %}
-        paymentsData.push(['{{payment.contract.project.name}}', 'Ahmetshin' , 'Configuration', '{{payment.contract.contractType.name}}', '{{payment.contract.name}}',
-            '{{payment.paymentDate}}', '{{payment.paymentAmount}}']);
-        console.log('{{payment.paymentDate}}');
-    {% endfor %}
+    {% autoescape off %}
+        var columns = {{columns}};
+        var payments = {{payments}};
+    {% endautoescape %}
 
-    console.log(moment().format("MMM. D, YYYY"));
-    console.log(paymentsData);
+    console.log(columns);
+    console.log(payments);
 
-    var paymentsByMonth = _.groupBy(paymentsData, function (result) {
-       return moment(result[5], 'MMM. D, YYYY').format('MMMM');
-    });
-
-    console.log(paymentsByMonth)
-    console.log(Object.keys(paymentsByMonth))
 </script>
 
 <script src="{% static 'js/projects.js' %}"></script>

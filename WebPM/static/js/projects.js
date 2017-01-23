@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var columns = [
+    var columnsaaa = [
         { 'title':'Project name' },
         { 'title':'Manager' },
         { 'title':'Current state' },
@@ -13,7 +13,8 @@ $(document).ready(function() {
 
     var projectTable = $('#projects').DataTable({
         columns: columns,
-        //data: paymentsData,
+        data: payments,
+        scrollX: true,
         rowsGroup: [0, 1, 2, 3, 4],
         paging: false,
     });
