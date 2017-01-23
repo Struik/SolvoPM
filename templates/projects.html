@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+
+{% block extracss %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}"/>
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'js/datatables.js' %}"></script>
+<script src="{% static 'js/dataTables.rowsGroup.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/lodash.js' %}"></script>
+<script>
+    //Variable containing all cities with reference to countries which will be used in main.js
+    //Django variables are only accessible inside the template and can be passed to external javascript only this way
+    var paymentsData = [];
+    {% for payment in payments %}
+        paymentsData.push(['{{payment.contract.project.name}}', 'Ahmetshin' , 'Configuration', '{{payment.contract.contractType.name}}', '{{payment.contract.name}}',
+            '{{payment.paymentDate}}', '{{payment.paymentAmount}}']);
+        console.log('{{payment.paymentDate}}');
+    {% endfor %}
+
+    console.log(moment().format("MMM. D, YYYY"));
+    console.log(paymentsData);
+
+    var paymentsByMonth = _.groupBy(paymentsData, function (result) {
+       return moment(result[5], 'MMM. D, YYYY').format('MMMM');
+    });
+
+    console.log(paymentsByMonth)
+    console.log(Object.keys(paymentsByMonth))
+</script>
+
+<script src="{% static 'js/projects.js' %}"></script>
+{% endblock %}
+
+
+{% block page-header %}Projects{% endblock %}
+
+{% block content %}
+
+
+
+<table id="projects" class="table table-bordered" cellspacing="0" width="100%">
+</table>
+
+{% endblock %}
+
+{% block script %}
+<script>
+</script>
+{% endblock %}

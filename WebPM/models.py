@@ -44,6 +44,7 @@ class ContractTypes(models.Model):
     name =  models.CharField(max_length=200)
 
 class Contracts(models.Model):
+    project = models.ForeignKey(Projects)
     contractType = models.ForeignKey(ContractTypes)
     name =  models.CharField(max_length=200, null=False)
     fullPrice = models.IntegerField(null=True)

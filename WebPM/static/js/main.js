@@ -47,8 +47,8 @@ $(document).ready(function(){
             }
 
             // Start validation; Prevent going forward if false
-            //return form.valid();
-            return true;
+            return form.valid();
+            //return true;
         },
         onFinishing: function (event, currentIndex)
         {

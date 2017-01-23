@@ -26,13 +26,6 @@
 
     var projectAttrs = '{{projectAttrs.Countries}}';
     console.log(cities);
-    console.log(cities['Russia']);
-    console.log('aa')
-
-
-
-
-
 </script>
 
 <script src="{% static 'js/selectize.js' %}"></script>
@@ -54,7 +47,7 @@
         <!-- Button trigger modal -->
         <button id="add" class="btn btn-xlg btn-default btn-ghost" data-toggle="modal" data-target="#myModal">Add
         </button>
-        <button id="look" class="btn btn-xlg btn-default btn-ghost">Look</button>
+        <button id="look" class="btn btn-xlg btn-default btn-ghost" onclick="location.href='projects';">Look</button>
     </div>
 </div>
 <!-- Modal -->
@@ -69,7 +62,7 @@
             <form id="projectAddForm" method="post">
                 <h3>Description</h3>
                 <h3>Place</h3>
-                <h3>Stages</h3>
+                <!--<h3>Stages</h3>-->
                 <h3>Contracts</h3>
 
                 <section>
@@ -135,54 +128,54 @@
                     </div>
                 </section>
 
-                <section>
-                    <div class="form-group col-lg-12">
-                        <select class="form-control" id="selectStage" name="selectStage" placeholder="Stage name"
-                        reference_id="StageTypes">
-                            <option value="">Stage name</option>
-                            {% for query in projectAttrs.StageTypes %}
-                            <option value="{{query.id}}">{{query.name}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <!--Struik. For possible future use: in case of need for dynamic stage attributes-->
-                    <!--div class="form-group col-lg-12">
-                    <select class="form-control" id="selectAttribute" placeholder="Stage attribute">
-                    <option value="">Stage attribute</option>
-                    <option value="1">Cost</option>
-                    <option value="2">Duration</option>
-                    <option value="3">Payment</option>
-                    </select>
-                    </div-->
-                    <div class="form-group col-lg-12">
-                        <input type="text" class="form-control stage-attr" id="cost" name="cost" placeholder="Cost">
-                    </div>
-                    <div class="form-group col-lg-12">
-                        <input type="text" class="form-control stage-attr" id="duration" name="duration"
-                               placeholder="Duration">
-                    </div>
-                    <div class="form-group col-lg-12">
-                        <select class="form-control selectize fixed-values" id="selectPayment" name="selectPayment"
-                                placeholder="Payment type">
-                            <option value="">Payment type</option>
-                            {% for query in projectAttrs.PaymentTypes %}
-                            <option value="{{query.id}}">{{query.name}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group col-lg-12">
-                        <button id="addStage" type="button" class="btn btn-info col-lg-12">Add stage</button>
-                    </div>
+                <!--<section>-->
                     <!--<div class="form-group col-lg-12">-->
-                    <!--<div class="input-group">-->
-                    <!--<span class="input-group-addon">$</span>-->
-                    <!--<input type="text" class="form-control" placeholder="price">-->
+                        <!--<select class="form-control" id="selectStage" name="selectStage" placeholder="Stage name"-->
+                        <!--reference_id="StageTypes">-->
+                            <!--<option value="">Stage name</option>-->
+                            <!--{% for query in projectAttrs.StageTypes %}-->
+                            <!--<option value="{{query.id}}">{{query.name}}</option>-->
+                            <!--{% endfor %}-->
+                        <!--</select>-->
                     <!--</div>-->
+                    <!--&lt;!&ndash;Struik. For possible future use: in case of need for dynamic stage attributes&ndash;&gt;-->
+                    <!--&lt;!&ndash;div class="form-group col-lg-12">-->
+                    <!--<select class="form-control" id="selectAttribute" placeholder="Stage attribute">-->
+                    <!--<option value="">Stage attribute</option>-->
+                    <!--<option value="1">Cost</option>-->
+                    <!--<option value="2">Duration</option>-->
+                    <!--<option value="3">Payment</option>-->
+                    <!--</select>-->
+                    <!--</div&ndash;&gt;-->
+                    <!--<div class="form-group col-lg-12">-->
+                        <!--<input type="text" class="form-control stage-attr" id="cost" name="cost" placeholder="Cost">-->
                     <!--</div>-->
-                    <div id="stagesList" class="form-group col-lg-12">
-                        <label id="stageListLabel" class="control-label hidden">Stages list:</label>
-                    </div>
-                </section>
+                    <!--<div class="form-group col-lg-12">-->
+                        <!--<input type="text" class="form-control stage-attr" id="duration" name="duration"-->
+                               <!--placeholder="Duration">-->
+                    <!--</div>-->
+                    <!--<div class="form-group col-lg-12">-->
+                        <!--<select class="form-control selectize fixed-values" id="selectPayment" name="selectPayment"-->
+                                <!--placeholder="Payment type">-->
+                            <!--<option value="">Payment type</option>-->
+                            <!--{% for query in projectAttrs.PaymentTypes %}-->
+                            <!--<option value="{{query.id}}">{{query.name}}</option>-->
+                            <!--{% endfor %}-->
+                        <!--</select>-->
+                    <!--</div>-->
+                    <!--<div class="form-group col-lg-12">-->
+                        <!--<button id="addStage" type="button" class="btn btn-info col-lg-12">Add stage</button>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;<div class="form-group col-lg-12">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="input-group">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span class="input-group-addon">$</span>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<input type="text" class="form-control" placeholder="price">&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--<div id="stagesList" class="form-group col-lg-12">-->
+                        <!--<label id="stageListLabel" class="control-label hidden">Stages list:</label>-->
+                    <!--</div>-->
+                <!--</section>-->
 
                 <section>
                     <div class="form-group col-lg-12">
