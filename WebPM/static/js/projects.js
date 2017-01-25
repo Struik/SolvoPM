@@ -24,10 +24,16 @@ $(document).ready(function() {
         data =  projectData['payments']
         //ES6 structure, might not be supported by some browsers
         var staticColumns = [...Array(5).keys()];
-        console.log(staticColumns)
-        var columnsNoSearch = [...Array(columns.length).keys()];
+        console.log('staticColumns: ' + staticColumns)
+        var allColumns = [...Array(columns.length).keys()];
+        console.log('allColumns: ' + allColumns)
+        var columnsNoSearch = allColumns.slice();
         columnsNoSearch.splice(0, 3)
-        console.log(columnsNoSearch)
+        console.log('columnsNoSearch: ' + columnsNoSearch)
+        var paymentsColumns = allColumns.slice()
+        paymentsColumns.splice(0, staticColumns.length)
+        console.log('paymentsColumns: ' + paymentsColumns)
+
 
 
 
@@ -50,6 +56,14 @@ $(document).ready(function() {
             columnDefs: [{
                 targets: columnsNoSearch,
                 searchable: false,
+            },
+            {
+                targets: paymentsColumns,
+                "createdCell": function (td, cellData, rowData, row, col) {
+                    if ( true ) {
+                        $(td).css('color', 'red');
+                    }
+                },
             }],
         });
 
