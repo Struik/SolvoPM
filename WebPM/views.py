@@ -133,7 +133,7 @@ def getProjectsData(request):
     paymentsData = []
 
     for (key, group) in groupby(paymentsObject, lambda x: [x.contract.project.name, 'Ahmetshin', 'Configuration',
-                                                           x.contract.contractType.name, x.contract.name, "rowwww"]):
+                                                           x.contract.contractType.name, x.contract.name, x.contract.id]):
         paymentPlannedDates = [''] * len(monthDict)
         paymentFactDates = [''] * len(monthDict)
         logger.info(key)
