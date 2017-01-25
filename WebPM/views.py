@@ -95,14 +95,14 @@ def new_ref_value(request):
 #Page with projects info. Table with all the data from DB
 def projects(request):
     logger.info('Projects page requested')
-    return render_to_response('projects.html', {'payments': paymentsData, 'columns': columns})
+    return render_to_response('projects.html')
 
 
-def getProjectData(request):
+@csrf_exempt
+def getProjectsData(request):
     logger.info('Preparing projects data')
 
     paymentsObject = Payments.objects.order_by('contract', 'paymentDate')
-    paymentsByMonth = {}
 
     minDate = min(payment.paymentDate for payment in paymentsObject)
     maxDate = max(payment.paymentDate for payment in paymentsObject)
@@ -110,13 +110,11 @@ def getProjectData(request):
 
     monthDict = getMonthList(minDate, maxDate)
     logger.info(monthDict)
-    monthCount = len(monthDict)
 
     paymentPeriod = (maxDate.year - minDate.year)*12 + maxDate.month - minDate.month + 1
     logger.info('Payment period is ' + str(paymentPeriod))
 
     paymentsData = []
-    counter = 0
 
     for (key, group) in groupby(paymentsObject, lambda x: [x.contract.project.name, 'Ahmetshin', 'Configuration',
                                                            x.contract.contractType.name, x.contract.name]):
@@ -141,9 +139,10 @@ def getProjectData(request):
         columns.append({'title': month[0]})
 
     logger.info(columns)
-    return render_to_response('projects.html', {'payments': paymentsData, 'columns': columns})
+    return HttpResponse(json.dumps({'payments': paymentsData, 'columns': columns}), content_type='application/json')
 
-
+#Function to make an array of dictionaties with months as keys and numerical order as value.
+#E.g.: with minDate = 21.12.2016 and maxDate = 04.02.2017 an array will be [{'Dec 16': 1}, {'Jan 17': 2}, {'Feb 17': 3}]
 def getMonthList(minDate, maxDate):
     totalMonths = lambda dt: dt.month + 12 * dt.year
     monthDict = {}
