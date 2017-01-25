@@ -3,25 +3,26 @@
 
 {% block extracss %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/fixedColumns.bootstrap.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/projects.css' %}"/>
 {% endblock %}
 
 {% block extrajs %}
 <script src="{% static 'js/datatables.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap.js' %}"></script>
 <script src="{% static 'js/dataTables.rowsGroup.js' %}"></script>
-<script src="{% static 'js/moment-with-locales.js' %}"></script>
-<script src="{% static 'js/lodash.js' %}"></script>
-<script>
-    //Variable containing all cities with reference to countries which will be used in main.js
-    //Django variables are only accessible inside the template and can be passed to external javascript only this way
-    {% autoescape off %}
-        var columns = {{columns}};
-        var payments = {{payments}};
-    {% endautoescape %}
+<!--<script>-->
+    <!--//Variable containing all cities with reference to countries which will be used in main.js-->
+    <!--//Django variables are only accessible inside the template and can be passed to external javascript only this way-->
+    <!--{% autoescape off %}-->
+        <!--var columns = {{columns}};-->
+        <!--var payments = {{payments}};-->
+    <!--{% endautoescape %}-->
 
-    console.log(columns);
-    console.log(payments);
+    <!--console.log(columns);-->
+    <!--console.log(payments);-->
 
-</script>
+<!--</script>-->
 
 <script src="{% static 'js/projects.js' %}"></script>
 {% endblock %}

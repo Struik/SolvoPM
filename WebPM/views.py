@@ -93,8 +93,12 @@ def new_ref_value(request):
 
 
 #Page with projects info. Table with all the data from DB
-def getProjectData(request):
+def projects(request):
     logger.info('Projects page requested')
+    return render_to_response('projects.html', {'payments': paymentsData, 'columns': columns})
+
+
+def getProjectData(request):
     logger.info('Preparing projects data')
 
     paymentsObject = Payments.objects.order_by('contract', 'paymentDate')
@@ -117,12 +121,13 @@ def getProjectData(request):
     for (key, group) in groupby(paymentsObject, lambda x: [x.contract.project.name, 'Ahmetshin', 'Configuration',
                                                            x.contract.contractType.name, x.contract.name]):
         paymentDates = [''] * len(monthDict)
-        logger.info(paymentDates)
+        logger.info(key)
         for item in group:
             logger.info(item.paymentDate)
-            monthNum = monthDict[item.paymentDate.strftime('%B %y')]
+            monthNum = monthDict[item.paymentDate.strftime('%b %y')]
             logger.info(monthNum)
             paymentDates[monthNum] = item.paymentAmount
+        paymentsData.append(key + paymentDates)
         paymentsData.append(key + paymentDates)
 
     logger.info(paymentsData)
@@ -145,6 +150,6 @@ def getMonthList(minDate, maxDate):
     i = 0
     for monthsRange in range(totalMonths(minDate)-1, totalMonths(maxDate)):
         y, m = divmod(monthsRange, 12)
-        monthDict[(datetime(y, m + 1, 1).strftime('%B %y'))] = i
+        monthDict[(datetime(y, m + 1, 1).strftime('%b %y'))] = i
         i += 1
     return monthDict
