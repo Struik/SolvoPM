@@ -54,3 +54,6 @@ class Payments(models.Model):
     contract = models.ForeignKey(Contracts)
     paymentDate = models.DateField()
     paymentAmount = models.IntegerField()
+    payed = models.BooleanField(default=False)
+    isSplit = models.BooleanField(default=False)
+    parentPayment = models.ForeignKey('Payments', null=True)
