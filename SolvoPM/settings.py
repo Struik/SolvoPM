@@ -80,7 +80,8 @@ DATABASES = {
         'NAME': 'wmsdb11',
         'USER': 'mvs',
         'PASSWORD': 'oracle',
-        'HOST': 'hercules.solvo.ru',
+        #'HOST': 'hercules.solvo.ru',
+        'HOST': 'localhost',
         'PORT': '1521',
     }
 }

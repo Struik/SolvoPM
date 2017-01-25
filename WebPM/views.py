@@ -108,68 +108,63 @@ def getProjectsData(request):
     maxDate = max(payment.paymentDate for payment in paymentsObject)
     logger.info('Date period from ' + minDate.strftime('%d.%m.%Y') + ' to ' + maxDate.strftime('%d.%m.%Y'))
 
-    monthDict = getMonthList(minDate, maxDate)
-    logger.info(monthDict)
-
-    #Creating table column headers object
-    #DT_RowId is needed for saving object id as an attribute in the table and is removed from this dict later
-    columnsDicted = [{'title': 'Project name', 'data': 'Project name'}, {'title': 'Manager', 'data': 'Manager'},
-               {'title': 'Current state', 'data': 'Current state'}, {'title': 'Contract type', 'data': 'Contract type'},
-               {'title': 'Contract name', 'data': 'Contract name'}, {'data': 'DT_RowId'}]
-    monthList = list(monthDict.items())
-    monthList.sort(key=lambda x: x[1])
-    logger.info(monthList)
-    for month in monthList:
-        columnsDicted.append({'title': month[0], 'data': month[0]})
-
-    logger.info(columnsDicted)
-
-    #Used later in current function
-    columnsList = [column['data'] for column in columnsDicted]
+    monthsDict = getMonthList(minDate, maxDate)
+    logger.info('Months in period: ' + str(monthsDict))
 
     paymentPeriod = (maxDate.year - minDate.year)*12 + maxDate.month - minDate.month + 1
     logger.info('Payment period is ' + str(paymentPeriod))
 
-    paymentsData = []
+    columnsBasic = ['Project name', 'Manager', 'Current state', 'Contract type', 'Contract name', 'DT_RowId']
+    logger.info('Basic column headers: ' + str(columnsBasic))
 
-    for (key, group) in groupby(paymentsObject, lambda x: [x.contract.project.name, 'Ahmetshin', 'Configuration',
-                                                           x.contract.contractType.name, x.contract.name, x.contract.id]):
-        paymentPlannedDates = [''] * len(monthDict)
-        paymentFactDates = [''] * len(monthDict)
-        logger.info(key)
+    columnsDicted = []
+    monthsList = list(monthsDict.items())
+    monthsList.sort(key=lambda x: x[1])
+    for i in range(len(columnsBasic)):
+        #Columns with DT ain't for showing in the table but for technical usage
+        if not columnsBasic[i].startswith('DT'):
+            columnsDicted.append({'data': columnsBasic[i], 'title': columnsBasic[i]})
+    for i in range(len(monthsList)):
+        columnsDicted.append({'data': monthsList[i][0], 'title': monthsList[i][0]})
+    logger.info('Final column headers: ' + str(columnsDicted))
+
+    paymentsDataDicted = []
+    paymentDict = dict(zip(monthsDict.keys(), [''] * len(monthsDict)))
+
+    for (key, group) in groupby(paymentsObject, lambda x: dict(zip(columnsBasic, [x.contract.project.name,
+                                                                                  'Ahmetshin',
+                                                                                  'Configuration',
+                                                                                  x.contract.contractType.name,
+                                                                                  x.contract.name,
+                                                                                  x.contract.id]))):
+        paymentPlannedDates = {key: '' for key in paymentDict}
+        paymentFactDates = {key: '' for key in paymentDict}
+        logger.info('key: ' +  str(key))
         for item in group:
             logger.info(item.paymentDate)
-            monthNum = monthDict[item.paymentDate.strftime('%b %y')]
-            logger.info(monthNum)
-            paymentPlannedDates[monthNum] = item.paymentAmount
+            month = item.paymentDate.strftime('%b %y')
+            logger.info('month: ' + str(month))
+            logger.info('payment amount:' + str(item.paymentAmount))
+            paymentPlannedDates[item.paymentDate.strftime('%b %y')] = item.paymentAmount
             if item.payed:
-                paymentFactDates[monthNum] = item.paymentAmount
-        paymentsData.append(key + paymentPlannedDates)
-        paymentsData.append(key + paymentFactDates)
+                paymentFactDates[month] = item.paymentAmount
+        paymentPlannedDates.update(key)
+        logger.info('paymentPlannedDates: ' + str(paymentPlannedDates))
+        paymentsDataDicted.append({**key, **paymentPlannedDates})
+        paymentsDataDicted.append({**key, **paymentFactDates})
 
-    logger.info(paymentsData)
-
-    #This kind of object is more suitable for jquery-datatables plugin.
-    paymentsDataDicted = []
-    for payment in paymentsData:
-        paymentsDataDicted.append(dict(zip(columnsList, payment)))
-
+    logger.info('Payments data:')
     logger.info(paymentsDataDicted)
-
-    #Removing DT_RowId
-    columnsDicted[:] = [d for d in columnsDicted if d.get('data') != 'DT_RowId']
-    logger.info(columnsDicted)
-
     return HttpResponse(json.dumps({'payments': paymentsDataDicted, 'columns': columnsDicted}), content_type='application/json')
 
 #Function to make an array of dictionaties with months as keys and numerical order as value.
 #E.g.: with minDate = 21.12.2016 and maxDate = 04.02.2017 an array will be [{'Dec 16': 1}, {'Jan 17': 2}, {'Feb 17': 3}]
 def getMonthList(minDate, maxDate):
     totalMonths = lambda dt: dt.month + 12 * dt.year
-    monthDict = {}
+    monthsDict = {}
     i = 0
     for monthsRange in range(totalMonths(minDate)-1, totalMonths(maxDate)):
         y, m = divmod(monthsRange, 12)
-        monthDict[(datetime(y, m + 1, 1).strftime('%b %y'))] = i
+        monthsDict[(datetime(y, m + 1, 1).strftime('%b %y'))] = i
         i += 1
-    return monthDict
+    return monthsDict
