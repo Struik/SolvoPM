@@ -60,8 +60,23 @@ $(document).ready(function() {
             {
                 targets: paymentsColumns,
                 "createdCell": function (td, cellData, rowData, row, col) {
-                    if ( true ) {
-                        $(td).css('color', 'red');
+                    if(cellData) {
+                        var key = columns[col]['data'].replace('.amount','');
+                        td.id = rowData[key].id
+                        console.log(rowData[key].isSplit);
+
+                        $(td).append(' <span class="glyphicon glyphicon-search pull-right"></span>');
+                        $(td).addClass('payment');
+                        $(td).attr('data-content','Tooltip text');
+                        $(td).attr('data-placement','bottom');
+                        $(td).attr('data-container','body');
+                        //$(td).attr('data-trigger','hover');
+                        if(rowData[key].isSplit){
+                            $(td).addClass( "text-warning" );
+                        }
+                        //glyphicon-warning-sign
+                        //<a href="#" data-toggle="tooltip" title="" data-original-title="Default tooltip">you probably</a>
+
                     }
                 },
             }],
@@ -70,6 +85,9 @@ $(document).ready(function() {
         //Add bootstrap colors for payment values in the table
         $('#projects tr:nth-of-type(odd)').addClass( "text-primary" );
         $('#projects tr:nth-of-type(even)').addClass( "text-success" );
+        $('.payment').popover({
+                trigger: "hover",
+        })
     }
 
 

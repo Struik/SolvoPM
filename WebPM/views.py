@@ -125,11 +125,12 @@ def getProjectsData(request):
         if not columnsBasic[i].startswith('DT'):
             columnsDicted.append({'data': columnsBasic[i], 'title': columnsBasic[i]})
     for i in range(len(monthsList)):
-        columnsDicted.append({'data': monthsList[i][0], 'title': monthsList[i][0]})
+        columnsDicted.append({'data': monthsList[i][0].replace(' ','') + '.amount', 'title': monthsList[i][0]})
     logger.info('Final column headers: ' + str(columnsDicted))
 
     paymentsDataDicted = []
-    paymentDict = dict(zip(monthsDict.keys(), [''] * len(monthsDict)))
+    paymentDict = dict(zip([i.replace(' ','') for i in monthsDict.keys()], [''] * len(monthsDict)))
+    logger.info('PaymentDict: ' + str(paymentDict))
 
     for (key, group) in groupby(paymentsObject, lambda x: dict(zip(columnsBasic, [x.contract.project.name,
                                                                                   'Ahmetshin',
@@ -137,17 +138,21 @@ def getProjectsData(request):
                                                                                   x.contract.contractType.name,
                                                                                   x.contract.name,
                                                                                   x.contract.id]))):
-        paymentPlannedDates = {key: '' for key in paymentDict}
-        paymentFactDates = {key: '' for key in paymentDict}
+        paymentPlannedDates = {key: {'amount': ''} for key in paymentDict}
+        paymentFactDates = {key: {'amount': ''} for key in paymentDict}
         logger.info('key: ' +  str(key))
         for item in group:
             logger.info(item.paymentDate)
-            month = item.paymentDate.strftime('%b %y')
+            month = item.paymentDate.strftime('%b%y')
             logger.info('month: ' + str(month))
             logger.info('payment amount:' + str(item.paymentAmount))
-            paymentPlannedDates[item.paymentDate.strftime('%b %y')] = item.paymentAmount
+            paymentPlannedDates[month]['amount'] = item.paymentAmount
+            paymentPlannedDates[month]['id'] = item.id
+            paymentPlannedDates[month]['isSplit'] = item.isSplit
             if item.payed:
-                paymentFactDates[month] = item.paymentAmount
+                paymentFactDates[month]['amount'] = item.paymentAmount
+                paymentFactDates[month]['id'] = item.id
+                paymentFactDates[month]['isSplit'] = item.isSplit
         paymentPlannedDates.update(key)
         logger.info('paymentPlannedDates: ' + str(paymentPlannedDates))
         paymentsDataDicted.append({**key, **paymentPlannedDates})
