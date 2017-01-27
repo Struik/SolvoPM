@@ -148,11 +148,20 @@ def getProjectsData(request):
             logger.info('payment amount:' + str(item.paymentAmount))
             paymentPlannedDates[month]['amount'] = item.paymentAmount
             paymentPlannedDates[month]['id'] = item.id
-            paymentPlannedDates[month]['isSplit'] = item.isSplit
+            paymentPlannedDates[month]['split'] = item.isSplit
+            paymentPlannedDates[month]['date'] = item.paymentDate.strftime('%d.%m.%Y')
+            if item.isSplit:
+                logger.info('payment is split')
+                splitPayments = Payments.objects.filter(parentPayment = item.id)
+                logger.info(splitPayments)
+                paymentPlannedDates[month]['splitPayments'] = []
+                for splitPayment in splitPayments:
+                    paymentPlannedDates[month]['splitPayments'].append({'id': splitPayment.id, 'date': item.paymentDate.strftime('%d.%m.%Y'), 'amount': item.paymentAmount})
             if item.payed:
                 paymentFactDates[month]['amount'] = item.paymentAmount
                 paymentFactDates[month]['id'] = item.id
-                paymentFactDates[month]['isSplit'] = item.isSplit
+                paymentFactDates[month]['split'] = item.isSplit
+                paymentFactDates[month]['date'] = item.paymentDate.strftime('%d.%m.%Y')
         paymentPlannedDates.update(key)
         logger.info('paymentPlannedDates: ' + str(paymentPlannedDates))
         paymentsDataDicted.append({**key, **paymentPlannedDates})

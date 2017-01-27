@@ -7,5 +7,10 @@ td span{
 
 td:hover span{
     color: #333333;
-}   
+}
+
+td span {
+    cursor: pointer;
+    cursor: hand;
+}
 

@@ -67,12 +67,16 @@ $(document).ready(function() {
 
                         $(td).append(' <span class="glyphicon glyphicon-search pull-right"></span>');
                         $(td).addClass('payment');
-                        $(td).attr('data-content','Tooltip text');
+                        $(td).attr('data-html', 'true');
+                        $(td).attr('data-content','Date: ' + rowData[key].date);
                         $(td).attr('data-placement','bottom');
                         $(td).attr('data-container','body');
                         //$(td).attr('data-trigger','hover');
-                        if(rowData[key].isSplit){
+                        if(rowData[key].split){
                             $(td).addClass( "text-warning" );
+                            for splitPayment in rowData[key].splitPayments{
+                                $(td).attr('data-content','DDD: ' + splitPayment.amount);
+                            }
                         }
                         //glyphicon-warning-sign
                         //<a href="#" data-toggle="tooltip" title="" data-original-title="Default tooltip">you probably</a>
