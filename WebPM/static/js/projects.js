@@ -1,3 +1,5 @@
+'use strict'
+
 $(document).ready(function() {
     getProjectData();
 
@@ -20,8 +22,8 @@ $(document).ready(function() {
     //Function to created table
     function createDatatable(projectData){
         console.log(projectData)
-        columns = projectData['columns']
-        data =  projectData['payments']
+        var columns = projectData['columns']
+        var data =  projectData['payments']
         //ES6 structure, might not be supported by some browsers
         var staticColumns = [...Array(5).keys()];
         console.log('staticColumns: ' + staticColumns)
@@ -63,19 +65,23 @@ $(document).ready(function() {
                     if(cellData) {
                         var key = columns[col]['data'].replace('.amount','');
                         td.id = rowData[key].id
-                        console.log(rowData[key].isSplit);
+                        console.log(rowData[key].split);
 
                         $(td).append(' <span class="glyphicon glyphicon-search pull-right"></span>');
                         $(td).addClass('payment');
                         $(td).attr('data-html', 'true');
-                        $(td).attr('data-content','Date: ' + rowData[key].date);
+                        $(td).attr('data-content','Planned date: ' + rowData[key].date);
                         $(td).attr('data-placement','bottom');
                         $(td).attr('data-container','body');
                         //$(td).attr('data-trigger','hover');
                         if(rowData[key].split){
                             $(td).addClass( "text-warning" );
-                            for splitPayment in rowData[key].splitPayments{
-                                $(td).attr('data-content','DDD: ' + splitPayment.amount);
+                            $(td).attr('data-content', $(td).attr('data-content') + '<br/> Payment is split:')
+                            var payments = rowData[key].splitPayments
+                            console.log(payments)
+                            for (var i = 0; i < payments.length; i++) {
+                                console.log(payments[i]);
+                                $(td).attr('data-content', $(td).attr('data-content') + '<br/> #' + (i+1) +' Date:  ' + payments[i].date + ', amount: ' + payments[i].amount);
                             }
                         }
                         //glyphicon-warning-sign

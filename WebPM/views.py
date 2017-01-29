@@ -156,7 +156,7 @@ def getProjectsData(request):
                 logger.info(splitPayments)
                 paymentPlannedDates[month]['splitPayments'] = []
                 for splitPayment in splitPayments:
-                    paymentPlannedDates[month]['splitPayments'].append({'id': splitPayment.id, 'date': item.paymentDate.strftime('%d.%m.%Y'), 'amount': item.paymentAmount})
+                    paymentPlannedDates[month]['splitPayments'].append({'id': splitPayment.id, 'date': splitPayment.paymentDate.strftime('%d.%m.%Y'), 'amount': splitPayment.paymentAmount})
             if item.payed:
                 paymentFactDates[month]['amount'] = item.paymentAmount
                 paymentFactDates[month]['id'] = item.id
