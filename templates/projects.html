@@ -11,19 +11,6 @@
 <script src="{% static 'js/datatables.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap.js' %}"></script>
 <script src="{% static 'js/dataTables.rowsGroup.js' %}"></script>
-<!--<script>-->
-    <!--//Variable containing all cities with reference to countries which will be used in main.js-->
-    <!--//Django variables are only accessible inside the template and can be passed to external javascript only this way-->
-    <!--{% autoescape off %}-->
-        <!--var columns = {{columns}};-->
-        <!--var payments = {{payments}};-->
-    <!--{% endautoescape %}-->
-
-    <!--console.log(columns);-->
-    <!--console.log(payments);-->
-
-<!--</script>-->
-
 <script src="{% static 'js/projects.js' %}"></script>
 {% endblock %}
 
@@ -31,11 +18,52 @@
 {% block page-header %}Projects{% endblock %}
 
 {% block content %}
-
-
-
 <table id="projects" class="table table-bordered" cellspacing="0" width="100%">
 </table>
+
+
+<div class="modal fade" id="paymentInfo" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Payment info</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Recipient:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Payment is split:</label>
+                        <table id="paymentTable" class="table table-condensed table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody id="paymentsTableBody">
+                            <tr id="paymentRow1">
+                                <td>1</td>
+                                <td>01.02.2017</td>
+                                <td>231</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Send message</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 

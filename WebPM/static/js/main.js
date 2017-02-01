@@ -50,7 +50,7 @@ $(document).ready(function(){
             return form.valid();
             //return true;
         },
-        onFinishing: function (event, currentIndex)for
+        onFinishing: function (event, currentIndex)
         {
             var form = $(this);
             console.log('3');

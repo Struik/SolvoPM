@@ -1,6 +1,7 @@
 'use strict'
 
 $(document).ready(function() {
+    var projectTable;
     getProjectData();
 
     //Function to get project data from server and call table creation
@@ -41,7 +42,7 @@ $(document).ready(function() {
 
         //(plugin datatables.js)
         //Creating datatable, table headers and table data are generated in required way (array) on server side
-        var projectTable = $('#projects').DataTable({
+        projectTable = $('#projects').DataTable({
             processing: true,
             columns: columns,
             data: data,
@@ -67,7 +68,7 @@ $(document).ready(function() {
                         td.id = rowData[key].id
                         console.log(rowData[key].split);
 
-                        $(td).append(' <span class="glyphicon glyphicon-search pull-right"></span>');
+                        $(td).append(' <span class="show-payment glyphicon glyphicon-search pull-right"></span>');
                         $(td).addClass('payment');
                         $(td).attr('data-html', 'true');
                         $(td).attr('data-content','Planned date: ' + rowData[key].date);
@@ -100,7 +101,20 @@ $(document).ready(function() {
         })
     }
 
+    $("#projects").on("click", ".show-payment", function() {
+        var cell = $(this).parent();
+        var row = $(this).closest('tr');
+        console.log('Showing payment #' + cell.attr('id'));
+        console.log(projectTable.row( row ).data());
+        console.log(projectTable.cell( cell ).index() );
+        console.log(projectTable.data());
+        var a = 1;
+        console.log(a);
+        $('#paymentInfo').modal('show');
+    });
 
-
-} );
-
+//    $('#projects').on( 'click', 'tr', function () {
+//        var cell = projectTable.row( this ).data();
+//        console.log(cell);
+//    });
+});
