@@ -4,6 +4,7 @@
 {% block extracss %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/fixedColumns.bootstrap.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/projects.css' %}"/>
 {% endblock %}
 
@@ -11,6 +12,8 @@
 <script src="{% static 'js/datatables.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap.js' %}"></script>
 <script src="{% static 'js/dataTables.rowsGroup.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
 <script src="{% static 'js/projects.js' %}"></script>
 {% endblock %}
 
@@ -25,41 +28,117 @@
 <div class="modal fade" id="paymentInfo" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Payment info</h4>
-            </div>
+            <!--<div class="modal-header">-->
+            <!--</div>-->
             <div class="modal-body">
                 <form>
-                    <div class="form-group">
-                        <label for="recipient-name" class="control-label">Recipient:</label>
-                        <input type="text" class="form-control" id="recipient-name">
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="control-label">Payment is split:</label>
-                        <table id="paymentTable" class="table table-condensed table-hover">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Date</th>
-                                <th>Amount</th>
-                            </tr>
-                            </thead>
-                            <tbody id="paymentsTableBody">
-                            <tr id="paymentRow1">
-                                <td>1</td>
-                                <td>01.02.2017</td>
-                                <td>231</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#info">Info</a></li>
+                            <li><a data-toggle="tab" href="#confirm">Confirm</a></li>
+                            <li><a data-toggle="tab" href="#split">Split</a></li>
+                        </ul>
+
+                        <div class="tab-content top-buffer">
+                            <div id="info" class="tab-pane fade in active">
+                                <div class="form-group">
+                                    <div class="col-lg-3"><strong>Amount: </strong></div>
+                                    <div class="col-lg-9">10000000</div>
+                                    <div class="col-lg-3"><strong>Amount: </strong></div>
+                                    <div class="col-lg-9">10000000</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paymentTable" class="control-label">Payment is split:</label>
+                                    <table id="paymentTable" class="table table-condensed table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="paymentsTableBody">
+                                        <tr id="paymentRow1">
+                                            <td>1</td>
+                                            <td>01.02.2017</td>
+                                            <td>231</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="confirm" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <div class='input-group date' id='confirmDatePicker'>
+                                                <input type="text" class="form-control datepicker"
+                                                       id="confirmDate"
+                                                       name="confirmDate" placeholder="Payment date">
+                                                <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <button type="button" class="btn btn-success btn-block" id="confirmPayment">
+                                                Confirm payment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="split" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" readonly="">
+                                                <label class="input-group-btn">
+                                                    <span class="btn btn-primary">
+                                                        Browse… <input type="file" style="display: none;">
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class='input-group date' id='splitDatePicker'>
+                                                <input type="text" class="form-control datepicker"
+                                                       id="splitDate"
+                                                       name="splitDate" placeholder="Payment date" disabled>
+                                                <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control payment-attr" id="paymentAmount"
+                                                   name="paymentAmount"
+                                                   placeholder="Payment amount" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-success btn-block" id="addPayment" disabled>
+                                                Add payment
+                                            </button>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-info btn-block" id="splitPayment" disabled>
+                                                Split payment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send message</button>
             </div>
         </div>
     </div>

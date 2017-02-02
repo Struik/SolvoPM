@@ -82,7 +82,8 @@ $(document).ready(function() {
                             console.log(payments)
                             for (var i = 0; i < payments.length; i++) {
                                 console.log(payments[i]);
-                                $(td).attr('data-content', $(td).attr('data-content') + '<br/> #' + (i+1) +' Date:  ' + payments[i].date + ', amount: ' + payments[i].amount);
+                                $(td).attr('data-content', $(td).attr('data-content') + '<br/> #' + (i+1) +' Date:  '
+                                + payments[i].date + ', amount: ' + payments[i].amount);
                             }
                         }
                         //glyphicon-warning-sign
@@ -112,6 +113,34 @@ $(document).ready(function() {
         console.log(a);
         $('#paymentInfo').modal('show');
     });
+
+    $('#paymentDatePicker').datetimepicker({
+        format: 'DD.MM.YYYY',
+        minDate: moment(),
+        allowInputToggle: true,
+    });
+
+    $(document).on('change', ':file', function() {
+        var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [numFiles, label]);
+    });
+
+    $(document).ready( function() {
+      $(':file').on('fileselect', function(event, numFiles, label) {
+
+          var input = $(this).parents('.input-group').find(':text'),
+              log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+          if( input.length ) {
+              input.val(log);
+          } else {
+              if( log ) alert(log);
+          }
+
+      });
+  });
 
 //    $('#projects').on( 'click', 'tr', function () {
 //        var cell = projectTable.row( this ).data();
