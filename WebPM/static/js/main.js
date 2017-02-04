@@ -416,23 +416,23 @@ $(document).ready(function(){
         console.log(contracts);
     });
 
-        $.fn.serializeObject = function(){
-            console.log('Serializing');
-            var o = {};
-            var a = this.serializeArray();
-            console.log(a);
-            $.each(a, function() {
-                if (o[this.name] !== undefined) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
+    $.fn.serializeObject = function(){
+        console.log('Serializing');
+        var o = {};
+        var a = this.serializeArray();
+        console.log(a);
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
                 }
-            });
-            return o;
-        };
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
 
     exForm.submit(function() {
         alert('12312');

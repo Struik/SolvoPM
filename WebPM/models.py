@@ -57,3 +57,7 @@ class Payments(models.Model):
     payed = models.BooleanField(default=False)
     isSplit = models.BooleanField(default=False)
     parentPayment = models.ForeignKey('Payments', null=True)
+
+class Upload(models.Model):
+    document = models.FileField("Document", upload_to="documents/")
+    uploadDate=models.DateField(auto_now_add =True)

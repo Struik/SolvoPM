@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Max, Min
 from datetime import datetime
 from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, AttributeTypes, ProjectAttributes
-from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments
+from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments, Upload
 from itertools import groupby
 from operator import itemgetter, methodcaller
 import logging, json, WebPM
@@ -182,3 +182,22 @@ def getMonthList(minDate, maxDate):
         monthsDict[(datetime(y, m + 1, 1).strftime('%b %y'))] = i
         i += 1
     return monthsDict
+
+#Saving new document value to the database
+@csrf_exempt
+def save_document(request):
+    logger.info('Got new document')
+    logger.info(request.method)
+    logger.info(request.POST)
+    logger.info(request.FILES.keys())
+    if (request.POST):
+        params = request.POST
+        logger.info('POST request params:')
+        logger.info(params)
+        logger.info(request.FILES)
+    if (request.FILES):
+        logger.info('FILES request params:')
+        newDocument = Upload(document=request.FILES['document'])
+        newDocument.save()
+
+    return HttpResponse(content_type='application/json')

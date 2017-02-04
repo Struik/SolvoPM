@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^get_projects_data', views.getProjectsData),
     url(r'^new_project', views.new_project, name='new_project'),
     url(r'^new_ref_value', views.new_ref_value, name='new_ref_value'),
+    url(r'^save_document', views.save_document, name='save_document'),
     url(r'^admin/', admin.site.urls),
 ]

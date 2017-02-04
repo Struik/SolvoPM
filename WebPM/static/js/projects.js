@@ -1,6 +1,8 @@
 'use strict'
 
 $(document).ready(function() {
+    var paymentForm = $("#paymentForm");
+
     var projectTable;
     getProjectData();
 
@@ -114,7 +116,15 @@ $(document).ready(function() {
         $('#paymentInfo').modal('show');
     });
 
-    $('#paymentDatePicker').datetimepicker({
+
+    //Enabling datetimepicker fields
+    $('#confirmDatePicker').datetimepicker({
+        format: 'DD.MM.YYYY',
+        minDate: moment(),
+        allowInputToggle: true,
+    });
+
+    $('#splitDatePicker').datetimepicker({
         format: 'DD.MM.YYYY',
         minDate: moment(),
         allowInputToggle: true,
@@ -146,4 +156,45 @@ $(document).ready(function() {
 //        var cell = projectTable.row( this ).data();
 //        console.log(cell);
 //    });
+
+    $.fn.serializeObject = function(){
+        console.log('Serializing');
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+
+    $('#save').click(function() {
+        console.log('Saving split payment');
+        var paymentData = new FormData($('#paymentForm')[0]);
+        console.log(paymentData);
+        $.ajax({
+            type: 'POST',
+            url: "save_document",
+            data: paymentData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                console.log('New document request returned successfully');
+                console.log(response);
+            },
+            error: function () {
+                console.log('New document request failed');
+            },
+        });
+    });
+
+
 });
