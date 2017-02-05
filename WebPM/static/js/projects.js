@@ -4,6 +4,7 @@ $(document).ready(function() {
     var paymentForm = $("#paymentForm");
 
     var projectTable;
+    //Drawing table with datatable plugin
     getProjectData();
 
     //Function to get project data from server and call table creation
@@ -27,14 +28,17 @@ $(document).ready(function() {
         console.log(projectData)
         var columns = projectData['columns']
         var data =  projectData['payments']
-        //ES6 structure, might not be supported by some browsers
+        //ES6 structure below (Array...), might not be supported by some browsers
+        //Indexes of static columns
         var staticColumns = [...Array(5).keys()];
         console.log('staticColumns: ' + staticColumns)
         var allColumns = [...Array(columns.length).keys()];
         console.log('allColumns: ' + allColumns)
+        //Indexes of columns for which search function shouldn't work
         var columnsNoSearch = allColumns.slice();
         columnsNoSearch.splice(0, 3)
         console.log('columnsNoSearch: ' + columnsNoSearch)
+        //Indexes of columns with payment data
         var paymentsColumns = allColumns.slice()
         paymentsColumns.splice(0, staticColumns.length)
         console.log('paymentsColumns: ' + paymentsColumns)
@@ -49,6 +53,7 @@ $(document).ready(function() {
             columns: columns,
             data: data,
             scrollX: true,
+            //Static columns are cool
             fixedColumns: {
                 leftColumns: staticColumns.length,
                 rightColumns: 0
@@ -57,12 +62,13 @@ $(document).ready(function() {
             rowsGroup: staticColumns,
             paging: false,
             ordering: false,
-            //Searching on some columns may distort the table. Thus leaving search only for stable columns
             columnDefs: [{
+                //Searching on some columns may distort the table. Thus leaving search only for stable columns
                 targets: columnsNoSearch,
                 searchable: false,
             },
             {
+                //Bootstrap popovers (tooltip) for each payment in the table
                 targets: paymentsColumns,
                 "createdCell": function (td, cellData, rowData, row, col) {
                     if(cellData) {
@@ -72,20 +78,23 @@ $(document).ready(function() {
 
                         $(td).append(' <span class="show-payment glyphicon glyphicon-search pull-right"></span>');
                         $(td).addClass('payment');
+                        //Trigger event for bootstrap popover can be set for each element or one for all elements
+                        //$(td).attr('data-trigger','hover');
                         $(td).attr('data-html', 'true');
                         $(td).attr('data-content','Planned date: ' + rowData[key].date);
                         $(td).attr('data-placement','bottom');
                         $(td).attr('data-container','body');
-                        //$(td).attr('data-trigger','hover');
+
+                        //Showing extra data on tooltip for split payments
                         if(rowData[key].split){
                             $(td).addClass( "text-warning" );
                             $(td).attr('data-content', $(td).attr('data-content') + '<br/> Payment is split:')
-                            var payments = rowData[key].splitPayments
-                            console.log(payments)
-                            for (var i = 0; i < payments.length; i++) {
-                                console.log(payments[i]);
+                            var childPayments = rowData[key].childPayments
+                            console.log(childPayments)
+                            for (var i = 0; i < childPayments.length; i++) {
+                                console.log(childPayments[i]);
                                 $(td).attr('data-content', $(td).attr('data-content') + '<br/> #' + (i+1) +' Date:  '
-                                + payments[i].date + ', amount: ' + payments[i].amount);
+                                + childPayments[i].date + ', amount: ' + childPayments[i].amount);
                             }
                         }
                         //glyphicon-warning-sign
@@ -99,21 +108,63 @@ $(document).ready(function() {
         //Add bootstrap colors for payment values in the table
         $('#projects tr:nth-of-type(odd)').addClass( "text-primary" );
         $('#projects tr:nth-of-type(even)').addClass( "text-success" );
+        //Trigger event for bootstrap popover can be set for each element or one for all elements like here
         $('.payment').popover({
                 trigger: "hover",
         })
     }
 
+    //Showing modal with info and actions for each payment when zoom icon is clicked
     $("#projects").on("click", ".show-payment", function() {
+        //Clearn modal from previous data
+        $("#childPaymentsTableBody tr").remove();
         var cell = $(this).parent();
-        var row = $(this).closest('tr');
         console.log('Showing payment #' + cell.attr('id'));
-        console.log(projectTable.row( row ).data());
-        console.log(projectTable.cell( cell ).index() );
-        console.log(projectTable.data());
-        var a = 1;
-        console.log(a);
-        $('#paymentInfo').modal('show');
+        //For confirming and splitting this payment
+        paymentForm.attr('payment_id', cell.attr('id'));
+        var cellIndex = projectTable.cell( cell ).index();
+        var rowData = projectTable.row( cellIndex['row'] ).data();
+        console.log(rowData);
+        var columnTitle = projectTable.column( cellIndex['column'] ).title().replace(' ','');
+        if(rowData[columnTitle].split){
+            var childPayments = rowData[columnTitle]['childPayments'];
+            //TODO. This part of code is duplicate and used createdCell option of datatable.
+            //Might consider making a function for it.
+            for (var i = 0; i < childPayments.length; i++) {
+                console.log(childPayments[i]);
+                $('#childPaymentsTableBody').append('<tr id="childPaymentRow' + (i + 1) + '">'
+                    + '<td>' + (i + 1) + '</td>'
+                    + '<td>' + childPayments[i].date + '</td>'
+                    + '<td>' + childPayments[i].amount + '</td></tr>');
+            }
+            $('#splitInfo').removeClass('hidden');
+            $('#confirmTab').addClass('disabled');
+            $('#splitTab').addClass('disabled');
+            $('#confirmTab a').removeAttr('data-toggle');
+            $('#splitTab a').removeAttr('data-toggle');
+        }
+        else {
+            $('#splitInfo').addClass('hidden');
+            $('#confirmTab').removeClass('disabled');
+            $('#splitTab').removeClass('disabled');
+            $('#confirmTab a').attr('data-toggle','tab');
+            $('#splitTab a').attr('data-toggle','tab');
+        }
+
+        //Might consider serializing it instead of
+        $('#projectName').html(rowData['Project name']);
+        $('#manager').html(rowData['Manager']);
+        $('#currentState').html(rowData['Current state']);
+        $('#contractType').html(rowData['Contract type']);
+        $('#contractName').html(rowData['Contract name']);
+        $('#paymentAmount').html(rowData[columnTitle]['amount']);
+        $('#plannedDate').html(rowData[columnTitle]['date']);
+        $('#confirmedDate').html('Not confirmed');
+
+        //Switching to first tab
+        $('#infoTab a[href="#info"]').tab('show');
+
+        $('#paymentModal').modal('show');
     });
 
 
@@ -174,6 +225,29 @@ $(document).ready(function() {
         return o;
     };
 
+    //Plugin for datatables to implement title() function which gets certain column's title
+    $.fn.dataTable.Api.register( 'column().title()', function () {
+        var colheader = this.header();
+        return $(colheader).text().trim();
+    });
+
+    $('#confirmPayment').click(function() {
+        console.log('Confirming payment');
+        var paymentData = {'paymentId': paymentForm.attr('payment_id'),'confirmDate': $('#confirmDate').val()}
+        console.log(paymentData);
+        $.ajax({
+            type: 'POST',
+            url: "confirm_payment",
+            data: paymentData,
+            success: function (response) {
+                console.log('Payment confirmed successfully');
+                location.reload();
+            },
+            error: function () {
+                console.log('Payment confirmation failed');
+            },
+        });
+    });
 
     $('#save').click(function() {
         console.log('Saving split payment');

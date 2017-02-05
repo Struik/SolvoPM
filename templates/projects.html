@@ -25,46 +25,82 @@
 </table>
 
 
-<div class="modal fade" id="paymentInfo" tabindex="-1" role="dialog">
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <!--<div class="modal-header">-->
             <!--</div>-->
             <div class="modal-body">
-                <form id="paymentForm" enctype="multipart/form-data">
+                <form id="paymentForm" enctype="multipart/form-data" payment_id="">
                     <div>
                         <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#info">Info</a></li>
-                            <li><a data-toggle="tab" href="#confirm">Confirm</a></li>
-                            <li><a data-toggle="tab" href="#split">Split</a></li>
+                            <li id="infoTab" class="active"><a data-toggle="tab" href="#info">Info</a></li>
+                            <li id="confirmTab"><a data-toggle="tab" href="#confirm">Confirm</a></li>
+                            <li id="splitTab"><a data-toggle="tab" href="#split">Split</a></li>
                         </ul>
 
                         <div class="tab-content top-buffer">
                             <div id="info" class="tab-pane fade in active">
-                                <div class="form-group">
-                                    <div class="col-lg-3"><strong>Amount: </strong></div>
-                                    <div class="col-lg-9">10000000</div>
-                                    <div class="col-lg-3"><strong>Amount: </strong></div>
-                                    <div class="col-lg-9">10000000</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="paymentTable" class="control-label">Payment is split:</label>
-                                    <table id="paymentTable" class="table table-condensed table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Date</th>
-                                            <th>Amount</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="paymentsTableBody">
-                                        <tr id="paymentRow1">
-                                            <td>1</td>
-                                            <td>01.02.2017</td>
-                                            <td>231</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div id="paymentInfo" class="form-group">
+                                            <table id="paymentTable" class="table table-condensed table-borderless">
+                                                <thead>
+                                                </thead>
+                                                <tbody id="paymentTableBody">
+                                                <tr>
+                                                    <td>Project name:</td>
+                                                    <td id="projectName"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Manager:</td>
+                                                    <td id="manager"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Current state:</td>
+                                                    <td id="currentState"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Contract type:</td>
+                                                    <td id="contractType"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Contract name:</td>
+                                                    <td id="contractName"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Payment amount:</td>
+                                                    <td id="paymentAmount"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Planned date:</td>
+                                                    <td id="plannedDate"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Confirmed date:</td>
+                                                    <td id="confirmedDate"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div id="splitInfo" class="form-group hidden">
+                                            <div class="alert alert-info">
+                                                <strong>Payment is split</strong><br/>
+                                                Actions are not available
+                                            </div>
+                                            <table id="childPaymentTable" class="table table-condensed table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Date</th>
+                                                    <th>Amount</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="childPaymentsTableBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div id="confirm" class="tab-pane fade">
@@ -97,7 +133,8 @@
                                                 <input type="text" class="form-control" readonly="">
                                                 <label class="input-group-btn">
                                                     <span class="btn btn-primary">
-                                                        Browse… <input type="file" name="document" style="display: none;">
+                                                        Browse… <input type="file" name="document"
+                                                                       style="display: none;">
                                                     </span>
                                                 </label>
                                             </div>
@@ -115,8 +152,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <input type="text" class="form-control payment-attr" id="paymentAmount"
-                                                   name="paymentAmount"
+                                            <input type="text" class="form-control payment-attr" id="childPaymentAmount"
+                                                   name="childPaymentAmount"
                                                    placeholder="Payment amount">
                                         </div>
 
@@ -138,8 +175,8 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-            </div>
+            <!--<div class="modal-footer">-->
+            <!--</div>-->
         </div>
     </div>
 </div>

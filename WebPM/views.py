@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Max, Min
 from datetime import datetime
 from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, AttributeTypes, ProjectAttributes
-from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments, Upload
+from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments, Agreements
 from itertools import groupby
 from operator import itemgetter, methodcaller
 import logging, json, WebPM
@@ -99,7 +99,7 @@ def projects(request):
 
 
 @csrf_exempt
-def getProjectsData(request):
+def get_projects_data(request):
     logger.info('Preparing projects data')
 
     paymentsObject = Payments.objects.order_by('contract', 'paymentDate')
@@ -152,12 +152,12 @@ def getProjectsData(request):
             paymentPlannedDates[month]['date'] = item.paymentDate.strftime('%d.%m.%Y')
             if item.isSplit:
                 logger.info('payment is split')
-                splitPayments = Payments.objects.filter(parentPayment = item.id)
-                logger.info(splitPayments)
-                paymentPlannedDates[month]['splitPayments'] = []
-                for splitPayment in splitPayments:
-                    paymentPlannedDates[month]['splitPayments'].append({'id': splitPayment.id, 'date': splitPayment.paymentDate.strftime('%d.%m.%Y'), 'amount': splitPayment.paymentAmount})
-            if item.payed:
+                childPayments = Payments.objects.filter(parentPayment = item.id)
+                logger.info(childPayments)
+                paymentPlannedDates[month]['childPayments'] = []
+                for childPayment in childPayments:
+                    paymentPlannedDates[month]['childPayments'].append({'id': childPayment.id, 'date': childPayment.paymentDate.strftime('%d.%m.%Y'), 'amount': childPayment.paymentAmount})
+            if item.confirmed:
                 paymentFactDates[month]['amount'] = item.paymentAmount
                 paymentFactDates[month]['id'] = item.id
                 paymentFactDates[month]['split'] = item.isSplit
@@ -183,6 +183,20 @@ def getMonthList(minDate, maxDate):
         i += 1
     return monthsDict
 
+#Confirm payment
+@csrf_exempt
+def confirm_payment(request):
+    logger.info('Confirm payment request')
+    logger.info(request)
+    if (request.POST):
+        params = request.POST
+        logger.info('POST request params:')
+        logger.info(params)
+        paymentId = params['paymentId']
+        confirmedDate = datetime.strptime(params['confirmDate'],'%d.%m.%Y')
+        Payments.objects.filter(pk=paymentId).update(confirmed=True, confirmedDate=confirmedDate)
+    return HttpResponse('')
+
 #Saving new document value to the database
 @csrf_exempt
 def save_document(request):
@@ -197,7 +211,8 @@ def save_document(request):
         logger.info(request.FILES)
     if (request.FILES):
         logger.info('FILES request params:')
-        newDocument = Upload(document=request.FILES['document'])
+        newDocument = Agreements(document=request.FILES['document'])
         newDocument.save()
 
     return HttpResponse(content_type='application/json')
+

@@ -54,10 +54,12 @@ class Payments(models.Model):
     contract = models.ForeignKey(Contracts)
     paymentDate = models.DateField()
     paymentAmount = models.IntegerField()
-    payed = models.BooleanField(default=False)
+    confirmed = models.BooleanField(default=False)
+    confirmedDate = models.DateField(null=True)
     isSplit = models.BooleanField(default=False)
     parentPayment = models.ForeignKey('Payments', null=True)
 
-class Upload(models.Model):
-    document = models.FileField("Document", upload_to="documents/")
-    uploadDate=models.DateField(auto_now_add =True)
+class Agreements(models.Model):
+    payment = models.ForeignKey(Payments)
+    document = models.FileField("Document", upload_to="documents/agreements")
+    uploadDate=models.DateField(auto_now_add=True)

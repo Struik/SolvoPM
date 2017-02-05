@@ -20,9 +20,10 @@ from WebPM import views
 urlpatterns = [
     url(r'^$', views.index, name='pm'),
     url(r'^projects', views.projects, name='projects'),
-    url(r'^get_projects_data', views.getProjectsData),
+    url(r'^get_projects_data', views.get_projects_data, name='get_projects_data'),
     url(r'^new_project', views.new_project, name='new_project'),
     url(r'^new_ref_value', views.new_ref_value, name='new_ref_value'),
+    url(r'^confirm_payment', views.confirm_payment, name='confirm_payment'),
     url(r'^save_document', views.save_document, name='save_document'),
     url(r'^admin/', admin.site.urls),
 ]
