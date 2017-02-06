@@ -35,7 +35,6 @@
                     <div>
                         <ul class="nav nav-tabs">
                             <li id="infoTab" class="active"><a data-toggle="tab" href="#info">Info</a></li>
-                            <li id="confirmTab"><a data-toggle="tab" href="#confirm">Confirm</a></li>
                             <li id="splitTab"><a data-toggle="tab" href="#split">Split</a></li>
                         </ul>
 
@@ -102,9 +101,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="confirm" class="tab-pane fade">
-                                <div class="panel panel-default">
+                                <div id="confirmPanel" class="panel panel-default">
                                     <div class="panel-body">
                                         <div class="form-group">
                                             <div class='input-group date' id='confirmDatePicker'>
@@ -122,6 +119,11 @@
                                             </button>
                                         </div>
                                     </div>
+                                </div>
+                                <div id="unconfirmPanel" class="form-group ">
+                                    <button type="button" class="btn btn-warning btn-block" id="unconfirmPayment">
+                                        Unconfirm payment
+                                    </button>
                                 </div>
                             </div>
                             <div id="split" class="tab-pane fade">

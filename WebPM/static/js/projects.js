@@ -78,6 +78,7 @@ $(document).ready(function() {
 
                         $(td).append(' <span class="show-payment glyphicon glyphicon-search pull-right"></span>');
                         $(td).addClass('payment');
+                        //$(td).wrapInner( "<strong></strong>" );
                         //Trigger event for bootstrap popover can be set for each element or one for all elements
                         //$(td).attr('data-trigger','hover');
                         $(td).attr('data-html', 'true');
@@ -85,9 +86,9 @@ $(document).ready(function() {
                         $(td).attr('data-placement','bottom');
                         $(td).attr('data-container','body');
 
-                        //Showing extra data on tooltip for split payments
+                        //Showing extra data on tooltip for split payments and adding colors depending on payment status
                         if(rowData[key].split){
-                            $(td).addClass( "text-warning" );
+                            $(td).addClass( "bg-warning" );
                             $(td).attr('data-content', $(td).attr('data-content') + '<br/> Payment is split:')
                             var childPayments = rowData[key].childPayments
                             console.log(childPayments)
@@ -97,32 +98,35 @@ $(document).ready(function() {
                                 + childPayments[i].date + ', amount: ' + childPayments[i].amount);
                             }
                         }
-                        //glyphicon-warning-sign
-                        //<a href="#" data-toggle="tooltip" title="" data-original-title="Default tooltip">you probably</a>
-
+                        else if(rowData[key].confirmed){
+                            $(td).addClass( "bg-success" );
+                        }
                     }
                 },
             }],
         });
 
-        //Add bootstrap colors for payment values in the table
-        $('#projects tr:nth-of-type(odd)').addClass( "text-primary" );
-        $('#projects tr:nth-of-type(even)').addClass( "text-success" );
         //Trigger event for bootstrap popover can be set for each element or one for all elements like here
         $('.payment').popover({
                 trigger: "hover",
         })
+
+        $('#splitTab').popover({
+                trigger: "hover",
+        })
+
     }
 
     //Showing modal with info and actions for each payment when zoom icon is clicked
     $("#projects").on("click", ".show-payment", function() {
         //Clearn modal from previous data
         $("#childPaymentsTableBody tr").remove();
-        var cell = $(this).parent();
+        var cell = $(this).parents('td');
         console.log('Showing payment #' + cell.attr('id'));
         //For confirming and splitting this payment
         paymentForm.attr('payment_id', cell.attr('id'));
         var cellIndex = projectTable.cell( cell ).index();
+        console.log(cellIndex);
         var rowData = projectTable.row( cellIndex['row'] ).data();
         console.log(rowData);
         var columnTitle = projectTable.column( cellIndex['column'] ).title().replace(' ','');
@@ -138,17 +142,35 @@ $(document).ready(function() {
                     + '<td>' + childPayments[i].amount + '</td></tr>');
             }
             $('#splitInfo').removeClass('hidden');
-            $('#confirmTab').addClass('disabled');
+            $('#confirmPanel').addClass('hidden');
+            $('#unconfirmPanel').addClass('hidden');
+            //Split tab should be disabled for confirmed and split payments.
             $('#splitTab').addClass('disabled');
-            $('#confirmTab a').removeAttr('data-toggle');
             $('#splitTab a').removeAttr('data-toggle');
+            //Showing tooltip for those who will be wondering why Split tab is disabled
+            $('#splitTab').attr('data-html', 'true').attr('data-placement','bottom').attr('data-container','body');
+            $('#splitTab').attr('data-content','Payment is already split');
+        }
+        else if(rowData[columnTitle].confirmed) {
+            $('#splitInfo').addClass('hidden');
+            $('#confirmPanel').addClass('hidden');
+            $('#unconfirmPanel').removeClass('hidden');
+            //Split tab should be disabled for confirmed and split payments.
+            $('#splitTab').addClass('disabled');
+            $('#splitTab a').removeAttr('data-toggle','tab');
+            //Showing tooltip for those who will be wondering why Split tab is disabled
+            $('#splitTab').attr('data-html', 'true').attr('data-placement','bottom').attr('data-container','body');
+            $('#splitTab').attr('data-content','Cannot split confirmed payment');
         }
         else {
             $('#splitInfo').addClass('hidden');
-            $('#confirmTab').removeClass('disabled');
-            $('#splitTab').removeClass('disabled');
-            $('#confirmTab a').attr('data-toggle','tab');
+            $('#confirmPanel').removeClass('hidden');
+            $('#unconfirmPanel').addClass('hidden');
+            $('#splitTab').removeClass('disabled')
             $('#splitTab a').attr('data-toggle','tab');
+            $('#splitTab').attr('data-html', 'true').attr('data-placement','bottom').attr('data-container','body');
+            $('#splitTab').attr('data-content','Split payment into smaller ones');
+
         }
 
         //Might consider serializing it instead of
@@ -159,7 +181,7 @@ $(document).ready(function() {
         $('#contractName').html(rowData['Contract name']);
         $('#paymentAmount').html(rowData[columnTitle]['amount']);
         $('#plannedDate').html(rowData[columnTitle]['date']);
-        $('#confirmedDate').html('Not confirmed');
+        $('#confirmedDate').html(rowData[columnTitle]['confirmedDate']);
 
         //Switching to first tab
         $('#infoTab a[href="#info"]').tab('show');
@@ -245,6 +267,24 @@ $(document).ready(function() {
             },
             error: function () {
                 console.log('Payment confirmation failed');
+            },
+        });
+    });
+
+    $('#unconfirmPayment').click(function() {
+        console.log('Unconfirming payment');
+        var paymentData = {'paymentId': paymentForm.attr('payment_id')}
+        console.log(paymentData);
+        $.ajax({
+            type: 'POST',
+            url: "unconfirm_payment",
+            data: paymentData,
+            success: function (response) {
+                console.log('Payment unconfirmed successfully');
+                location.reload();
+            },
+            error: function () {
+                console.log('Payment unconfirmation failed');
             },
         });
     });

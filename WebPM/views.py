@@ -114,7 +114,9 @@ def get_projects_data(request):
     paymentPeriod = (maxDate.year - minDate.year)*12 + maxDate.month - minDate.month + 1
     logger.info('Payment period is ' + str(paymentPeriod))
 
+    #Rather putting several lines in one column "Project" than having 2 extra columns (not implemented - table size issue)
     columnsBasic = ['Project name', 'Manager', 'Current state', 'Contract type', 'Contract name', 'DT_RowId']
+    #columnsBasic = ['Project', 'Contract type', 'Contract name', 'DT_RowId']
     logger.info('Basic column headers: ' + str(columnsBasic))
 
     columnsDicted = []
@@ -150,6 +152,11 @@ def get_projects_data(request):
             paymentPlannedDates[month]['id'] = item.id
             paymentPlannedDates[month]['split'] = item.isSplit
             paymentPlannedDates[month]['date'] = item.paymentDate.strftime('%d.%m.%Y')
+            paymentPlannedDates[month]['confirmed'] = item.confirmed
+            logger.info(item.confirmed)
+            logger.info(item.confirmedDate)
+            paymentPlannedDates[month]['confirmedDate'] = \
+                item.confirmedDate.strftime('%d.%m.%Y') if item.confirmed else 'Not confirmed'
             if item.isSplit:
                 logger.info('payment is split')
                 childPayments = Payments.objects.filter(parentPayment = item.id)
@@ -165,7 +172,7 @@ def get_projects_data(request):
         paymentPlannedDates.update(key)
         logger.info('paymentPlannedDates: ' + str(paymentPlannedDates))
         paymentsDataDicted.append({**key, **paymentPlannedDates})
-        paymentsDataDicted.append({**key, **paymentFactDates})
+        # paymentsDataDicted.append({**key, **paymentFactDates})
 
     logger.info('Payments data:')
     logger.info(paymentsDataDicted)
@@ -195,6 +202,19 @@ def confirm_payment(request):
         paymentId = params['paymentId']
         confirmedDate = datetime.strptime(params['confirmDate'],'%d.%m.%Y')
         Payments.objects.filter(pk=paymentId).update(confirmed=True, confirmedDate=confirmedDate)
+    return HttpResponse('')
+
+#Unconfirm payment
+@csrf_exempt
+def unconfirm_payment(request):
+    logger.info('Unconfirm payment request')
+    logger.info(request)
+    if (request.POST):
+        params = request.POST
+        logger.info('POST request params:')
+        logger.info(params)
+        paymentId = params['paymentId']
+        Payments.objects.filter(pk=paymentId).update(confirmed=False, confirmedDate=None)
     return HttpResponse('')
 
 #Saving new document value to the database
