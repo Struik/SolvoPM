@@ -43,10 +43,10 @@
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <div id="paymentInfo" class="form-group">
-                                            <table id="paymentTable" class="table table-condensed table-borderless">
+                                            <table id="paymentInfoTable" class="table table-condensed table-borderless">
                                                 <thead>
                                                 </thead>
-                                                <tbody id="paymentTableBody">
+                                                <tbody id="paymentInfoTableBody">
                                                 <tr>
                                                     <td>Project name:</td>
                                                     <td id="projectName"></td>
@@ -143,10 +143,33 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <input type="text" class="form-control payment-attr" id="documentName"
+                                                   name="documentName"
+                                                   placeholder="Document name">
+                                        </div>
+
+                                        <div class="form-group col-lg-12">
+                                            <label id="paymentsListLabel" class="control-label text-center">Payments
+                                                info</label>
+
+                                            <table id="paymentsTable" class="table table-condensed table-hover hidden">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Date</th>
+                                                    <th>Amount</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="paymentsTableBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="form-group">
                                             <div class='input-group date' id='splitDatePicker'>
                                                 <input type="text" class="form-control datepicker"
-                                                       id="splitDate"
-                                                       name="splitDate" placeholder="Payment date">
+                                                       id="childPaymentDate"
+                                                       name="childPaymentDate" placeholder="Payment date">
                                                 <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
@@ -164,13 +187,12 @@
                                                 Add payment
                                             </button>
                                         </div>
-
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-info btn-block" id="save">
-                                                Save
-                                            </button>
-                                        </div>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-info btn-block" id="save">
+                                        Save
+                                    </button>
                                 </div>
                             </div>
                         </div>

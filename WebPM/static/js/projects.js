@@ -89,7 +89,8 @@ $(document).ready(function() {
                         //Showing extra data on tooltip for split payments and adding colors depending on payment status
                         if(rowData[key].split){
                             $(td).addClass( "bg-warning" );
-                            $(td).attr('data-content', $(td).attr('data-content') + '<br/> Payment is split:')
+                            $(td).attr('data-content', $(td).attr('data-content') + '<br/> Payment is split according '
+                                                + 'document: ' + rowData[key].agreementName + '. <br/> Child payments:')
                             var childPayments = rowData[key].childPayments
                             console.log(childPayments)
                             for (var i = 0; i < childPayments.length; i++) {
@@ -289,23 +290,66 @@ $(document).ready(function() {
         });
     });
 
+    var paymentsQty = 0;
+    var paymentDate;
+    var paymentAmount;
+    var paymentId;
+    var splitPayment = {'paymentId': '', 'childPayments': ''};
+
+
+    $('#addPayment').click(function() {
+//        if(paymentForm.valid())
+//        {
+            paymentId = paymentForm.attr('payment_id');
+            paymentDate = $('#childPaymentDate').val();
+            paymentAmount = $('#childPaymentAmount').val();
+
+            paymentsQty++;
+
+            if (paymentsQty == 1)
+            {
+                splitPayment['paymentId'] = paymentId;
+                splitPayment['childPayments'] = [];
+                console.log('Splitting payment:');
+                console.log(splitPayment);
+                $('#paymentsListLabel').removeClass('hidden');
+                $('#paymentsTable').removeClass('hidden');
+            }
+
+            console.log('Payment adding. Payment date: ' + paymentDate + ', payment amount: ' + paymentAmount +
+            '. New payments quantity: ' + paymentsQty);
+
+            $('#paymentsTableBody').append('<tr id="paymentRow' + paymentsQty + '" name>'
+                + '<td>' + paymentsQty + '</td>'
+                + '<td>' + paymentDate + '</td>'
+                + '<td>' + paymentAmount + '</td></tr>');
+
+            splitPayment['childPayments'].push({'id': paymentsQty, 'date': paymentDate, 'amount': paymentAmount});
+            console.log(splitPayment);
+            $('#childPaymentDate').val('');
+            $('#childPaymentAmount').val('');
+            console.log('Child payment added');
+//        };
+    });
+
     $('#save').click(function() {
         console.log('Saving split payment');
         var paymentData = new FormData($('#paymentForm')[0]);
+        paymentData.append('splitPayment', JSON.stringify(splitPayment));
         console.log(paymentData);
         $.ajax({
             type: 'POST',
-            url: "save_document",
+            url: "split_payment",
             data: paymentData,
             cache: false,
             contentType: false,
             processData: false,
             success: function (response) {
-                console.log('New document request returned successfully');
-                console.log(response);
+                console.log('Payment split successfully');
+                location.reload();
             },
             error: function () {
-                console.log('New document request failed');
+                console.log('Payment splitting failed');
             },
         });
     });

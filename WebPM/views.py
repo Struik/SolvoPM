@@ -141,13 +141,13 @@ def get_projects_data(request):
                                                                                   x.contract.name,
                                                                                   x.contract.id]))):
         paymentPlannedDates = {key: {'amount': ''} for key in paymentDict}
-        paymentFactDates = {key: {'amount': ''} for key in paymentDict}
+        #paymentFactDates = {key: {'amount': ''} for key in paymentDict}
         logger.info('key: ' +  str(key))
         for item in group:
             logger.info(item.paymentDate)
             month = item.paymentDate.strftime('%b%y')
             logger.info('month: ' + str(month))
-            logger.info('payment amount:' + str(item.paymentAmount))
+            logger.info('payment amount: ' + str(item.paymentAmount))
             paymentPlannedDates[month]['amount'] = item.paymentAmount
             paymentPlannedDates[month]['id'] = item.id
             paymentPlannedDates[month]['split'] = item.isSplit
@@ -158,17 +158,20 @@ def get_projects_data(request):
             paymentPlannedDates[month]['confirmedDate'] = \
                 item.confirmedDate.strftime('%d.%m.%Y') if item.confirmed else 'Not confirmed'
             if item.isSplit:
-                logger.info('payment is split')
+                logger.info('Payment is split')
+                logger.info('Agreement id is: ' + str(item.splitAgreement.id) + ', name: ' + str(item.splitAgreement.name))
+                paymentPlannedDates[month]['agreementName'] = item.splitAgreement.name
+                paymentPlannedDates[month]['childPayments'] = []
                 childPayments = Payments.objects.filter(parentPayment = item.id)
                 logger.info(childPayments)
                 paymentPlannedDates[month]['childPayments'] = []
                 for childPayment in childPayments:
                     paymentPlannedDates[month]['childPayments'].append({'id': childPayment.id, 'date': childPayment.paymentDate.strftime('%d.%m.%Y'), 'amount': childPayment.paymentAmount})
-            if item.confirmed:
-                paymentFactDates[month]['amount'] = item.paymentAmount
-                paymentFactDates[month]['id'] = item.id
-                paymentFactDates[month]['split'] = item.isSplit
-                paymentFactDates[month]['date'] = item.paymentDate.strftime('%d.%m.%Y')
+            # if item.confirmed:
+            #     paymentFactDates[month]['amount'] = item.paymentAmount
+            #     paymentFactDates[month]['id'] = item.id
+            #     paymentFactDates[month]['split'] = item.isSplit
+            #     paymentFactDates[month]['date'] = item.paymentDate.strftime('%d.%m.%Y')
         paymentPlannedDates.update(key)
         logger.info('paymentPlannedDates: ' + str(paymentPlannedDates))
         paymentsDataDicted.append({**key, **paymentPlannedDates})
@@ -196,6 +199,7 @@ def confirm_payment(request):
     logger.info('Confirm payment request')
     logger.info(request)
     if (request.POST):
+        logger.info('Request is POST:')
         params = request.POST
         logger.info('POST request params:')
         logger.info(params)
@@ -210,6 +214,7 @@ def unconfirm_payment(request):
     logger.info('Unconfirm payment request')
     logger.info(request)
     if (request.POST):
+        logger.info('Request is POST:')
         params = request.POST
         logger.info('POST request params:')
         logger.info(params)
@@ -219,20 +224,43 @@ def unconfirm_payment(request):
 
 #Saving new document value to the database
 @csrf_exempt
-def save_document(request):
-    logger.info('Got new document')
+def split_payment(request):
+    logger.info('Split payment request')
     logger.info(request.method)
     logger.info(request.POST)
     logger.info(request.FILES.keys())
-    if (request.POST):
+    if (request.POST and request.FILES):
+        logger.info('Request is POST and FILES:')
         params = request.POST
         logger.info('POST request params:')
         logger.info(params)
-        logger.info(request.FILES)
-    if (request.FILES):
-        logger.info('FILES request params:')
-        newDocument = Agreements(document=request.FILES['document'])
-        newDocument.save()
 
-    return HttpResponse(content_type='application/json')
+
+        documentName = params['documentName']
+        logger.info('Saving file: ' + str(documentName))
+        newDocument = Agreements(document = request.FILES['document'], name = documentName)
+        newDocument.save()
+        logger.info('Saved file with id: ' + str(newDocument.id))
+
+        logger.info('Splitting payment')
+        payment = json.loads(params['splitPayment'])
+        logger.info(payment)
+        paymentId = payment['paymentId']
+        logger.info('Payment id:' + str(paymentId))
+        splitPayment = Payments.objects.get(pk=paymentId)
+        contractId = splitPayment.contract.id
+        logger.info('Contract id: '+ str(contractId))
+        splitPayment.isSplit = True
+        splitPayment.splitAgreement = newDocument
+        splitPayment.save()
+
+        for childPayment in payment['childPayments']:
+            logger.info('Creating child payment:')
+            logger.info(childPayment)
+            childPaymentDate = datetime.strptime(childPayment['date'], '%d.%m.%Y')
+            childPaymentObject = Payments(contract_id = contractId, paymentDate = childPaymentDate,
+                                         paymentAmount = childPayment['amount'], parentPayment_id = paymentId)
+            childPaymentObject.save()
+            logger.info('Payment #' + str(childPaymentObject.id) + ' created')
+    return HttpResponse('')
 

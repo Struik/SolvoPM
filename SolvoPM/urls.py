@@ -25,6 +25,6 @@ urlpatterns = [
     url(r'^new_ref_value', views.new_ref_value, name='new_ref_value'),
     url(r'^confirm_payment', views.confirm_payment, name='confirm_payment'),
     url(r'^unconfirm_payment', views.unconfirm_payment, name='unconfirm_payment'),
-    url(r'^save_document', views.save_document, name='save_document'),
+    url(r'^split_payment', views.split_payment, name='split_payment'),
     url(r'^admin/', admin.site.urls),
 ]

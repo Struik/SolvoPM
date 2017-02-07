@@ -381,7 +381,8 @@ $(document).ready(function(){
                 contracts.push({'name': contractName, 'type': contractType, 'payments': []});
                 console.log('New contract data created:');
                 console.log(contracts);
-                $('#paymentTable').removeClass('hidden');
+                $('#paymentsListLabel').removeClass('hidden');
+                $('#paymentsTable').removeClass('hidden');
             }
 
             console.log('Payment adding. Payment date: ' + paymentDate + ', payment amount: ' + paymentAmount +

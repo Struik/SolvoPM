@@ -57,9 +57,10 @@ class Payments(models.Model):
     confirmed = models.BooleanField(default=False)
     confirmedDate = models.DateField(null=True)
     isSplit = models.BooleanField(default=False)
+    splitAgreement = models.ForeignKey('Agreements', null=True)
     parentPayment = models.ForeignKey('Payments', null=True)
 
 class Agreements(models.Model):
-    payment = models.ForeignKey(Payments)
+    name =  models.CharField(max_length=200, null=False)
     document = models.FileField("Document", upload_to="documents/agreements")
-    uploadDate=models.DateField(auto_now_add=True)
+    uploadDate = models.DateTimeField(auto_now_add=True)
