@@ -104,6 +104,9 @@ def get_projects_data(request):
 
     paymentsObject = Payments.objects.order_by('contract', 'paymentDate')
 
+    if not paymentsObject:
+        return HttpResponse('No data')
+
     minDate = min(payment.paymentDate for payment in paymentsObject)
     maxDate = max(payment.paymentDate for payment in paymentsObject)
     logger.info('Date period from ' + minDate.strftime('%d.%m.%Y') + ' to ' + maxDate.strftime('%d.%m.%Y'))

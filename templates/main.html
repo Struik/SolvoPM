@@ -26,6 +26,8 @@
 
     var projectAttrs = '{{projectAttrs.Countries}}';
     console.log(cities);
+
+
 </script>
 
 <script src="{% static 'js/selectize.js' %}"></script>
@@ -61,39 +63,16 @@
 
             <form id="projectAddForm" method="post">
                 <h3>Description</h3>
-                <h3>Place</h3>
                 <!--<h3>Stages</h3>-->
                 <h3>Contracts</h3>
 
                 <section>
-                    <div class="form-group col-lg-12">
-                        <select class="form-control selectize fixed-values" id="selectTemplate" name="selectTemplate">
-                            <option>No template</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-lg-12">
+                    <div class="form-group">
                         <input type="text" class="form-control" id="projectName" name="projectName" value=""
                                placeholder="Project name">
                     </div>
-                    <div class="form-group col-lg-12">
-                        <label class="control-label">Type</label>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="optionsRadios" id="Outside" value="option1" checked="">
-                                Outside
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="optionsRadios" id="Inside" value="option2">
-                                Inside
-                            </label>
-                        </div>
-                    </div>
-                </section>
 
-                <section>
-                    <div class="form-group col-lg-12">
+                    <div class="form-group">
                         <select class="form-control selectize" id="selectCompany" name="selectCompany"
                                 placeholder="Select company" reference_id="Companies">
                             <option value="">Select a company</option>
@@ -103,7 +82,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group col-lg-12">
+                    <div class="form-group">
                         <select class="form-control selfselectized" id="selectCountry" name="selectCountry"
                                 placeholder="Select a country" reference_id="Countries">
                             <option value="">Select a country</option>
@@ -113,7 +92,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group col-lg-12">
+                    <div class="form-group">
                         <select class="form-control selectize" id="selectCity" name="selectCity"
                                 placeholder="Select a city" reference_id="Cities">
                             <option value="">Select a city</option>
@@ -123,115 +102,127 @@
                         </select>
                     </div>
 
-                    <div class="form-group col-lg-12">
-                        <textarea class="form-control" id="Address" name="Address" rows="3" placeholder="Address"></textarea>
+                    <div class="form-group">
+                        <textarea class="form-control" id="Address" name="Address" rows="3"
+                                  placeholder="Address"></textarea>
                     </div>
                 </section>
 
                 <!--<section>-->
-                    <!--<div class="form-group col-lg-12">-->
-                        <!--<select class="form-control" id="selectStage" name="selectStage" placeholder="Stage name"-->
-                        <!--reference_id="StageTypes">-->
-                            <!--<option value="">Stage name</option>-->
-                            <!--{% for query in projectAttrs.StageTypes %}-->
-                            <!--<option value="{{query.id}}">{{query.name}}</option>-->
-                            <!--{% endfor %}-->
-                        <!--</select>-->
-                    <!--</div>-->
-                    <!--&lt;!&ndash;Struik. For possible future use: in case of need for dynamic stage attributes&ndash;&gt;-->
-                    <!--&lt;!&ndash;div class="form-group col-lg-12">-->
-                    <!--<select class="form-control" id="selectAttribute" placeholder="Stage attribute">-->
-                    <!--<option value="">Stage attribute</option>-->
-                    <!--<option value="1">Cost</option>-->
-                    <!--<option value="2">Duration</option>-->
-                    <!--<option value="3">Payment</option>-->
-                    <!--</select>-->
-                    <!--</div&ndash;&gt;-->
-                    <!--<div class="form-group col-lg-12">-->
-                        <!--<input type="text" class="form-control stage-attr" id="cost" name="cost" placeholder="Cost">-->
-                    <!--</div>-->
-                    <!--<div class="form-group col-lg-12">-->
-                        <!--<input type="text" class="form-control stage-attr" id="duration" name="duration"-->
-                               <!--placeholder="Duration">-->
-                    <!--</div>-->
-                    <!--<div class="form-group col-lg-12">-->
-                        <!--<select class="form-control selectize fixed-values" id="selectPayment" name="selectPayment"-->
-                                <!--placeholder="Payment type">-->
-                            <!--<option value="">Payment type</option>-->
-                            <!--{% for query in projectAttrs.PaymentTypes %}-->
-                            <!--<option value="{{query.id}}">{{query.name}}</option>-->
-                            <!--{% endfor %}-->
-                        <!--</select>-->
-                    <!--</div>-->
-                    <!--<div class="form-group col-lg-12">-->
-                        <!--<button id="addStage" type="button" class="btn btn-info col-lg-12">Add stage</button>-->
-                    <!--</div>-->
-                    <!--&lt;!&ndash;<div class="form-group col-lg-12">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<div class="input-group">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<span class="input-group-addon">$</span>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<input type="text" class="form-control" placeholder="price">&ndash;&gt;-->
-                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                    <!--<div id="stagesList" class="form-group col-lg-12">-->
-                        <!--<label id="stageListLabel" class="control-label hidden">Stages list:</label>-->
-                    <!--</div>-->
+                <!--<div class="form-group">-->
+                <!--<select class="form-control" id="selectStage" name="selectStage" placeholder="Stage name"-->
+                <!--reference_id="StageTypes">-->
+                <!--<option value="">Stage name</option>-->
+                <!--{% for query in projectAttrs.StageTypes %}-->
+                <!--<option value="{{query.id}}">{{query.name}}</option>-->
+                <!--{% endfor %}-->
+                <!--</select>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;Struik. For possible future use: in case of need for dynamic stage attributes&ndash;&gt;-->
+                <!--&lt;!&ndash;div class="form-group">-->
+                <!--<select class="form-control" id="selectAttribute" placeholder="Stage attribute">-->
+                <!--<option value="">Stage attribute</option>-->
+                <!--<option value="1">Cost</option>-->
+                <!--<option value="2">Duration</option>-->
+                <!--<option value="3">Payment</option>-->
+                <!--</select>-->
+                <!--</div&ndash;&gt;-->
+                <!--<div class="form-group">-->
+                <!--<input type="text" class="form-control stage-attr" id="cost" name="cost" placeholder="Cost">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                <!--<input type="text" class="form-control stage-attr" id="duration" name="duration"-->
+                <!--placeholder="Duration">-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                <!--<select class="form-control selectize fixed-values" id="selectPayment" name="selectPayment"-->
+                <!--placeholder="Payment type">-->
+                <!--<option value="">Payment type</option>-->
+                <!--{% for query in projectAttrs.PaymentTypes %}-->
+                <!--<option value="{{query.id}}">{{query.name}}</option>-->
+                <!--{% endfor %}-->
+                <!--</select>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                <!--<button id="addStage" type="button" class="btn btn-info">Add stage</button>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="input-group">&ndash;&gt;-->
+                <!--&lt;!&ndash;<span class="input-group-addon">$</span>&ndash;&gt;-->
+                <!--&lt;!&ndash;<input type="text" class="form-control" placeholder="price">&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--<div id="stagesList" class="form-group">-->
+                <!--<label id="stageListLabel" class="control-label hidden">Stages list:</label>-->
+                <!--</div>-->
                 <!--</section>-->
 
                 <section>
-                    <div class="form-group col-lg-12">
-                        <select class="form-control selfselectized" id="selectContractType" name="selectContractType"
-                                placeholder="Contract type" reference_id="ContractTypes">
-                            <option value="">Contract type</option>
-                            {% for query in projectAttrs.ContractTypes %}
-                            <option value="{{query.id}}">{{query.name}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                    <div id="confirmPanel" class="panel panel-default">
+                        <div class="panel-body">
 
-                    <div class="form-group col-lg-12">
-                        <input type="text" class="form-control contract-attr" id="contractName" name="contractName"
-                               value="" placeholder="Contract name" disabled>
-                    </div>
+                            <div class="form-group">
+                                <select class="form-control selfselectized" id="selectContractType"
+                                        name="selectContractType"
+                                        placeholder="Contract type" reference_id="ContractTypes">
+                                    <option value="">Contract type</option>
+                                    {% for query in projectAttrs.ContractTypes %}
+                                    <option value="{{query.id}}">{{query.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
-                    <div class="form-group col-lg-12">
-                        <label id="paymentsListLabel" class="control-label text-center hidden">Payments info</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control contract-attr" id="contractName"
+                                       name="contractName"
+                                       value="" placeholder="Contract name" disabled>
+                            </div>
 
-                        <table id="paymentsTable" class="table table-condensed table-hover hidden">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Date</th>
-                                <th>Amount</th>
-                            </tr>
-                            </thead>
-                            <tbody id="paymentsTableBody">
-                            </tbody>
-                        </table>
-                    </div>
 
-                    <div class="form-group col-lg-12">
-                        <div class='input-group date' id='paymentDatePicker'>
-                            <input type="text" class="form-control datepicker payment-attr" id="paymentDate"
-                                   name="paymentDate" placeholder="Payment date" disabled>
-                            <span class="input-group-addon">
+                            <div class="form-group">
+                                <label id="paymentsListLabel" class="control-label text-center hidden">Payments
+                                    info</label>
+
+                                <table id="paymentsTable" class="table table-condensed table-hover hidden">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="paymentsTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="form-group">
+                                <div class='input-group date' id='paymentDatePicker'>
+                                    <input type="text" class="form-control datepicker payment-attr" id="paymentDate"
+                                           name="paymentDate" placeholder="Payment date" disabled>
+                                    <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control payment-attr" id="paymentAmount"
+                                       name="paymentAmount"
+                                       placeholder="Payment amount" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success payment-attr btn-block" id="addPayment"
+                                        disabled>Add
+                                    payment
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group col-lg-12">
-                        <input type="text" class="form-control payment-attr" id="paymentAmount" name="paymentAmount"
-                               placeholder="Payment amount" disabled>
-                    </div>
-
-                    <div class="form-group col-lg-12">
-                        <button type="button" class="btn btn-info payment-attr btn-block" id="addPayment" disabled>Add
-                            payment
-                        </button>
-                    </div>
-
-                    <div class="form-group col-lg-12">
-                        <button id="addAnotherContract" type="button" class="btn btn-success btn-block" disabled>Add
+                    <div class="form-group">
+                        <button id="addAnotherContract" type="button" class="btn btn-info  btn-block" disabled>Add
                             another contract
                         </button>
                     </div>

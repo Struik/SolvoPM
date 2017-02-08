@@ -85,6 +85,7 @@ $(document).ready(function(){
                 success: function (response) {
                     console.log('New project request returned successfully');
                     console.log(response);
+                    location.reload();
                 },
                 error: function () {
                     console.log('New project request failed');
@@ -168,7 +169,7 @@ $(document).ready(function(){
     //wasn't visible
     $('div .selectize-input').addClass('form-control');
 
-    //Enabling jquery validation addon project adding form
+    //Enabling jquery validation addon on project adding form
     exForm.validate({
         //Fix to make selectize and validation working together.
         ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',

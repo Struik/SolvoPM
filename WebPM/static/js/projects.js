@@ -15,6 +15,10 @@ $(document).ready(function() {
             url: "get_projects_data",
             success: function (response) {
                 console.log('Project data returned');
+                    if (response == 'No data'){
+                        alert('No data found, nothing to display');
+                        return;
+                    }
                 createDatatable(response);
             },
             error: function () {
@@ -117,6 +121,69 @@ $(document).ready(function() {
         })
 
     }
+
+    //Extra validator method for jquery validation plugin
+    $.validator.addMethod('checkPaymentSum', function (value, element, param) {
+        var childSum = parseInt(value);
+        var addedChildPayments = document.getElementsByClassName("childPaymentAmount");
+        for (var i = 0; i < addedChildPayments.length; i++) {
+            childSum += parseInt(addedChildPayments[i].textContent);
+        }
+        console.log('Child sum: ' + childSum);
+        if (childSum > parseInt($('#paymentAmount').text())){
+            return false;
+        }
+        return true;
+    }, 'Specified amounts exceed initial payment amount');
+
+    //Enabling jquery validation addon on payment form
+    paymentForm.validate({
+        //Fix to make selectize and validation working together.
+        ignore: 'div.form-tab:not(.active) input',
+        onsubmit: false,
+        //debug: true,
+        rules: {
+            confirmDate: {
+                required: true,
+            },
+            fileName: {
+                required: true,
+            },
+            documentName: {
+                required: true,
+                minlength: 5,
+            },
+            childPaymentDate: {
+                required: true,
+            },
+            childPaymentAmount: {
+                required: true,
+                checkPaymentSum: true,
+            },
+        },
+        //Playing with highlighting error fields. Some effects might be excess and should be removed
+        highlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').addClass("has-error has-danger");
+            $(element).parents('.form-group').removeClass("has-success");
+            $(element).fadeOut(function() {
+                $(element).fadeIn();
+            });
+        },
+        //Changing red lightning border on corrected error field to green
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').removeClass("has-error has-danger").addClass("has-success");
+        },
+        //Fix for datepicker or fileinput fields so labels with error description are placed under the field
+        errorPlacement: function(error, element) {
+            if (element.hasClass("datepicker") || element.hasClass("fileinput")){
+                element.parents('.form-group').append(error);
+            }
+            else
+            {
+                error.insertAfter(element);
+            }
+        },
+    });
 
     //Showing modal with info and actions for each payment when zoom icon is clicked
     $("#projects").on("click", ".show-payment", function() {
@@ -255,21 +322,24 @@ $(document).ready(function() {
     });
 
     $('#confirmPayment').click(function() {
-        console.log('Confirming payment');
-        var paymentData = {'paymentId': paymentForm.attr('payment_id'),'confirmDate': $('#confirmDate').val()}
-        console.log(paymentData);
-        $.ajax({
-            type: 'POST',
-            url: "confirm_payment",
-            data: paymentData,
-            success: function (response) {
-                console.log('Payment confirmed successfully');
-                location.reload();
-            },
-            error: function () {
-                console.log('Payment confirmation failed');
-            },
-        });
+        if(paymentForm.valid())
+        {
+            console.log('Confirming payment');
+            var paymentData = {'paymentId': paymentForm.attr('payment_id'),'confirmDate': $('#confirmDate').val()}
+            console.log(paymentData);
+            $.ajax({
+                type: 'POST',
+                url: "confirm_payment",
+                data: paymentData,
+                success: function (response) {
+                    console.log('Payment confirmed successfully');
+                    location.reload();
+                },
+                error: function () {
+                    console.log('Payment confirmation failed');
+                },
+            });
+        };
     });
 
     $('#unconfirmPayment').click(function() {
@@ -298,8 +368,8 @@ $(document).ready(function() {
 
 
     $('#addPayment').click(function() {
-//        if(paymentForm.valid())
-//        {
+        if(paymentForm.valid())
+        {
             paymentId = paymentForm.attr('payment_id');
             paymentDate = $('#childPaymentDate').val();
             paymentAmount = $('#childPaymentAmount').val();
@@ -322,14 +392,14 @@ $(document).ready(function() {
             $('#paymentsTableBody').append('<tr id="paymentRow' + paymentsQty + '" name>'
                 + '<td>' + paymentsQty + '</td>'
                 + '<td>' + paymentDate + '</td>'
-                + '<td>' + paymentAmount + '</td></tr>');
+                + '<td  class="childPaymentAmount">' + paymentAmount + '</td></tr>');
 
             splitPayment['childPayments'].push({'id': paymentsQty, 'date': paymentDate, 'amount': paymentAmount});
             console.log(splitPayment);
             $('#childPaymentDate').val('');
             $('#childPaymentAmount').val('');
             console.log('Child payment added');
-//        };
+        };
     });
 
     $('#save').click(function() {
