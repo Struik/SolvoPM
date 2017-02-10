@@ -111,12 +111,21 @@ $(document).ready(function(){
 
     //This variables are needed to have possibility to programmatically clear and update selectized fields.
     //One variable for each select
-    var $selectCity = $('#selectCity').selectize();
     var $selectStage = $('#selectStage').selectize();
     var $selectPayment = $('#selectPayment').selectize();
+    var $selectCity = $('#selectCity').selectize({
+        create: function (input, callback){
+            //Passing extra argument for cities since it has foreign key to countries reference
+            newRefValue(input, callback, this, {'country_id': $('#selectCountry').val()});
+        },
+    });
+
+    selectCity = $selectCity[0].selectize;
+    selectCity.disable();
 
     //Separate selectize initialisation on country select node
-    //Populating cities select with values on country change
+    //Populating cities select field with values on country change
+    //Variable cities is defined in html template
     $('#selectCountry').selectize({
         onChange: function(value) {
             console.log('Country changed');
@@ -124,8 +133,10 @@ $(document).ready(function(){
             var country = $('#selectCountry').text()
             selectCity.disable();
             selectCity.clearOptions();
-            for (var i = 0; i < cities[country].length; i++) {
-                selectCity.addOption({value: cities[country][i]['id'], text: cities[country][i]['name']})
+            if (cities[country]){
+                for (var i = 0; i < cities[country].length; i++) {
+                    selectCity.addOption({value: cities[country][i]['id'], text: cities[country][i]['name']})
+                }
             }
             selectCity.enable();
         },
@@ -134,8 +145,7 @@ $(document).ready(function(){
         },
     });
 
-    selectCity = $selectCity[0].selectize;
-    selectCity.disable();
+
 
     $('#selectContractType').selectize({
         onChange: function(value) {
@@ -212,7 +222,7 @@ $(document).ready(function(){
             },
             paymentAmount: {
                 required: true,
-                number: true,
+                digits: true,
             },
             paymentDate: {
                 required: true,
@@ -444,17 +454,23 @@ $(document).ready(function(){
     });
 
     //Function to add new value in DB references when it's added via select field on the form
-    var newRefValue = function(input, callback, object){
+    //parentReference is an extra argument for references which have foreign key to other reference
+    var newRefValue = function(input, callback, object, parentReference){
         var selectId = object.$input[0].id;
         console.log(selectId);
         var referenceName = $('#' + selectId).attr('reference_id');
         var newValue = {'referenceName': referenceName, 'value': input}
+        if (parentReference){
+            console.log('Parent ref: ' + JSON.stringify(parentReference));
+            newValue['parentReference'] = JSON.stringify(parentReference);
+        }
         console.log('Adding new value to the reference');
         console.log(newValue);
         $.ajax({
             type: 'POST',
             url: "new_ref_value",
             data: newValue,
+            dataType: "json",
             success: function (result) {
                 console.log('Response on adding new value to reference request:');
                 console.log(result['refId']);

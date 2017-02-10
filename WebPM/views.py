@@ -86,7 +86,16 @@ def new_ref_value(request):
         logger.info(params['referenceName'])
         model = getattr(WebPM.models, params['referenceName'])
         logger.info(model)
-        ref = model(name = params['value'])
+        ref = model(name=params['value'])
+        #If parentReference exists then given reference has foreign key to another reference
+        if 'parentReference' in params:
+            logger.info(str(params['referenceName']) + ' is linked to another reference')
+            parentRef = json.loads(params['parentReference'])
+            logger.info(parentRef)
+            parentField = list(parentRef.keys())[0]
+            parentValue = parentRef[parentField]
+            setattr(ref, parentField, parentValue)
+        logger.info(ref)
         ref.save()
         logger.info('New reference value id: ' + str(ref.id))
     return HttpResponse(json.dumps({'refId': ref.id}), content_type='application/json')
