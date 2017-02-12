@@ -46,3 +46,7 @@ td span {
 .table-borderless tfoot tr td {
     border: none;
 }
+
+.modal-sm {
+    width: 350px;
+}

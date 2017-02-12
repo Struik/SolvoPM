@@ -139,7 +139,7 @@ def get_projects_data(request):
         if not columnsBasic[i].startswith('DT'):
             columnsDicted.append({'data': columnsBasic[i], 'title': columnsBasic[i]})
     for i in range(len(monthsList)):
-        columnsDicted.append({'data': monthsList[i][0].replace(' ','') + '.amount', 'title': monthsList[i][0]})
+        columnsDicted.append({'data': monthsList[i][0].replace(' ','') + '.sum', 'title': monthsList[i][0]})
     logger.info('Final column headers: ' + str(columnsDicted))
 
     paymentsDataDicted = []
@@ -152,42 +152,39 @@ def get_projects_data(request):
                                                                                   x.contract.contractType.name,
                                                                                   x.contract.name,
                                                                                   x.contract.id]))):
-        paymentPlannedDates = {key: {'amount': ''} for key in paymentDict}
-        #paymentFactDates = {key: {'amount': ''} for key in paymentDict}
+        paymentPlannedDates = {month: {'sum': '', 'payments': []} for month in paymentDict}
         logger.info('key: ' +  str(key))
+        logger.info(paymentPlannedDates)
         for item in group:
+            payment = {}
             logger.info(item.paymentDate)
             month = item.paymentDate.strftime('%b%y')
             logger.info('month: ' + str(month))
             logger.info('payment amount: ' + str(item.paymentAmount))
-            paymentPlannedDates[month]['amount'] = item.paymentAmount
-            paymentPlannedDates[month]['id'] = item.id
-            paymentPlannedDates[month]['split'] = item.isSplit
-            paymentPlannedDates[month]['date'] = item.paymentDate.strftime('%d.%m.%Y')
-            paymentPlannedDates[month]['confirmed'] = item.confirmed
-            logger.info(item.confirmed)
-            logger.info(item.confirmedDate)
-            paymentPlannedDates[month]['confirmedDate'] = \
-                item.confirmedDate.strftime('%d.%m.%Y') if item.confirmed else 'Not confirmed'
+            if paymentPlannedDates[month]['sum']:
+                paymentPlannedDates[month]['sum'] += item.paymentAmount
+            else:
+                paymentPlannedDates[month]['sum'] = item.paymentAmount
+            payment['amount'] = item.paymentAmount
+            payment['id'] = item.id
+            payment['split'] = item.isSplit
+            payment['date'] = item.paymentDate.strftime('%d.%m.%y')
+            payment['confirmed'] = item.confirmed
+            payment['confirmedDate'] = item.confirmedDate.strftime('%d.%m.%y') if item.confirmed else ''
             if item.isSplit:
                 logger.info('Payment is split')
                 logger.info('Agreement id is: ' + str(item.splitAgreement.id) + ', name: ' + str(item.splitAgreement.name))
-                paymentPlannedDates[month]['agreementName'] = item.splitAgreement.name
-                paymentPlannedDates[month]['childPayments'] = []
+                payment['agreementName'] = item.splitAgreement.name
+                payment['childPayments'] = []
                 childPayments = Payments.objects.filter(parentPayment = item.id)
                 logger.info(childPayments)
-                paymentPlannedDates[month]['childPayments'] = []
+                payment['childPayments'] = []
                 for childPayment in childPayments:
-                    paymentPlannedDates[month]['childPayments'].append({'id': childPayment.id, 'date': childPayment.paymentDate.strftime('%d.%m.%Y'), 'amount': childPayment.paymentAmount})
-            # if item.confirmed:
-            #     paymentFactDates[month]['amount'] = item.paymentAmount
-            #     paymentFactDates[month]['id'] = item.id
-            #     paymentFactDates[month]['split'] = item.isSplit
-            #     paymentFactDates[month]['date'] = item.paymentDate.strftime('%d.%m.%Y')
+                    payment['childPayments'].append({'id': childPayment.id, 'date': childPayment.paymentDate.strftime('%d.%m.%y'), 'amount': childPayment.paymentAmount})
+            paymentPlannedDates[month]['payments'].append(payment)
         paymentPlannedDates.update(key)
         logger.info('paymentPlannedDates: ' + str(paymentPlannedDates))
         paymentsDataDicted.append({**key, **paymentPlannedDates})
-        # paymentsDataDicted.append({**key, **paymentFactDates})
 
     logger.info('Payments data:')
     logger.info(paymentsDataDicted)

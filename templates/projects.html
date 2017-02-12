@@ -27,6 +27,7 @@
 
 
 <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog">
+    <!--modal-sm is redefined in projects.css to make it wider-->
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <!--<div class="modal-header">-->
@@ -69,34 +70,23 @@
                                                     <td id="contractName"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Payment amount:</td>
-                                                    <td id="paymentAmount"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Planned date:</td>
-                                                    <td id="plannedDate"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Confirmed date:</td>
-                                                    <td id="confirmedDate"></td>
+                                                    <td>Sum:</td>
+                                                    <td id="sum"></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div id="splitInfo" class="form-group hidden">
-                                            <div class="alert alert-info">
-                                                <strong>Payment is split</strong><br/>
-                                                Actions are not available
-                                            </div>
-                                            <table id="childPaymentTable" class="table table-condensed table-hover">
+                                        <div class="form-group">
+                                            <table id="paymentsTable" class="table table-condensed">
                                                 <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Date</th>
                                                     <th>Amount</th>
+                                                    <th>Planned</th>
+                                                    <th>Confirmed</th>
                                                 </tr>
                                                 </thead>
-                                                <tbody id="childPaymentsTableBody">
+                                                <tbody id="paymentsTableBody">
                                                 </tbody>
                                             </table>
                                         </div>
@@ -150,10 +140,10 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label id="paymentsListLabel" class="control-label text-center hidden">Payments
+                                            <label id="childPaymentsListLabel" class="control-label text-center hidden">Payments
                                                 info</label>
 
-                                            <table id="paymentsTable" class="table table-condensed table-hover hidden">
+                                            <table id="childPaymentsTable" class="table table-condensed table-hover hidden">
                                                 <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -161,7 +151,7 @@
                                                     <th>Amount</th>
                                                 </tr>
                                                 </thead>
-                                                <tbody id="paymentsTableBody">
+                                                <tbody id="childPaymentsTableBody">
                                                 </tbody>
                                             </table>
                                         </div>

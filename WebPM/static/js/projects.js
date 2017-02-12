@@ -76,9 +76,9 @@ $(document).ready(function() {
                 targets: paymentsColumns,
                 "createdCell": function (td, cellData, rowData, row, col) {
                     if(cellData) {
-                        var key = columns[col]['data'].replace('.amount','');
-                        td.id = rowData[key].id
-                        console.log(rowData[key].split);
+                        var key = columns[col]['data'].replace('.sum','');
+                        //td.id = rowData[key].id
+                        //console.log(rowData[key].split);
 
                         $(td).append(' <span class="show-payment glyphicon glyphicon-search pull-right"></span>');
                         $(td).addClass('payment');
@@ -90,22 +90,37 @@ $(document).ready(function() {
                         $(td).attr('data-placement','bottom');
                         $(td).attr('data-container','body');
 
-                        //Showing extra data on tooltip for split payments and adding colors depending on payment status
-                        if(rowData[key].split){
-                            $(td).addClass( "bg-warning" );
-                            $(td).attr('data-content', $(td).attr('data-content') + '<br/> Payment is split according '
-                                                + 'document: ' + rowData[key].agreementName + '. <br/> Child payments:')
-                            var childPayments = rowData[key].childPayments
-                            console.log(childPayments)
-                            for (var i = 0; i < childPayments.length; i++) {
-                                console.log(childPayments[i]);
-                                $(td).attr('data-content', $(td).attr('data-content') + '<br/> #' + (i+1) +' Date:  '
-                                + childPayments[i].date + ', amount: ' + childPayments[i].amount);
+                        //Adding colors depending on payment status (considering all payments in this month/key)
+                        var isConfirmed = true;
+                        var payments = rowData[key].payments
+                        for (var i = 0; i < payments.length; i++) {
+                            if (!payments[i].confirmed)
+                            {
+                                isConfirmed = false;
+                                break;
                             }
                         }
-                        else if(rowData[key].confirmed){
-                            $(td).addClass( "bg-success" );
+                        if (isConfirmed) {
+                            $(td).addClass( 'bg-success' );
                         }
+
+
+                        //Showing extra data on tooltip for split payments and adding colors depending on payment status
+//                        if(rowData[key].split){
+//                            $(td).addClass( "bg-warning" );
+//                            $(td).attr('data-content', $(td).attr('data-content') + '<br/> Payment is split according '
+//                                                + 'document: ' + rowData[key].agreementName + '. <br/> Child payments:')
+//                            var childPayments = rowData[key].childPayments
+//                            console.log(childPayments)
+//                            for (var i = 0; i < childPayments.length; i++) {
+//                                console.log(childPayments[i]);
+//                                $(td).attr('data-content', $(td).attr('data-content') + '<br/> #' + (i+1) +' Date:  '
+//                                + childPayments[i].date + ', amount: ' + childPayments[i].amount);
+//                            }
+//                        }
+//                        else if(rowData[key].confirmed){
+//                            $(td).addClass( "bg-success" );
+//                        }
                     }
                 },
             }],
@@ -187,6 +202,46 @@ $(document).ready(function() {
 
     //Showing modal with info and actions for each payment when zoom icon is clicked
     $("#projects").on("click", ".show-payment", function() {
+        $("#paymentsTableBody tr").remove();
+        var cell = $(this).parents('td');
+        var cellIndex = projectTable.cell( cell ).index();
+        console.log(cellIndex);
+        var rowData = projectTable.row( cellIndex['row'] ).data();
+        console.log(rowData);
+        var columnTitle = projectTable.column( cellIndex['column'] ).title().replace(' ','');
+        console.log(columnTitle);
+        var payments = rowData[columnTitle]['payments'];
+        var paymentClass;
+        for (var i = 0; i < payments.length; i++) {
+            console.log(payments[i]);
+            if (payments[i].confirmed){
+                paymentClass = 'bg-success';
+            }
+            else {
+                paymentClass = ''
+            }
+
+            $('#paymentsTableBody').append('<tr id="' + payments[i].id + '" class="' + paymentClass + '">'
+                + '<td>' + (i + 1) + '</td>'
+                + '<td>' + payments[i].amount + '</td>'
+                + '<td>' + payments[i].date + '</td>'
+                + '<td>' + payments[i].confirmedDate + '</td></tr>');
+        }
+
+        //Might consider serializing it instead of
+        $('#projectName').html(rowData['Project name']);
+        $('#manager').html(rowData['Manager']);
+        $('#currentState').html(rowData['Current state']);
+        $('#contractType').html(rowData['Contract type']);
+        $('#contractName').html(rowData['Contract name']);
+        $('#sum').html(cell.text());
+
+        $('#paymentModal').modal('show');
+
+    });
+
+    //Showing modal with info and actions for each payment when zoom icon is clicked
+    $("#projects1").on("click", ".show-payment", function() {
         //Clearn modal from previous data
         $("#childPaymentsTableBody tr").remove();
         var cell = $(this).parents('td');
@@ -383,13 +438,13 @@ $(document).ready(function() {
                 console.log('Splitting payment:');
                 console.log(splitPayment);
                 $('#paymentsListLabel').removeClass('hidden');
-                $('#paymentsTable').removeClass('hidden');
+                $('#childPaymentsTable').removeClass('hidden');
             }
 
             console.log('Payment adding. Payment date: ' + paymentDate + ', payment amount: ' + paymentAmount +
             '. New payments quantity: ' + paymentsQty);
 
-            $('#paymentsTableBody').append('<tr id="paymentRow' + paymentsQty + '" name>'
+            $('#childPaymentsTableBody').append('<tr id="paymentRow' + paymentsQty + '" name>'
                 + '<td>' + paymentsQty + '</td>'
                 + '<td>' + paymentDate + '</td>'
                 + '<td  class="childPaymentAmount">' + paymentAmount + '</td></tr>');
