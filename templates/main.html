@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block extracss %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
 {% endblock %}
@@ -26,9 +26,6 @@
 
     var projectAttrs = '{{projectAttrs.Countries}}';
     console.log(cities);
-
-
-
 
 </script>
 
@@ -58,11 +55,6 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <!--<div class="modal-header">-->
-
-            <!--</div>-->
-            <!--<div class="modal-body">-->
-
             <form id="projectAddForm" method="post">
                 <h3>Description</h3>
                 <!--<h3>Stages</h3>-->
@@ -237,10 +229,6 @@
 
                 </section>
             </form>
-
-            <!--</div>-->
-            <!--<div class="modal-footer">-->
-            <!--</div>-->
         </div>
     </div>
 </div>

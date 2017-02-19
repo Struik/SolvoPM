@@ -270,8 +270,6 @@ $(document).ready(function(){
     $('.wizard .steps').addClass("modal-header");
     $('.wizard .content').addClass("modal-body");
     $('.wizard .actions').addClass("modal-footer");
-    $('.steps1 ul').addClass("modal-title");
-    $('.steps1 ul').addClass("nav-pills");
     $(".steps ul li").each(function (i) {
         var title = $(this).find("a").contents().filter(function() {
             return this.nodeType == 3;

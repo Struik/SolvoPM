@@ -137,9 +137,10 @@ def get_projects_data(request):
     for i in range(len(columnsBasic)):
         #Columns with DT ain't for showing in the table but for technical usage
         if not columnsBasic[i].startswith('DT'):
-            columnsDicted.append({'data': columnsBasic[i], 'title': columnsBasic[i]})
+            columnsDicted.append({'data': columnsBasic[i], 'caption': columnsBasic[i]})
     for i in range(len(monthsList)):
-        columnsDicted.append({'data': monthsList[i][0].replace(' ','') + '.sum', 'title': monthsList[i][0]})
+        columnsDicted.append({'data': monthsList[i][0].replace(' ', '') + '.planned', 'caption': monthsList[i][0]})
+        columnsDicted.append({'data': monthsList[i][0].replace(' ', '') + '.confirmed', 'caption': monthsList[i][0]})
     logger.info('Final column headers: ' + str(columnsDicted))
 
     paymentsDataDicted = []
@@ -152,7 +153,7 @@ def get_projects_data(request):
                                                                                   x.contract.contractType.name,
                                                                                   x.contract.name,
                                                                                   x.contract.id]))):
-        paymentPlannedDates = {month: {'sum': '', 'payments': []} for month in paymentDict}
+        paymentPlannedDates = {month: {'planned': '', 'payments': [], 'confirmed': ''} for month in paymentDict}
         logger.info('key: ' +  str(key))
         logger.info(paymentPlannedDates)
         for item in group:
@@ -161,10 +162,16 @@ def get_projects_data(request):
             month = item.paymentDate.strftime('%b%y')
             logger.info('month: ' + str(month))
             logger.info('payment amount: ' + str(item.paymentAmount))
-            if paymentPlannedDates[month]['sum']:
-                paymentPlannedDates[month]['sum'] += item.paymentAmount
+            #Summing up planned and confirmed payments if it's not first one for this month else assigning it's value
+            if paymentPlannedDates[month]['planned']:
+                paymentPlannedDates[month]['planned'] += item.paymentAmount
             else:
-                paymentPlannedDates[month]['sum'] = item.paymentAmount
+                paymentPlannedDates[month]['planned'] = item.paymentAmount
+            if item.confirmed:
+                if paymentPlannedDates[month]['confirmed']:
+                    paymentPlannedDates[month]['confirmed'] += item.paymentAmount if item.confirmed else 0
+                else:
+                    paymentPlannedDates[month]['confirmed'] = item.paymentAmount if item.confirmed else ''
             payment['amount'] = item.paymentAmount
             payment['id'] = item.id
             payment['split'] = item.isSplit

@@ -3,6 +3,35 @@
 $(document).ready(function() {
     var paymentForm = $("#paymentForm");
 
+    //Enabling jquery steps addon on payment info form
+    paymentForm.steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        transitionEffect: 1,
+        autoFocus: true,
+        enableKeyNavigation: false,
+        enablePagination: false,
+    });
+
+    //Enabling bootstrap classes on payment info form
+    $('.wizard .steps').addClass("modal-header");
+    $('.wizard .content').addClass("modal-body");
+    $('.wizard .actions').addClass("modal-footer");
+    $('.steps ul li').each(function (i) {
+        var title = $(this).find("a").contents().filter(function() {
+            return this.nodeType == 3;
+        }).text();
+        $(this).append('<h4 class="modal-title">' + title + '<span class="glyphicon glyphicon-arrow-left pull-right '
+                                                                                    + 'previous-step"></span></h4>');
+    });
+    $('.actions ul').addClass("pager");
+
+    $(document).on("click", ".previous-step", function() {
+        console.log('dsadsadssa');
+        paymentForm.steps('previous');
+    });
+
+
     var projectTable;
     //Drawing table with datatable plugin
     getProjectData();
@@ -27,7 +56,7 @@ $(document).ready(function() {
         });
     }
 
-    //Function to created table
+    //Function to create table with projects and payment schedule
     function createDatatable(projectData){
         console.log(projectData)
         var columns = projectData['columns']
@@ -47,7 +76,22 @@ $(document).ready(function() {
         paymentsColumns.splice(0, staticColumns.length)
         console.log('paymentsColumns: ' + paymentsColumns)
 
-
+        //Creating headers before datatables plugin because rowspan and colspan classes are needed
+        //which cannot be assigned automatically on datatable initialisation
+        var projectsHeaderFirst = $("#projectsHeaderFirst");
+        var projectsHeaderSecond = $("#projectsHeaderSecond");
+        for (var i = 0; i < staticColumns.length; i++){
+            projectsHeaderFirst.append('<th rowspan="2">' + columns[i].caption + '</th>');
+        }
+        for (var i = staticColumns.length; i < (paymentsColumns.length + staticColumns.length); i++){
+            if (i % 2){
+                projectsHeaderFirst.append('<th colspan="2">' + columns[i].caption + '</th>');
+                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '">Plan</th>');
+            }
+            else{
+                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '">Fact</th>');
+            }
+        }
 
 
         //(plugin datatables.js)
@@ -76,32 +120,32 @@ $(document).ready(function() {
                 targets: paymentsColumns,
                 "createdCell": function (td, cellData, rowData, row, col) {
                     if(cellData) {
-                        var key = columns[col]['data'].replace('.sum','');
+                        var key = columns[col]['data'].replace('.planned','');
                         //td.id = rowData[key].id
                         //console.log(rowData[key].split);
 
-                        $(td).append(' <span class="show-payment glyphicon glyphicon-search pull-right"></span>');
+                        $(td).append(' <span class="show-month glyphicon glyphicon-search pull-right"></span>');
                         $(td).addClass('payment');
                         //$(td).wrapInner( "<strong></strong>" );
                         //Trigger event for bootstrap popover can be set for each element or one for all elements
                         //$(td).attr('data-trigger','hover');
                         $(td).attr('data-html', 'true');
-                        $(td).attr('data-content','Planned date: ' + rowData[key].date);
+                        //$(td).attr('data-content','Planned date: ' + rowData[key].date);
                         $(td).attr('data-placement','bottom');
                         $(td).attr('data-container','body');
 
                         //Adding colors depending on payment status (considering all payments in this month/key)
                         var isConfirmed = true;
-                        var payments = rowData[key].payments
-                        for (var i = 0; i < payments.length; i++) {
-                            if (!payments[i].confirmed)
-                            {
-                                isConfirmed = false;
-                                break;
-                            }
-                        }
+//                        var payments = rowData[key].payments
+//                        for (var i = 0; i < payments.length; i++) {
+//                            if (!payments[i].confirmed)
+//                            {
+//                                isConfirmed = false;
+//                                break;
+//                            }
+//                        }
                         if (isConfirmed) {
-                            $(td).addClass( 'bg-success' );
+                            //$(td).addClass( 'bg-success' );
                         }
 
 
@@ -200,16 +244,17 @@ $(document).ready(function() {
         },
     });
 
-    //Showing modal with info and actions for each payment when zoom icon is clicked
-    $("#projects").on("click", ".show-payment", function() {
+    //Showing modal form with info and actions for each payment when zoom icon is clicked
+    $("#projects").on("click", ".show-month", function() {
         $("#paymentsTableBody tr").remove();
         var cell = $(this).parents('td');
         var cellIndex = projectTable.cell( cell ).index();
         console.log(cellIndex);
         var rowData = projectTable.row( cellIndex['row'] ).data();
         console.log(rowData);
-        var columnTitle = projectTable.column( cellIndex['column'] ).title().replace(' ','');
+        var columnTitle = projectTable.column( cellIndex['column'] ).parentTitle().replace(' ','');
         console.log(columnTitle);
+        console.log(projectTable.column( cellIndex['column'] ));
         var payments = rowData[columnTitle]['payments'];
         var paymentClass;
         for (var i = 0; i < payments.length; i++) {
@@ -223,9 +268,10 @@ $(document).ready(function() {
 
             $('#paymentsTableBody').append('<tr id="' + payments[i].id + '" class="' + paymentClass + '">'
                 + '<td>' + (i + 1) + '</td>'
-                + '<td>' + payments[i].amount + '</td>'
-                + '<td>' + payments[i].date + '</td>'
-                + '<td>' + payments[i].confirmedDate + '</td></tr>');
+                + '<td class="amount">' + payments[i].amount + '</td>'
+                + '<td class="planned">' + payments[i].date + '</td>'
+                + '<td class="confirmed">' + payments[i].confirmedDate + '</td>'
+                + '<td><span class="show-payment glyphicon glyphicon-pencil"/></td></tr>');
         }
 
         //Might consider serializing it instead of
@@ -234,84 +280,33 @@ $(document).ready(function() {
         $('#currentState').html(rowData['Current state']);
         $('#contractType').html(rowData['Contract type']);
         $('#contractName').html(rowData['Contract name']);
-        $('#sum').html(cell.text());
+        $('#planned').html(rowData[columnTitle]['planned']);
+        $('#confirmed').html(rowData[columnTitle]['confirmed']);
 
         $('#paymentModal').modal('show');
 
     });
 
-    //Showing modal with info and actions for each payment when zoom icon is clicked
-    $("#projects1").on("click", ".show-payment", function() {
-        //Clearn modal from previous data
-        $("#childPaymentsTableBody tr").remove();
-        var cell = $(this).parents('td');
-        console.log('Showing payment #' + cell.attr('id'));
-        //For confirming and splitting this payment
-        paymentForm.attr('payment_id', cell.attr('id'));
-        var cellIndex = projectTable.cell( cell ).index();
-        console.log(cellIndex);
-        var rowData = projectTable.row( cellIndex['row'] ).data();
-        console.log(rowData);
-        var columnTitle = projectTable.column( cellIndex['column'] ).title().replace(' ','');
-        if(rowData[columnTitle].split){
-            var childPayments = rowData[columnTitle]['childPayments'];
-            //TODO. This part of code is duplicate and used createdCell option of datatable.
-            //Might consider making a function for it.
-            for (var i = 0; i < childPayments.length; i++) {
-                console.log(childPayments[i]);
-                $('#childPaymentsTableBody').append('<tr id="childPaymentRow' + (i + 1) + '">'
-                    + '<td>' + (i + 1) + '</td>'
-                    + '<td>' + childPayments[i].date + '</td>'
-                    + '<td>' + childPayments[i].amount + '</td></tr>');
-            }
-            $('#splitInfo').removeClass('hidden');
-            $('#confirmPanel').addClass('hidden');
-            $('#unconfirmPanel').addClass('hidden');
-            //Split tab should be disabled for confirmed and split payments.
-            $('#splitTab').addClass('disabled');
-            $('#splitTab a').removeAttr('data-toggle');
-            //Showing tooltip for those who will be wondering why Split tab is disabled
-            $('#splitTab').attr('data-html', 'true').attr('data-placement','bottom').attr('data-container','body');
-            $('#splitTab').attr('data-content','Payment is already split');
-        }
-        else if(rowData[columnTitle].confirmed) {
-            $('#splitInfo').addClass('hidden');
-            $('#confirmPanel').addClass('hidden');
-            $('#unconfirmPanel').removeClass('hidden');
-            //Split tab should be disabled for confirmed and split payments.
-            $('#splitTab').addClass('disabled');
-            $('#splitTab a').removeAttr('data-toggle','tab');
-            //Showing tooltip for those who will be wondering why Split tab is disabled
-            $('#splitTab').attr('data-html', 'true').attr('data-placement','bottom').attr('data-container','body');
-            $('#splitTab').attr('data-content','Cannot split confirmed payment');
+    //Showing page with payment actionson modal form page
+    $("#paymentsTable").on("click", ".show-payment", function() {
+        var row = $(this).parents('tr');
+        $('#paymentInfo').attr('payment-id', row.attr('id'));
+        $('#paymentInfoAmount').html(row.children('.amount').text());
+        $('#paymentInfoPlanned').html(row.children('.planned').text());
+        $('#paymentInfoConfirmed').html(row.children('.confirmed').text());
+        if(row.children('.confirmed').text()){
+            console.log('Is not confirmed');
+            //$('#splitInfo').removeClass('hidden');
+            $('.confirm-action').addClass('hidden');
+            $('.unconfirm-action').removeClass('hidden');
         }
         else {
-            $('#splitInfo').addClass('hidden');
-            $('#confirmPanel').removeClass('hidden');
-            $('#unconfirmPanel').addClass('hidden');
-            $('#splitTab').removeClass('disabled')
-            $('#splitTab a').attr('data-toggle','tab');
-            $('#splitTab').attr('data-html', 'true').attr('data-placement','bottom').attr('data-container','body');
-            $('#splitTab').attr('data-content','Split payment into smaller ones');
-
+            console.log('Is not confirmed');
+            $('.confirm-action').removeClass('hidden');
+            $('.unconfirm-action').addClass('hidden');
         }
-
-        //Might consider serializing it instead of
-        $('#projectName').html(rowData['Project name']);
-        $('#manager').html(rowData['Manager']);
-        $('#currentState').html(rowData['Current state']);
-        $('#contractType').html(rowData['Contract type']);
-        $('#contractName').html(rowData['Contract name']);
-        $('#paymentAmount').html(rowData[columnTitle]['amount']);
-        $('#plannedDate').html(rowData[columnTitle]['date']);
-        $('#confirmedDate').html(rowData[columnTitle]['confirmedDate']);
-
-        //Switching to first tab
-        $('#infoTab a[href="#info"]').tab('show');
-
-        $('#paymentModal').modal('show');
+        paymentForm.steps('next');
     });
-
 
     //Enabling datetimepicker fields
     $('#confirmDatePicker').datetimepicker({
@@ -375,12 +370,17 @@ $(document).ready(function() {
         var colheader = this.header();
         return $(colheader).text().trim();
     });
+    //Plugin for datatables to implement parent-title() function which gets parent (colspanned) column's title
+    $.fn.dataTable.Api.register( 'column().parentTitle()', function () {
+        var colheader = this.header();
+        return $(colheader).attr('parent-title');
+    });
 
     $('#confirmPayment').click(function() {
-        if(paymentForm.valid())
+        if($('#confirmDate').valid())
         {
             console.log('Confirming payment');
-            var paymentData = {'paymentId': paymentForm.attr('payment_id'),'confirmDate': $('#confirmDate').val()}
+            var paymentData = {'paymentId': $('#paymentInfo').attr('payment-id'),'confirmDate': $('#confirmDate').val()}
             console.log(paymentData);
             $.ajax({
                 type: 'POST',
@@ -399,7 +399,7 @@ $(document).ready(function() {
 
     $('#unconfirmPayment').click(function() {
         console.log('Unconfirming payment');
-        var paymentData = {'paymentId': paymentForm.attr('payment_id')}
+        var paymentData = {'paymentId': $('#paymentInfo').attr('payment-id')}
         console.log(paymentData);
         $.ajax({
             type: 'POST',

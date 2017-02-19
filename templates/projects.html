@@ -5,10 +5,12 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/fixedColumns.bootstrap.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/projects.css' %}"/>
 {% endblock %}
 
 {% block extrajs %}
+<script src="{% static 'js/jquery.steps.js' %}"></script>
 <script src="{% static 'js/jquery.validate.js' %}"></script>
 <script src="{% static 'js/datatables.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap.js' %}"></script>
@@ -23,6 +25,12 @@
 
 {% block content %}
 <table id="projects" class="table table-bordered " cellspacing="0" width="100%">
+    <thead>
+    <tr id="projectsHeaderFirst">
+    </tr>
+    <tr id="projectsHeaderSecond">
+    </tr>
+    </thead>
 </table>
 
 
@@ -30,168 +38,188 @@
     <!--modal-sm is redefined in projects.css to make it wider-->
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-            <!--<div class="modal-header">-->
-            <!--</div>-->
-            <div class="modal-body">
-                <form id="paymentForm" enctype="multipart/form-data" payment_id="">
-                    <div>
-                        <ul class="nav nav-tabs">
-                            <li id="infoTab" class="active"><a data-toggle="tab" href="#info">Info</a></li>
-                            <li id="splitTab"><a data-toggle="tab" href="#split">Split</a></li>
-                        </ul>
+            <form id="paymentForm" enctype="multipart/form-data">
+                <h3>Month info</h3>
+                <h3>Payment info</h3>
+                <section>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div id="monthInfo" class="form-group">
+                                <table id="monthInfoTable" class="table table-condensed table-borderless">
+                                    <thead>
+                                    </thead>
+                                    <tbody id="monthInfoTableBody">
+                                    <tr>
+                                        <td>Project name:</td>
+                                        <td id="projectName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Manager:</td>
+                                        <td id="manager"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Current state:</td>
+                                        <td id="currentState"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contract type:</td>
+                                        <td id="contractType"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contract name:</td>
+                                        <td id="contractName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Planned:</td>
+                                        <td id="planned"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Confirmed:</td>
+                                        <td id="confirmed"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        <div class="tab-content top-buffer">
-                            <div id="info" class="tab-pane form-tab fade in active">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div id="paymentInfo" class="form-group">
-                                            <table id="paymentInfoTable" class="table table-condensed table-borderless">
-                                                <thead>
-                                                </thead>
-                                                <tbody id="paymentInfoTableBody">
-                                                <tr>
-                                                    <td>Project name:</td>
-                                                    <td id="projectName"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Manager:</td>
-                                                    <td id="manager"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Current state:</td>
-                                                    <td id="currentState"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Contract type:</td>
-                                                    <td id="contractType"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Contract name:</td>
-                                                    <td id="contractName"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Sum:</td>
-                                                    <td id="sum"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="form-group">
-                                            <table id="paymentsTable" class="table table-condensed">
-                                                <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Amount</th>
-                                                    <th>Planned</th>
-                                                    <th>Confirmed</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="paymentsTableBody">
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="confirmPanel" class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="form-group">
-                                            <div class='input-group date' id='confirmDatePicker'>
-                                                <input type="text" class="form-control datepicker"
-                                                       id="confirmDate"
-                                                       name="confirmDate" placeholder="Payment date">
-                                                <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group ">
-                                            <button type="button" class="btn btn-success btn-block" id="confirmPayment">
-                                                Confirm payment
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="unconfirmPanel" class="form-group ">
-                                    <button type="button" class="btn btn-warning btn-block" id="unconfirmPayment">
-                                        Unconfirm payment
-                                    </button>
+                            <div class="form-group">
+                                <table id="paymentsTable" class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Amount</th>
+                                        <th>Planned</th>
+                                        <th>Confirmed</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="paymentsTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div id="paymentInfoPanel" class="panel panel-default">
+                        <div class="panel-body">
+                            <div id="paymentInfo" class="form-group" style="margin-bottom: 5px;">
+                                <table id="paymentInfoTable" class="table table-condensed table-borderless">
+                                    <thead>
+                                    </thead>
+                                    <tbody id="paymentInfoTableBody">
+                                    <tr>
+                                        <td>Amount:</td>
+                                        <td id="paymentInfoAmount"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Planned:</td>
+                                        <td id="paymentInfoPlanned"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Confirmed:</td>
+                                        <td id="paymentInfoConfirmed"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="form-group confirm-action">
+                                <div class='input-group date' id='confirmDatePicker'>
+                                    <input type="text" class="form-control datepicker"
+                                           id="confirmDate"
+                                           name="confirmDate" placeholder="Payment date">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
                                 </div>
                             </div>
-                            <div id="split" class="tab-pane form-tab fade">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
 
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input id="fileName" name="fileName" type="text" class="form-control fileinput" readonly="">
-                                                <label class="input-group-btn">
+                            <div class="form-group confirm-action">
+                                <button type="button" class="btn btn-success btn-block" id="confirmPayment">
+                                    Confirm payment
+                                </button>
+                            </div>
+
+                            <div class="form-group unconfirm-action">
+                                <button type="button" class="btn btn-warning btn-block" id="unconfirmPayment">
+                                    Unconfirm payment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input id="fileName" name="fileName" type="text"
+                                           class="form-control fileinput" readonly="">
+                                    <label class="input-group-btn">
                                                     <span class="btn btn-primary">
                                                         Browse… <input type="file" name="document"
                                                                        style="display: none;">
                                                     </span>
-                                                </label>
-                                            </div>
-                                        </div>
+                                    </label>
+                                </div>
+                            </div>
 
-                                        <div class="form-group">
-                                            <input type="text" class="form-control payment-attr" id="documentName"
-                                                   name="documentName"
-                                                   placeholder="Document name">
-                                        </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control payment-attr" id="documentName"
+                                       name="documentName"
+                                       placeholder="Document name">
+                            </div>
 
-                                        <div class="form-group">
-                                            <label id="childPaymentsListLabel" class="control-label text-center hidden">Payments
-                                                info</label>
+                            <div class="form-group">
+                                <label id="childPaymentsListLabel" class="control-label text-center hidden">Payments
+                                    info</label>
 
-                                            <table id="childPaymentsTable" class="table table-condensed table-hover hidden">
-                                                <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Date</th>
-                                                    <th>Amount</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="childPaymentsTableBody">
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                <table id="childPaymentsTable"
+                                       class="table table-condensed table-hover hidden">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="childPaymentsTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
 
-                                        <div class="form-group">
-                                            <div class='input-group date' id='splitDatePicker'>
-                                                <input type="text" class="form-control datepicker"
-                                                       id="childPaymentDate"
-                                                       name="childPaymentDate" placeholder="Payment date">
-                                                <span class="input-group-addon">
+                            <div class="form-group">
+                                <div class='input-group date' id='splitDatePicker'>
+                                    <input type="text" class="form-control datepicker"
+                                           id="childPaymentDate"
+                                           name="childPaymentDate" placeholder="Payment date">
+                                    <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input type="text" class="form-control payment-attr" id="childPaymentAmount"
-                                                   name="childPaymentAmount"
-                                                   placeholder="Payment amount">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-success btn-block" id="addPayment">
-                                                Add payment
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-info btn-block" id="save">
-                                        Save
-                                    </button>
-                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control payment-attr" id="childPaymentAmount"
+                                       name="childPaymentAmount"
+                                       placeholder="Payment amount">
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success btn-block" id="addPayment">
+                                    Add payment
+                                </button>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
-            <!--<div class="modal-footer">-->
-            <!--</div>-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-info btn-block" id="save">
+                            Save
+                        </button>
+                    </div>
+                </section>
+            </form>
         </div>
     </div>
 </div>
