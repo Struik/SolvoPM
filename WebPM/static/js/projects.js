@@ -294,16 +294,20 @@ $(document).ready(function() {
         $('#paymentInfoAmount').html(row.children('.amount').text());
         $('#paymentInfoPlanned').html(row.children('.planned').text());
         $('#paymentInfoConfirmed').html(row.children('.confirmed').text());
-        if(row.children('.confirmed').text()){
+        if($('#paymentInfoConfirmed').html()){
             console.log('Is not confirmed');
             //$('#splitInfo').removeClass('hidden');
             $('.confirm-action').addClass('hidden');
             $('.unconfirm-action').removeClass('hidden');
+            $('.confirmed').removeClass('hidden');
+            $('.split-action').addClass('hidden');
         }
         else {
             console.log('Is not confirmed');
             $('.confirm-action').removeClass('hidden');
             $('.unconfirm-action').addClass('hidden');
+            $('.confirmed').addClass('hidden');
+            $('.split-action').removeClass('hidden');
         }
         paymentForm.steps('next');
     });
@@ -311,7 +315,7 @@ $(document).ready(function() {
     //Enabling datetimepicker fields
     $('#confirmDatePicker').datetimepicker({
         format: 'DD.MM.YYYY',
-        minDate: moment(),
+        maxDate: moment(),
         allowInputToggle: true,
     });
 

@@ -175,6 +175,7 @@ def get_projects_data(request):
             payment['amount'] = item.paymentAmount
             payment['id'] = item.id
             payment['split'] = item.isSplit
+            payment['parentPayment'] = item.parentPayment.id if item.parentPayment else 0
             payment['date'] = item.paymentDate.strftime('%d.%m.%y')
             payment['confirmed'] = item.confirmed
             payment['confirmedDate'] = item.confirmedDate.strftime('%d.%m.%y') if item.confirmed else ''
@@ -191,6 +192,7 @@ def get_projects_data(request):
             paymentPlannedDates[month]['payments'].append(payment)
         paymentPlannedDates.update(key)
         logger.info('paymentPlannedDates: ' + str(paymentPlannedDates))
+        #Python 3.5 syntax
         paymentsDataDicted.append({**key, **paymentPlannedDates})
 
     logger.info('Payments data:')

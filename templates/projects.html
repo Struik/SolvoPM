@@ -149,7 +149,15 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-default">
+                    <div class="alert alert-success confirmed" role="alert">Payment is <strong>confirmed.</strong>
+                        Other actions unavailable
+                    </div>
+
+                    <div class="alert alert-warning inherited" role="alert">Payment is inherited from
+                        <a href="#" class="alert-link">this one</a>
+                    </div>
+
+                    <div class="panel panel-default split-action">
                         <div class="panel-body">
 
                             <div class="form-group">
@@ -212,12 +220,13 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-info btn-block" id="save">
+                                Save
+                            </button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-info btn-block" id="save">
-                            Save
-                        </button>
-                    </div>
+
                 </section>
             </form>
         </div>
