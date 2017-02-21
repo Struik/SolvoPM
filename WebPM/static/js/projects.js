@@ -1,10 +1,11 @@
 'use strict'
 
 $(document).ready(function() {
-    var paymentForm = $("#paymentForm");
+    var infoForm = $("#infoForm");
 
-    //Enabling jquery steps addon on payment info form
-    paymentForm.steps({
+    
+    //Enabling jquery steps addon on info form
+    infoForm.steps({
         headerTag: "h3",
         bodyTag: "section",
         transitionEffect: 1,
@@ -12,8 +13,7 @@ $(document).ready(function() {
         enableKeyNavigation: false,
         enablePagination: false,
     });
-
-    //Enabling bootstrap classes on payment info form
+    //Enabling bootstrap classes on info form
     $('.wizard .steps').addClass("modal-header");
     $('.wizard .content').addClass("modal-body");
     $('.wizard .actions').addClass("modal-footer");
@@ -25,14 +25,18 @@ $(document).ready(function() {
                                                                                     + 'previous-step"></span></h4>');
     });
     $('.actions ul').addClass("pager");
-
+    //Button for moving to the first step with month info
     $(document).on("click", ".previous-step", function() {
-        console.log('dsadsadssa');
-        paymentForm.steps('previous');
+        infoForm.steps('previous');
     });
-
+    //Move to the first step when modal is closed
+    $('#infoModal').on('hide.bs.modal', function (e) {
+        infoForm.steps('previous');
+    })
 
     var projectTable;
+    //Global variable for storing full payments data so it's available for all functions on the page
+    var paymentsFullData;
     //Drawing table with datatable plugin
     getProjectData();
 
@@ -48,6 +52,7 @@ $(document).ready(function() {
                         alert('No data found, nothing to display');
                         return;
                     }
+                paymentsFullData = response['paymentsFullData']
                 createDatatable(response);
             },
             error: function () {
@@ -196,7 +201,7 @@ $(document).ready(function() {
     }, 'Specified amounts exceed initial payment amount');
 
     //Enabling jquery validation addon on payment form
-    paymentForm.validate({
+    infoForm.validate({
         //Fix to make selectize and validation working together.
         ignore: 'div.form-tab:not(.active) input',
         onsubmit: false,
@@ -205,10 +210,10 @@ $(document).ready(function() {
             confirmDate: {
                 required: true,
             },
-            fileName: {
+            splitFileName: {
                 required: true,
             },
-            documentName: {
+            splitDocumentName: {
                 required: true,
                 minlength: 5,
             },
@@ -255,22 +260,24 @@ $(document).ready(function() {
         var columnTitle = projectTable.column( cellIndex['column'] ).parentTitle().replace(' ','');
         console.log(columnTitle);
         console.log(projectTable.column( cellIndex['column'] ));
-        var payments = rowData[columnTitle]['payments'];
+        var paymentIds = rowData[columnTitle]['paymentIds'];
         var paymentClass;
-        for (var i = 0; i < payments.length; i++) {
-            console.log(payments[i]);
-            if (payments[i].confirmed){
+        var payment;
+        for (var i = 0; i < paymentIds.length; i++) {
+            payment = paymentsFullData[paymentIds[i]];
+            console.log(payment);
+            if (payment.confirmed){
                 paymentClass = 'bg-success';
             }
             else {
                 paymentClass = ''
             }
 
-            $('#paymentsTableBody').append('<tr id="' + payments[i].id + '" class="' + paymentClass + '">'
+            $('#paymentsTableBody').append('<tr id="' + paymentIds[i] + '" class="' + paymentClass + '">'
                 + '<td>' + (i + 1) + '</td>'
-                + '<td class="amount">' + payments[i].amount + '</td>'
-                + '<td class="planned">' + payments[i].date + '</td>'
-                + '<td class="confirmed">' + payments[i].confirmedDate + '</td>'
+                + '<td>' + payment.amount + '</td>'
+                + '<td>' + payment.date + '</td>'
+                + '<td>' + payment.confirmedDate + '</td>'
                 + '<td><span class="show-payment glyphicon glyphicon-pencil"/></td></tr>');
         }
 
@@ -283,39 +290,58 @@ $(document).ready(function() {
         $('#planned').html(rowData[columnTitle]['planned']);
         $('#confirmed').html(rowData[columnTitle]['confirmed']);
 
-        $('#paymentModal').modal('show');
+        $('#infoModal').modal('show');
 
     });
 
-    //Showing page with payment actionson modal form page
+    //Showing page with payment actions on modal form page
     $("#paymentsTable").on("click", ".show-payment", function() {
         var row = $(this).parents('tr');
-        $('#paymentInfo').attr('payment-id', row.attr('id'));
-        $('#paymentInfoAmount').html(row.children('.amount').text());
-        $('#paymentInfoPlanned').html(row.children('.planned').text());
-        $('#paymentInfoConfirmed').html(row.children('.confirmed').text());
-        if($('#paymentInfoConfirmed').html()){
-            console.log('Is not confirmed');
-            //$('#splitInfo').removeClass('hidden');
+        var paymentId = row.attr('id');
+        $('#paymentInfo').attr('payment-id', paymentId);
+        $('#paymentInfoAmount').html(paymentsFullData[paymentId].amount);
+        $('#paymentInfoPlanned').html(paymentsFullData[paymentId].date);
+        $('#paymentInfoConfirmed').html(paymentsFullData[paymentId].confirmedDate);
+        if(paymentsFullData[paymentId].confirmed){
+            console.log('Is confirmed');
+            $('.confirmed-alert').removeClass('hidden');
             $('.confirm-action').addClass('hidden');
             $('.unconfirm-action').removeClass('hidden');
-            $('.confirmed').removeClass('hidden');
+            $('.postpone-action').addClass('hidden');
+            $('.cancel-action').addClass('hidden');
             $('.split-action').addClass('hidden');
         }
         else {
             console.log('Is not confirmed');
+            $('.confirmed-alert').addClass('hidden');
             $('.confirm-action').removeClass('hidden');
             $('.unconfirm-action').addClass('hidden');
-            $('.confirmed').addClass('hidden');
+            $('.postpone-action').removeClass('hidden');
+            $('.cancel-action').removeClass('hidden');
             $('.split-action').removeClass('hidden');
         }
-        paymentForm.steps('next');
+        if(paymentsFullData[paymentId].parentPayment){
+            console.log('Has parent');
+            $('.inherited-alert').removeClass('hidden');
+        }
+        else {
+            console.log('Has no parent');
+            $('.inherited-alert').addClass('hidden');
+        }
+
+        infoForm.steps('next');
     });
 
     //Enabling datetimepicker fields
     $('#confirmDatePicker').datetimepicker({
         format: 'DD.MM.YYYY',
         maxDate: moment(),
+        allowInputToggle: true,
+    });
+
+    $('#postponeDatePicker').datetimepicker({
+        format: 'DD.MM.YYYY',
+        minDate: moment(),
         allowInputToggle: true,
     });
 
@@ -427,9 +453,9 @@ $(document).ready(function() {
 
 
     $('#addPayment').click(function() {
-        if(paymentForm.valid())
+        if(infoForm.valid())
         {
-            paymentId = paymentForm.attr('payment_id');
+            paymentId = infoForm.attr('payment_id');
             paymentDate = $('#childPaymentDate').val();
             paymentAmount = $('#childPaymentAmount').val();
 
@@ -463,7 +489,7 @@ $(document).ready(function() {
 
     $('#save').click(function() {
         console.log('Saving split payment');
-        var paymentData = new FormData($('#paymentForm')[0]);
+        var paymentData = new FormData($('#infoForm')[0]);
         paymentData.append('splitPayment', JSON.stringify(splitPayment));
         console.log(paymentData);
         $.ajax({

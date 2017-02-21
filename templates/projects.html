@@ -34,11 +34,11 @@
 </table>
 
 
-<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog">
     <!--modal-sm is redefined in projects.css to make it wider-->
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-            <form id="paymentForm" enctype="multipart/form-data">
+            <form id="infoForm" enctype="multipart/form-data">
                 <h3>Month info</h3>
                 <h3>Payment info</h3>
                 <section>
@@ -101,6 +101,14 @@
                 </section>
 
                 <section>
+                    <div class="alert alert-success confirmed-alert hidden" role="alert">Payment is
+                        <strong>confirmed.</strong>
+                        You may only unconfirm it
+                    </div>
+
+                    <div class="alert alert-warning inherited-alert hidden" role="alert">Payment is inherited from
+                        <a href="#" class="alert-link">this one</a>
+                    </div>
                     <div id="paymentInfoPanel" class="panel panel-default">
                         <div class="panel-body">
                             <div id="paymentInfo" class="form-group" style="margin-bottom: 5px;">
@@ -149,84 +157,173 @@
                         </div>
                     </div>
 
-                    <div class="alert alert-success confirmed" role="alert">Payment is <strong>confirmed.</strong>
-                        Other actions unavailable
-                    </div>
+                    <div class="panel-group" id="actions">
+                        <div class="panel panel-default postpone-action">
+                            <div class="panel-heading">
+                                <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
+                                                           href="#collapse-postpone">Postpone</a>
+                                </h3>
+                            </div>
+                            <div id="collapse-postpone" class="panel-collapse collapse">
+                                <div class="panel-body">
 
-                    <div class="alert alert-warning inherited" role="alert">Payment is inherited from
-                        <a href="#" class="alert-link">this one</a>
-                    </div>
-
-                    <div class="panel panel-default split-action">
-                        <div class="panel-body">
-
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input id="fileName" name="fileName" type="text"
-                                           class="form-control fileinput" readonly="">
-                                    <label class="input-group-btn">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input id="postponefileName" name="postponefileName" type="text"
+                                                   class="form-control fileinput" readonly="">
+                                            <label class="input-group-btn">
                                                     <span class="btn btn-primary">
                                                         Browse… <input type="file" name="document"
                                                                        style="display: none;">
                                                     </span>
-                                    </label>
-                                </div>
-                            </div>
+                                            </label>
+                                        </div>
+                                    </div>
 
-                            <div class="form-group">
-                                <input type="text" class="form-control payment-attr" id="documentName"
-                                       name="documentName"
-                                       placeholder="Document name">
-                            </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control payment-attr" id="postponeDocumentName"
+                                               name="postponeDocumentName"
+                                               placeholder="Document name">
+                                    </div>
 
-                            <div class="form-group">
-                                <label id="childPaymentsListLabel" class="control-label text-center hidden">Payments
-                                    info</label>
-
-                                <table id="childPaymentsTable"
-                                       class="table table-condensed table-hover hidden">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Date</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="childPaymentsTableBody">
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="form-group">
-                                <div class='input-group date' id='splitDatePicker'>
-                                    <input type="text" class="form-control datepicker"
-                                           id="childPaymentDate"
-                                           name="childPaymentDate" placeholder="Payment date">
-                                    <span class="input-group-addon">
+                                    <div class="form-group">
+                                        <div class='input-group date' id='postponeDatePicker'>
+                                            <input type="text" class="form-control datepicker"
+                                                   id="postponePaymentDate"
+                                                   name="postponePaymentDate" placeholder="Payment date">
+                                            <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-success btn-block" id="postponePayment">
+                                            Postpone payment
+                                        </button>
+                                    </div>
+
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <input type="text" class="form-control payment-attr" id="childPaymentAmount"
-                                       name="childPaymentAmount"
-                                       placeholder="Payment amount">
+                        <div class="panel panel-default cancel-action">
+                            <div class="panel-heading">
+                                <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
+                                                           href="#collapse-cancel">Cancel</a>
+                                </h3>
                             </div>
+                            <div id="collapse-cancel" class="panel-collapse collapse">
+                                <div class="panel-body">
 
-                            <div class="form-group">
-                                <button type="button" class="btn btn-success btn-block" id="addPayment">
-                                    Add payment
-                                </button>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input id="cancelfileName" name="cancelfileName" type="text"
+                                                   class="form-control fileinput" readonly="">
+                                            <label class="input-group-btn">
+                                                    <span class="btn btn-primary">
+                                                        Browse… <input type="file" name="document"
+                                                                       style="display: none;">
+                                                    </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control payment-attr" id="cancelDocumentName"
+                                               name="cancelDocumentName"
+                                               placeholder="Document name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-success btn-block" id="cancelPayment">
+                                            Cancel payment
+                                        </button>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-info btn-block" id="save">
-                                Save
-                            </button>
+
+                        <div class="panel panel-default split-action ">
+                            <div class="panel-heading">
+                                <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
+                                                           href="#collapse-split">Split
+                                </a></h3>
+                            </div>
+                            <div id="collapse-split" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input id="splitFileName" name="splitFileName" type="text"
+                                                   class="form-control fileinput" readonly="">
+                                            <label class="input-group-btn">
+                                                    <span class="btn btn-primary">
+                                                        Browse… <input type="file" name="document"
+                                                                       style="display: none;">
+                                                    </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control payment-attr" id="splitDocumentName"
+                                               name="splitDocumentName"
+                                               placeholder="Document name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label id="childPaymentsListLabel" class="control-label text-center hidden">Payments
+                                            info</label>
+
+                                        <table id="childPaymentsTable"
+                                               class="table table-condensed table-hover hidden">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Date</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="childPaymentsTableBody">
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class='input-group date' id='splitDatePicker'>
+                                            <input type="text" class="form-control datepicker"
+                                                   id="childPaymentDate"
+                                                   name="childPaymentDate" placeholder="Payment date">
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control payment-attr" id="childPaymentAmount"
+                                               name="childPaymentAmount"
+                                               placeholder="Payment amount">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-success btn-block" id="addPayment">
+                                            Add payment
+                                        </button>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-info btn-block" id="save">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </section>
             </form>
         </div>

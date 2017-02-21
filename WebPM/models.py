@@ -56,9 +56,16 @@ class Payments(models.Model):
     paymentAmount = models.IntegerField()
     confirmed = models.BooleanField(default=False)
     confirmedDate = models.DateField(null=True)
+    isPostponed = models.BooleanField(default=False)
+    beforePostponedDate = models.DateField(null=True)
+    postponeAgreement = models.ForeignKey('Agreements', null=True, related_name='postpone_agreement')
+    isCanceled = models.BooleanField(default=False)
+    canceledDate = models.DateField(null=True)
+    cancelAgreement = models.ForeignKey('Agreements', null=True, related_name='cancel_agreement')
     isSplit = models.BooleanField(default=False)
-    splitAgreement = models.ForeignKey('Agreements', null=True)
+    splitAgreement = models.ForeignKey('Agreements', null=True, related_name='split_agreement')
     parentPayment = models.ForeignKey('Payments', null=True)
+
 
 class Agreements(models.Model):
     name =  models.CharField(max_length=200, null=False)
