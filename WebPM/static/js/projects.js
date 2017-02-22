@@ -12,6 +12,18 @@ $(document).ready(function() {
         autoFocus: true,
         enableKeyNavigation: false,
         enablePagination: false,
+        onStepChanged: function (event, currentIndex, newIndex)
+        {
+            //Always open confirm panel when going to on payment info form
+            if(currentIndex == 1){
+                //$("#collapse-confirm").collapse('toggle');
+                console.log('Hidden?')
+                if ($('#collapse-confirm').attr('aria-expanded') !== 'true'){
+                    console.log('was hidden');
+                    $('#panel-confirm-title').click();
+                }
+            }
+        }
     });
     //Enabling bootstrap classes on info form
     $('.wizard .steps').addClass("modal-header");
@@ -33,6 +45,14 @@ $(document).ready(function() {
     $('#infoModal').on('hide.bs.modal', function (e) {
         infoForm.steps('previous');
     })
+
+    // For changing the collapsed icon in the panels
+    $('.collapse').on('show.bs.collapse', function(){
+        $(this).parents('.panel').addClass("panel-success");
+    }).on('hide.bs.collapse', function(){
+        $(this).parents('.panel').removeClass("panel-success");
+    });
+
 
     var projectTable;
     //Global variable for storing full payments data so it's available for all functions on the page
@@ -305,20 +325,20 @@ $(document).ready(function() {
         if(paymentsFullData[paymentId].confirmed){
             console.log('Is confirmed');
             $('.confirmed-alert').removeClass('hidden');
-            $('.confirm-action').addClass('hidden');
             $('.unconfirm-action').removeClass('hidden');
-            $('.postpone-action').addClass('hidden');
-            $('.cancel-action').addClass('hidden');
-            $('.split-action').addClass('hidden');
+            $('.confirm-panel').addClass('hidden');
+            $('.postpone-panel').addClass('hidden');
+            $('.split-panel').addClass('hidden');
+            $('.cancel-panel').addClass('hidden');
         }
         else {
             console.log('Is not confirmed');
             $('.confirmed-alert').addClass('hidden');
-            $('.confirm-action').removeClass('hidden');
             $('.unconfirm-action').addClass('hidden');
-            $('.postpone-action').removeClass('hidden');
-            $('.cancel-action').removeClass('hidden');
-            $('.split-action').removeClass('hidden');
+            $('.confirm-panel').removeClass('hidden');
+            $('.postpone-panel').removeClass('hidden');
+            $('.split-panel').removeClass('hidden');
+            $('.cancel-panel').removeClass('hidden');
         }
         if(paymentsFullData[paymentId].parentPayment){
             console.log('Has parent');
@@ -328,7 +348,6 @@ $(document).ready(function() {
             console.log('Has no parent');
             $('.inherited-alert').addClass('hidden');
         }
-
         infoForm.steps('next');
     });
 
