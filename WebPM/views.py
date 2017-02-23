@@ -172,9 +172,9 @@ def get_projects_data(request):
             paymentsByDates[month]['paymentIds'].append(item.id)
             # Summing up planned and confirmed payments if it's not first one for this month else assigning it's value
             if paymentsByDates[month]['planned']:
-                paymentsByDates[month]['planned'] += item.paymentAmount if not item.canceled else 0
+                paymentsByDates[month]['planned'] += item.paymentAmount if not (item.canceled or item.split) else 0
             else:
-                paymentsByDates[month]['planned'] = item.paymentAmount if not item.canceled else ''
+                paymentsByDates[month]['planned'] = item.paymentAmount if not (item.canceled or item.split) else ''
             if item.confirmed:
                 if paymentsByDates[month]['confirmed']:
                     paymentsByDates[month]['confirmed'] += item.paymentAmount if item.confirmed else 0
@@ -329,7 +329,7 @@ def split_payment(request):
         logger.info('POST request params:')
         logger.info(params)
 
-        documentName = params['documentName']
+        documentName = params['splitDocumentName']
         logger.info('Saving file: ' + str(documentName))
         newDocument = Agreements(document=request.FILES['document'], name=documentName)
         newDocument.save()

@@ -121,7 +121,8 @@
                     <div id="paymentInfoPanel" class="panel panel-default">
                         <div class="panel-body">
                             <div id="paymentInfo" class="form-group" style="margin-bottom: 5px;">
-                                <table id="paymentInfoTable" class="table table-condensed table-borderless">
+                                <table id="paymentInfoTable"
+                                       class="table table-condensed table-borderless no-margin-bottom">
                                     <thead>
                                     </thead>
                                     <tbody id="paymentInfoTableBody">
@@ -271,13 +272,23 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Date</th>
                                                 <th>Amount</th>
+                                                <th>Date</th>
                                             </tr>
                                             </thead>
                                             <tbody id="childPaymentsTableBody">
                                             </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td><p class="pull-right">Total: </p></td>
+                                                <td><p id="childPaymentSum" name="childPaymentSum"/></td>
+                                                <td/>
+                                            </tr>
+                                            </tfoot>
                                         </table>
+                                        <div class="alert alert-danger sum-alert hidden" role="alert">Child payment's
+                                            sum is <strong>less</strong> than initial amount
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
@@ -296,6 +307,12 @@
                                                name="childPaymentAmount"
                                                placeholder="Payment amount">
                                     </div>
+
+                                    <!--<div class="form-group">-->
+                                    <!--<input type="text" class="form-control payment-attr" id="splitPaymentsum"-->
+                                    <!--name="splitPaymentsum"-->
+                                    <!--placeholder="Payments sum">-->
+                                    <!--</div>-->
 
                                     <div class="form-group">
                                         <button type="button" class="btn btn-success btn-block" id="addPayment">

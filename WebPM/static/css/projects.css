@@ -50,3 +50,7 @@ td span{
 .modal-sm {
     width: 350px;
 }
+
+.no-margin-bottom {
+    margin-bottom: 0px;
+}

@@ -58,9 +58,9 @@ $(document).ready(function() {
 
     //Changing heading color when showing panel body
     $('.collapse').on('show.bs.collapse', function(){
-        $(this).parents('.panel').addClass("panel-success");
+        $(this).parents('.panel').addClass("panel-primary");
     }).on('hide.bs.collapse', function(){
-        $(this).parents('.panel').removeClass("panel-success");
+        $(this).parents('.panel').removeClass("panel-primary");
     });
 
 
@@ -178,18 +178,13 @@ $(document).ready(function() {
     }
 
     //Extra validator method for jquery validation plugin
-    $.validator.addMethod('checkPaymentSum', function (value, element, param) {
-        var childSum = parseInt(value);
-        var addedChildPayments = document.getElementsByClassName("childPaymentAmount");
-        for (var i = 0; i < addedChildPayments.length; i++) {
-            childSum += parseInt(addedChildPayments[i].textContent);
-        }
-        console.log('Child sum: ' + childSum);
-        if (childSum > parseInt($('#paymentAmount').text())){
+    $.validator.addMethod('checkChildSumIsMore', function (value, element, param) {
+        var sum = parseInt(value) + parseInt($('#childPaymentSum').text());
+        if (sum > parseInt($('#paymentInfoAmount').text())){
             return false;
         }
         return true;
-    }, 'Specified amounts exceed initial payment amount');
+    }, 'Specified amount exceeds initial payment amount');
 
     //Enabling jquery validation addon on payment form
     infoForm.validate({
@@ -223,7 +218,8 @@ $(document).ready(function() {
             },
             childPaymentAmount: {
                 required: true,
-                checkPaymentSum: true,
+                digits: true,
+                checkChildSumIsMore: true,
             },
             cancelfileName: {
                 required: true,
@@ -240,6 +236,7 @@ $(document).ready(function() {
             $(element).fadeOut(function() {
                 $(element).fadeIn();
             });
+            console.log(document.activeElement);
         },
         //Changing red lightning border on corrected error field to green
         unhighlight: function (element, errorClass, validClass) {
@@ -279,6 +276,10 @@ $(document).ready(function() {
             }
             else if (payment.canceled){
                 paymentClass = 'bg-danger';
+            }
+            //Not showing split payments. TODO Got to fix numerical order
+            else if (payment.split){
+                continue;
             }
             else {
                 paymentClass = ''
@@ -321,6 +322,7 @@ $(document).ready(function() {
         $('.postponed-alert').addClass('hidden');
         $('.postpone-panel').removeClass('hidden');
         $('.inherited-alert').addClass('hidden');
+        $('.split-alert').addClass('hidden');
         $('.split-panel').removeClass('hidden');
         $('.canceled-alert').addClass('hidden');
         $('.cancel-panel').removeClass('hidden');
@@ -527,21 +529,26 @@ $(document).ready(function() {
     var paymentDate;
     var paymentAmount;
     var paymentId;
+    var paymentSum = 0;
     var splitPayment = {'paymentId': '', 'childPayments': ''};
 
 
     $('#addPayment').click(function() {
-        if(infoForm.valid())
+        if($('#splitFileName').valid() & $('#splitDocumentName').valid() & $('#childPaymentDate').valid() &
+                                                                        $('#childPaymentAmount').valid())
         {
-            paymentId = infoForm.attr('payment_id');
+            $('.sum-alert').addClass('hidden');
+            paymentId = $('#paymentInfo').attr('payment-id');
             paymentDate = $('#childPaymentDate').val();
             paymentAmount = $('#childPaymentAmount').val();
 
             paymentsQty++;
+            paymentSum += parseInt(paymentAmount);
+            $('#childPaymentSum').text(paymentSum);
 
             if (paymentsQty == 1)
             {
-                splitPayment['paymentId'] = paymentId;
+                splitPayment['paymentId'] = $('#paymentInfo').attr('payment-id');
                 splitPayment['childPayments'] = [];
                 console.log('Splitting payment:');
                 console.log(splitPayment);
@@ -550,41 +557,48 @@ $(document).ready(function() {
             }
 
             console.log('Payment adding. Payment date: ' + paymentDate + ', payment amount: ' + paymentAmount +
-            '. New payments quantity: ' + paymentsQty);
+            '. New payments quantity: ' + paymentsQty + '. New payments sum: ' + paymentSum);
 
             $('#childPaymentsTableBody').append('<tr id="paymentRow' + paymentsQty + '" name>'
                 + '<td>' + paymentsQty + '</td>'
-                + '<td>' + paymentDate + '</td>'
-                + '<td  class="childPaymentAmount">' + paymentAmount + '</td></tr>');
+                + '<td  class="childPaymentAmount">' + paymentAmount + '</td>'
+                + '<td>' + paymentDate + '</td></tr>');
 
             splitPayment['childPayments'].push({'id': paymentsQty, 'date': paymentDate, 'amount': paymentAmount});
             console.log(splitPayment);
-            $('#childPaymentDate').val('');
             $('#childPaymentAmount').val('');
+            $('#childPaymentDate').val('');
             console.log('Child payment added');
         };
     });
 
     $('#save').click(function() {
-        console.log('Saving split payment');
-        var paymentData = new FormData($('#infoForm')[0]);
-        paymentData.append('splitPayment', JSON.stringify(splitPayment));
-        console.log(paymentData);
-        $.ajax({
-            type: 'POST',
-            url: "split_payment",
-            data: paymentData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                console.log('Payment split successfully');
-                location.reload();
-            },
-            error: function () {
-                console.log('Payment splitting failed');
-            },
-        });
+        if(parseInt($('#childPaymentSum').text()) < parseInt($('#paymentInfoAmount').text())){
+            $('.sum-alert').removeClass('hidden');
+            $('.sum-alert').fadeOut();
+            $('.sum-alert').fadeIn();
+        }
+        else {
+            console.log('Saving split payment');
+            var paymentData = new FormData($('#infoForm')[0]);
+            paymentData.append('splitPayment', JSON.stringify(splitPayment));
+            console.log(paymentData);
+            $.ajax({
+                type: 'POST',
+                url: "split_payment",
+                data: paymentData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    console.log('Payment split successfully');
+                    location.reload();
+                },
+                error: function () {
+                    console.log('Payment splitting failed');
+                },
+            });
+        };
     });
 
 
