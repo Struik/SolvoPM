@@ -12,11 +12,21 @@ $(document).ready(function() {
         autoFocus: true,
         enableKeyNavigation: false,
         enablePagination: false,
+        onStepChanging: function (event, currentIndex, newIndex)
+        {
+            //Not showing goto previous form page button for the first page
+            if(newIndex != 0){
+                $('.previous-step').removeClass('hidden')
+            }
+            else {
+                $('.previous-step').addClass('hidden')
+            }
+            return true;
+        },
         onStepChanged: function (event, currentIndex, newIndex)
         {
-            //Always open confirm panel when going to on payment info form
+            //Always open confirm panel when going to payment info form
             if(currentIndex == 1){
-                //$("#collapse-confirm").collapse('toggle');
                 console.log('Hidden?')
                 if ($('#collapse-confirm').attr('aria-expanded') !== 'true'){
                     console.log('was hidden');
@@ -34,7 +44,7 @@ $(document).ready(function() {
             return this.nodeType == 3;
         }).text();
         $(this).append('<h4 class="modal-title">' + title + '<span class="glyphicon glyphicon-arrow-left pull-right '
-                                                                                    + 'previous-step"></span></h4>');
+                                                                    + 'previous-step hoverable hidden"></span></h4>');
     });
     $('.actions ul').addClass("pager");
     //Button for moving to the first step with month info
@@ -46,7 +56,7 @@ $(document).ready(function() {
         infoForm.steps('previous');
     })
 
-    // For changing the collapsed icon in the panels
+    //Changing heading color when showing panel body
     $('.collapse').on('show.bs.collapse', function(){
         $(this).parents('.panel').addClass("panel-success");
     }).on('hide.bs.collapse', function(){
@@ -145,51 +155,12 @@ $(document).ready(function() {
                 targets: paymentsColumns,
                 "createdCell": function (td, cellData, rowData, row, col) {
                     if(cellData) {
-                        var key = columns[col]['data'].replace('.planned','');
-                        //td.id = rowData[key].id
-                        //console.log(rowData[key].split);
-
-                        $(td).append(' <span class="show-month glyphicon glyphicon-search pull-right"></span>');
-                        $(td).addClass('payment');
-                        //$(td).wrapInner( "<strong></strong>" );
-                        //Trigger event for bootstrap popover can be set for each element or one for all elements
-                        //$(td).attr('data-trigger','hover');
-                        $(td).attr('data-html', 'true');
-                        //$(td).attr('data-content','Planned date: ' + rowData[key].date);
-                        $(td).attr('data-placement','bottom');
-                        $(td).attr('data-container','body');
-
-                        //Adding colors depending on payment status (considering all payments in this month/key)
-                        var isConfirmed = true;
-//                        var payments = rowData[key].payments
-//                        for (var i = 0; i < payments.length; i++) {
-//                            if (!payments[i].confirmed)
-//                            {
-//                                isConfirmed = false;
-//                                break;
-//                            }
-//                        }
-                        if (isConfirmed) {
-                            //$(td).addClass( 'bg-success' );
+                        var key = columns[col]['data'].replace('.planned','').replace('.confirmed','');
+                        if(rowData[key].planned == rowData[key].confirmed){
+                            $(td).addClass('bg-success');
                         }
-
-
-                        //Showing extra data on tooltip for split payments and adding colors depending on payment status
-//                        if(rowData[key].split){
-//                            $(td).addClass( "bg-warning" );
-//                            $(td).attr('data-content', $(td).attr('data-content') + '<br/> Payment is split according '
-//                                                + 'document: ' + rowData[key].agreementName + '. <br/> Child payments:')
-//                            var childPayments = rowData[key].childPayments
-//                            console.log(childPayments)
-//                            for (var i = 0; i < childPayments.length; i++) {
-//                                console.log(childPayments[i]);
-//                                $(td).attr('data-content', $(td).attr('data-content') + '<br/> #' + (i+1) +' Date:  '
-//                                + childPayments[i].date + ', amount: ' + childPayments[i].amount);
-//                            }
-//                        }
-//                        else if(rowData[key].confirmed){
-//                            $(td).addClass( "bg-success" );
-//                        }
+                        $(td).append(' <span class="show-month glyphicon glyphicon-search hoverable pull-right"></span>');
+                        $(td).addClass('payment');
                     }
                 },
             }],
@@ -230,6 +201,16 @@ $(document).ready(function() {
             confirmDate: {
                 required: true,
             },
+            postponefileName: {
+                required: true,
+            },
+            postponeDocumentName: {
+                required: true,
+                minlength: 5,
+            },
+            postponePaymentDate: {
+                required: true,
+            },
             splitFileName: {
                 required: true,
             },
@@ -243,6 +224,13 @@ $(document).ready(function() {
             childPaymentAmount: {
                 required: true,
                 checkPaymentSum: true,
+            },
+            cancelfileName: {
+                required: true,
+                minlength: 5,
+            },
+            cancelDocumentName: {
+                required: true,
             },
         },
         //Playing with highlighting error fields. Some effects might be excess and should be removed
@@ -289,6 +277,9 @@ $(document).ready(function() {
             if (payment.confirmed){
                 paymentClass = 'bg-success';
             }
+            else if (payment.canceled){
+                paymentClass = 'bg-danger';
+            }
             else {
                 paymentClass = ''
             }
@@ -298,7 +289,7 @@ $(document).ready(function() {
                 + '<td>' + payment.amount + '</td>'
                 + '<td>' + payment.date + '</td>'
                 + '<td>' + payment.confirmedDate + '</td>'
-                + '<td><span class="show-payment glyphicon glyphicon-pencil"/></td></tr>');
+                + '<td><span class="show-payment glyphicon glyphicon-pencil hoverable"/></td></tr>');
         }
 
         //Might consider serializing it instead of
@@ -318,10 +309,22 @@ $(document).ready(function() {
     $("#paymentsTable").on("click", ".show-payment", function() {
         var row = $(this).parents('tr');
         var paymentId = row.attr('id');
+        //console.log(paymentsFullData[paymentId]);
         $('#paymentInfo').attr('payment-id', paymentId);
         $('#paymentInfoAmount').html(paymentsFullData[paymentId].amount);
         $('#paymentInfoPlanned').html(paymentsFullData[paymentId].date);
         $('#paymentInfoConfirmed').html(paymentsFullData[paymentId].confirmedDate);
+
+        $('.confirmed-alert').addClass('hidden');
+        $('.unconfirm-action').addClass('hidden');
+        $('.confirm-panel').removeClass('hidden');
+        $('.postponed-alert').addClass('hidden');
+        $('.postpone-panel').removeClass('hidden');
+        $('.inherited-alert').addClass('hidden');
+        $('.split-panel').removeClass('hidden');
+        $('.canceled-alert').addClass('hidden');
+        $('.cancel-panel').removeClass('hidden');
+
         if(paymentsFullData[paymentId].confirmed){
             console.log('Is confirmed');
             $('.confirmed-alert').removeClass('hidden');
@@ -331,23 +334,27 @@ $(document).ready(function() {
             $('.split-panel').addClass('hidden');
             $('.cancel-panel').addClass('hidden');
         }
-        else {
-            console.log('Is not confirmed');
-            $('.confirmed-alert').addClass('hidden');
-            $('.unconfirm-action').addClass('hidden');
-            $('.confirm-panel').removeClass('hidden');
-            $('.postpone-panel').removeClass('hidden');
-            $('.split-panel').removeClass('hidden');
-            $('.cancel-panel').removeClass('hidden');
+
+        if(paymentsFullData[paymentId].postponed){
+            console.log('Is postponed');
+            $('#initialDate').html(paymentsFullData[paymentId].initialDate);
+            $('.postponed-alert').removeClass('hidden');
         }
+
         if(paymentsFullData[paymentId].parentPayment){
             console.log('Has parent');
             $('.inherited-alert').removeClass('hidden');
         }
-        else {
-            console.log('Has no parent');
-            $('.inherited-alert').addClass('hidden');
+
+        if(paymentsFullData[paymentId].canceled){
+            console.log('Is canceled');
+            $('.canceled-alert').removeClass('hidden');
+            $('.confirm-panel').addClass('hidden');
+            $('.postpone-panel').addClass('hidden');
+            $('.split-panel').addClass('hidden');
+            $('.cancel-panel').addClass('hidden');
         }
+
         infoForm.steps('next');
     });
 
@@ -462,6 +469,58 @@ $(document).ready(function() {
                 console.log('Payment unconfirmation failed');
             },
         });
+    });
+
+    $('#postponePayment').click(function() {
+        //Using '&&' will stop calculation on first false so other elements will not be marked on the form as invalid
+        if($('#postponefileName').valid() & $('#postponeDocumentName').valid() & $('#postponePaymentDate').valid())
+        {
+            console.log('Postponing payment');
+            var paymentData = new FormData($('#infoForm')[0]);
+            paymentData.append('paymentId', $('#paymentInfo').attr('payment-id'));
+            console.log(paymentData);
+            $.ajax({
+                type: 'POST',
+                url: "postpone_payment",
+                data: paymentData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    console.log('Payment postponed successfully');
+                    location.reload();
+                },
+                error: function () {
+                    console.log('Payment postponing failed');
+                },
+            });
+        };
+    });
+
+    $('#cancelPayment').click(function() {
+        //Using '&&' will stop calculation on first false so other elements will not be marked on the form as invalid
+        if($('#cancelfileName').valid() & $('#cancelDocumentName').valid())
+        {
+            console.log('Cancelling payment');
+            var paymentData = new FormData($('#infoForm')[0]);
+            paymentData.append('paymentId', $('#paymentInfo').attr('payment-id'));
+            console.log(paymentData);
+            $.ajax({
+                type: 'POST',
+                url: "cancel_payment",
+                data: paymentData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    console.log('Payment canceled successfully');
+                    location.reload();
+                },
+                error: function () {
+                    console.log('Payment cancelling failed');
+                },
+            });
+        };
     });
 
     var paymentsQty = 0;

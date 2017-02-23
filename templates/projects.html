@@ -106,9 +106,18 @@
                         You may only unconfirm it
                     </div>
 
+                    <div class="alert alert-info postponed-alert hidden" role="alert">Payment was
+                        <strong>postponed.</strong> Initial date - <p id="initialDate"/>
+                    </div>
+
                     <div class="alert alert-warning inherited-alert hidden" role="alert">Payment is inherited from
                         <a href="#" class="alert-link">this one</a>
                     </div>
+
+                    <div class="alert alert-danger canceled-alert hidden" role="alert">Payment is
+                        <strong>canceled.</strong> No actions available
+                    </div>
+
                     <div id="paymentInfoPanel" class="panel panel-default">
                         <div class="panel-body">
                             <div id="paymentInfo" class="form-group" style="margin-bottom: 5px;">

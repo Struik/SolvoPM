@@ -3,33 +3,19 @@
 td span{
     font-size:11px;
     padding-top: 4px;
+}
+
+.hoverable{
     color: #999999;
 }
 
-td:hover span{
+.hoverable:hover{
     color: #333333;
 }
 
-td span {
+.hoverable {
     cursor: pointer;
     cursor: hand;
-}
-
-.previous-step{
-    color: #999999;
-}
-
-.previous-step:hover{
-    color: #333333;
-}
-
-.previous-step {
-    cursor: pointer;
-    cursor: hand;
-}
-
-.top-buffer {
-    margin-top: 20px;
 }
 
 .btn-file {

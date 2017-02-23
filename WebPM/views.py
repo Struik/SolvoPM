@@ -172,21 +172,24 @@ def get_projects_data(request):
             paymentsByDates[month]['paymentIds'].append(item.id)
             # Summing up planned and confirmed payments if it's not first one for this month else assigning it's value
             if paymentsByDates[month]['planned']:
-                paymentsByDates[month]['planned'] += item.paymentAmount
+                paymentsByDates[month]['planned'] += item.paymentAmount if not item.canceled else 0
             else:
-                paymentsByDates[month]['planned'] = item.paymentAmount
+                paymentsByDates[month]['planned'] = item.paymentAmount if not item.canceled else ''
             if item.confirmed:
                 if paymentsByDates[month]['confirmed']:
                     paymentsByDates[month]['confirmed'] += item.paymentAmount if item.confirmed else 0
                 else:
                     paymentsByDates[month]['confirmed'] = item.paymentAmount if item.confirmed else ''
             payment['amount'] = item.paymentAmount
-            payment['split'] = item.isSplit
+            payment['split'] = item.split
             payment['parentPayment'] = item.parentPayment.id if item.parentPayment else 0
             payment['date'] = item.paymentDate.strftime('%d.%m.%y')
             payment['confirmed'] = item.confirmed
             payment['confirmedDate'] = item.confirmedDate.strftime('%d.%m.%y') if item.confirmed else ''
-            if item.isSplit:
+            payment['postponed'] = item.postponed
+            payment['initialDate'] = item.beforePostponedDate.strftime('%d.%m.%y') if item.postponed else ''
+            payment['canceled'] = item.canceled
+            if item.split:
                 logger.info('Payment is split')
                 logger.info(
                     'Agreement id is: ' + str(item.splitAgreement.id) + ', name: ' + str(item.splitAgreement.name))
@@ -268,20 +271,20 @@ def postpone_payment(request):
         logger.info('POST request params:')
         logger.info(params)
 
-        documentName = params['documentName']
+        documentName = params['postponeDocumentName']
         logger.info('Saving file: ' + str(documentName))
         newDocument = Agreements(document=request.FILES['document'], name=documentName)
         newDocument.save()
         logger.info('Saved file with id: ' + str(newDocument.id))
 
-        paymentId = payment['paymentId']
-        newPaymentDate = datetime.strptime(params['newPaymentDate'], '%d.%m.%Y')
+        paymentId = params['paymentId']
+        newPaymentDate = datetime.strptime(params['postponePaymentDate'], '%d.%m.%Y')
         payment = Payments.objects.get(pk=paymentId)
-        splitPayment.isPostponed = True
-        splitPayment.beforePostponedDate = payment.paymentDate
-        splitPayment.paymentDate= newPaymentDate
-        splitPayment.postponeAgreement = newDocument
-        splitPayment.save()
+        payment.postponed = True
+        payment.beforePostponedDate = payment.paymentDate
+        payment.paymentDate= newPaymentDate
+        payment.postponeAgreement = newDocument
+        payment.save()
     return HttpResponse('')
 
 # Cancel payment
@@ -297,19 +300,19 @@ def cancel_payment(request):
         logger.info('POST request params:')
         logger.info(params)
 
-        documentName = params['documentName']
+        documentName = params['cancelDocumentName']
         logger.info('Saving file: ' + str(documentName))
         newDocument = Agreements(document=request.FILES['document'], name=documentName)
         newDocument.save()
         logger.info('Saved file with id: ' + str(newDocument.id))
 
-        paymentId = payment['paymentId']
-        canceledDate = datetime.datetime.now()
+        paymentId = params['paymentId']
+        canceledDate = datetime.now()
         payment = Payments.objects.get(pk=paymentId)
-        splitPayment.isCanceled = True
-        splitPayment.canceledDate= canceledDate
-        splitPayment.cancelAgreement = newDocument
-        splitPayment.save()
+        payment.canceled = True
+        payment.canceledDate = canceledDate
+        payment.cancelAgreement = newDocument
+        payment.save()
     return HttpResponse('')
 
 
@@ -340,7 +343,7 @@ def split_payment(request):
         splitPayment = Payments.objects.get(pk=paymentId)
         contractId = splitPayment.contract.id
         logger.info('Contract id: ' + str(contractId))
-        splitPayment.isSplit = True
+        splitPayment.split = True
         splitPayment.splitAgreement = newDocument
         splitPayment.save()
 
