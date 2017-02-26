@@ -58,9 +58,9 @@ $(document).ready(function() {
 
     //Changing heading color when showing panel body
     $('.collapse').on('show.bs.collapse', function(){
-        $(this).parents('.panel').addClass("panel-primary");
+        $(this).parents('.panel').addClass("panel-info");
     }).on('hide.bs.collapse', function(){
-        $(this).parents('.panel').removeClass("panel-primary");
+        $(this).parents('.panel').removeClass("panel-info");
     });
 
 
@@ -104,7 +104,7 @@ $(document).ready(function() {
         console.log('allColumns: ' + allColumns)
         //Indexes of columns for which search function shouldn't work
         var columnsNoSearch = allColumns.slice();
-        columnsNoSearch.splice(0, 3)
+        columnsNoSearch.splice(0, 5)
         console.log('columnsNoSearch: ' + columnsNoSearch)
         //Indexes of columns with payment data
         var paymentsColumns = allColumns.slice()
