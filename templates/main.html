@@ -27,6 +27,8 @@
     var projectAttrs = '{{projectAttrs.Countries}}';
     console.log(cities);
 
+
+
 </script>
 
 <script src="{% static 'js/selectize.js' %}"></script>
@@ -35,6 +37,7 @@
 <script src="{% static 'js/additional-methods.js' %}"></script>
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+<script src="{% static 'js/jquery.masknumber.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}
 
@@ -63,7 +66,7 @@
                 <section>
                     <div class="form-group">
                         <input type="text" class="form-control" id="projectName" name="projectName" value=""
-                               placeholder="Project name">
+                               placeholder="Project name" tabindex="1">
                     </div>
 
                     <div class="alert alert-info alert-dismissible" role="alert">
@@ -74,7 +77,7 @@
 
                     <div class="form-group">
                         <select class="form-control selectize" id="selectCompany" name="selectCompany"
-                                placeholder="Select company" reference_id="Companies">
+                                placeholder="Select company" reference_id="Companies" tabindex="2">
                             <option value="">Select a company</option>
                             {% for query in projectAttrs.Companies %}
                             <option value="{{query.id}}">{{query.name}}</option>
@@ -84,7 +87,7 @@
 
                     <div class="form-group">
                         <select class="form-control selfselectized" id="selectCountry" name="selectCountry"
-                                placeholder="Select a country" reference_id="Countries">
+                                placeholder="Select a country" reference_id="Countries" tabindex="3">
                             <option value="">Select a country</option>
                             {% for query in projectAttrs.Countries %}
                             <option value="{{query.id}}">{{query.name}}</option>
@@ -94,7 +97,7 @@
 
                     <div class="form-group">
                         <select class="form-control selfselectized" id="selectCity" name="selectCity"
-                                placeholder="Select a city" reference_id="Cities">
+                                placeholder="Select a city" reference_id="Cities" tabindex="4">
                             <option value="">Select a city</option>
                             {% for query in projectAttrs.Cities %}
                             <option value="{{query.id}}">{{query.name}}</option>
@@ -104,7 +107,7 @@
 
                     <div class="form-group">
                         <textarea class="form-control" id="Address" name="Address" rows="3"
-                                  placeholder="Address"></textarea>
+                                  placeholder="Address" tabindex="5"></textarea>
                     </div>
                 </section>
 
@@ -164,7 +167,7 @@
                             <div class="form-group">
                                 <select class="form-control selfselectized" id="selectContractType"
                                         name="selectContractType"
-                                        placeholder="Contract type" reference_id="ContractTypes">
+                                        placeholder="Contract type" reference_id="ContractTypes" tabindex="6">
                                     <option value="">Contract type</option>
                                     {% for query in projectAttrs.ContractTypes %}
                                     <option value="{{query.id}}">{{query.name}}</option>
@@ -175,7 +178,7 @@
                             <div class="form-group">
                                 <input type="text" class="form-control contract-attr" id="contractName"
                                        name="contractName"
-                                       value="" placeholder="Contract name" disabled>
+                                       value="" placeholder="Contract name" tabindex="7" disabled>
                             </div>
 
 
@@ -199,7 +202,7 @@
                             <div class="form-group">
                                 <div class='input-group date' id='paymentDatePicker'>
                                     <input type="text" class="form-control datepicker payment-attr" id="paymentDate"
-                                           name="paymentDate" placeholder="Payment date" disabled>
+                                           name="paymentDate" placeholder="Payment date" tabindex="8" disabled>
                                     <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -209,13 +212,19 @@
                             <div class="form-group">
                                 <input type="text" class="form-control payment-attr" id="paymentAmount"
                                        name="paymentAmount"
-                                       placeholder="Payment amount" disabled>
+                                       placeholder="Payment amount" tabindex="9" disabled>
                             </div>
 
                             <div class="form-group">
                                 <button type="button" class="btn btn-success payment-attr btn-block" id="addPayment"
                                         disabled>Add
                                     payment
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <button id="clearPayments" type="button" class="btn btn-warning payment-attr btn-block" disabled>
+                                    Clear
                                 </button>
                             </div>
                         </div>

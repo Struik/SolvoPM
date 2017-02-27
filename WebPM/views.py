@@ -174,7 +174,9 @@ def get_projects_data(request):
             if paymentsByDates[month]['planned']:
                 paymentsByDates[month]['planned'] += item.paymentAmount if not (item.canceled or item.split) else 0
             else:
-                paymentsByDates[month]['planned'] = item.paymentAmount if not (item.canceled or item.split) else ''
+                #TODO change to something more readable?
+                paymentsByDates[month]['planned'] = item.paymentAmount if not (
+                                                        item.canceled or item.split) else 0 if item.canceled else ''
             if item.confirmed:
                 if paymentsByDates[month]['confirmed']:
                     paymentsByDates[month]['confirmed'] += item.paymentAmount if item.confirmed else 0
@@ -282,10 +284,11 @@ def postpone_payment(request):
         payment = Payments.objects.get(pk=paymentId)
         payment.postponed = True
         payment.beforePostponedDate = payment.paymentDate
-        payment.paymentDate= newPaymentDate
+        payment.paymentDate = newPaymentDate
         payment.postponeAgreement = newDocument
         payment.save()
     return HttpResponse('')
+
 
 # Cancel payment
 @csrf_exempt

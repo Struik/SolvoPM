@@ -97,7 +97,10 @@ $(document).ready(function(){
 
     //Enabled dynamic and static (values wise) select nodes with selectize plugin
     $('.selectize.fixed-values').selectize({
-        sortField: 'text'
+        sortField: 'text',
+        onChange: function(value) {
+            gotoNextTabIndex(this.$control_input[0]);
+        },
     });
 
     //Country change need special logic which is called via onChange event
@@ -107,6 +110,9 @@ $(document).ready(function(){
             newRefValue(input, callback, this);
         },
         sortField: 'text',
+        onChange: function(value) {
+            gotoNextTabIndex(this.$control_input[0]);
+        },
     });
 
     //This variables are needed to have possibility to programmatically clear and update selectized fields.
@@ -118,6 +124,9 @@ $(document).ready(function(){
             //Passing extra argument for cities since it has foreign key to countries reference
             newRefValue(input, callback, this, {'country_id': $('#selectCountry').val()});
         },
+        onChange: function(value) {
+            gotoNextTabIndex(this.$control_input[0]);
+        },
     });
 
     selectCity = $selectCity[0].selectize;
@@ -126,7 +135,7 @@ $(document).ready(function(){
     //Separate selectize initialisation on country select node
     //Populating cities select field with values on country change
     //Variable cities is defined in html template
-    $('#selectCountry').selectize({
+    var $selectCountry = $('#selectCountry').selectize({
         onChange: function(value) {
             console.log('Country changed');
             if (!value.length) return;
@@ -139,6 +148,7 @@ $(document).ready(function(){
                 }
             }
             selectCity.enable();
+            gotoNextTabIndex(this.$control_input[0]);
         },
         create: function (input, callback){
             newRefValue(input, callback, this);
@@ -160,6 +170,7 @@ $(document).ready(function(){
                 $('#addAnotherContract').prop('disabled', false);
                 $('.payment-attr').prop('disabled', false);
             }
+            gotoNextTabIndex(this.$control_input[0]);
         },
         create: function (input, callback){
             newRefValue(input, callback, this);
@@ -167,9 +178,6 @@ $(document).ready(function(){
     });
 
     var $selectContractType = $('#selectContractType').selectize();
-
-
-
 
     //Fix for jquery validate highlightning ("has-success" class). Bootstrap classes "has-success" and "has-error"
     //require a node to have "form-control" class (or other combo of conditions which are not my case).
@@ -404,10 +412,18 @@ $(document).ready(function(){
 
             contracts[contractsQty]['payments'].push({'id': paymentsQty, 'date': paymentDate, 'amount': paymentAmount});
             console.log(contracts[contractsQty]['payments'][paymentsQty - 1]);
+            console.log(contracts);
             $('#paymentDate').val('');
             $('#paymentAmount').val('');
             console.log('Payment added');
         };
+    });
+
+    $('#clearPayments').click(function() {
+        console.log('#clearPayments clicked');
+        $('#paymentsTableBody').empty();
+        paymentsQty = 0;
+        contracts[contractsQty]['payments'] = [];
     });
 
     $('#addAnotherContract').click(function() {
@@ -478,6 +494,42 @@ $(document).ready(function(){
             }
         });
     };
+
+    //Got to next form field when presisng enter
+    $(document).on("keypress", "input" , function(e){
+        //Only do something when the user presses enter
+        if( e.keyCode ==  13 )
+        {
+            gotoNextTabIndex(this);
+        }
+    });
+
+    //Function to navigate through form fields according tabIndex attribute
+    var gotoNextTabIndex = function(element){
+        console.log(element);
+        console.log(typeof(element));
+        console.log(element.tabIndex)
+        var nextElement = $('[tabindex="' + (element.tabIndex+1)  + '"]');
+        console.log( element , nextElement );
+        if(nextElement.length ){
+            nextElement.focus()
+        }
+        else{
+            $('[tabindex="1"]').focus();
+        }
+    };
+
+    //TODO. Extend selectize with calling gotoNextTabIndex when selectized field was changed
+    var selectCountry = $selectCountry[0].selectize;
+    var handler = function() { gotoNextTabIndex(this.$control_input[0]); };
+    selectCountry.on('change', handler);
+
+//    $("#paymentDatePicker").on("dp.change", function(e) {
+//        alert('hey');
+//    });
+
+    //Plugin for thousand separators and input number formatting
+    //$('#paymentAmount').maskNumber();
 
 });
 

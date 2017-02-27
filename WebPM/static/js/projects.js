@@ -154,9 +154,9 @@ $(document).ready(function() {
                 //Bootstrap popovers (tooltip) for each payment in the table
                 targets: paymentsColumns,
                 "createdCell": function (td, cellData, rowData, row, col) {
-                    if(cellData) {
+                    if(typeof(cellData) == 'number'){
                         var key = columns[col]['data'].replace('.planned','').replace('.confirmed','');
-                        if(rowData[key].planned == rowData[key].confirmed){
+                        if(rowData[key].planned === rowData[key].confirmed){
                             $(td).addClass('bg-success');
                         }
                         $(td).append(' <span class="show-month glyphicon glyphicon-search hoverable pull-right"></span>');
