@@ -29,6 +29,9 @@
 
 
 
+
+
+
 </script>
 
 <script src="{% static 'js/selectize.js' %}"></script>
@@ -190,8 +193,9 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Date</th>
                                         <th>Amount</th>
+                                        <th>Date</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody id="paymentsTableBody">
@@ -215,6 +219,10 @@
                                        placeholder="Payment amount" tabindex="9" disabled>
                             </div>
 
+                            <div class="alert alert-danger save-alert hidden" role="alert">Please add payment or clear
+                                fields
+                            </div>
+
                             <div class="form-group">
                                 <button type="button" class="btn btn-success payment-attr btn-block" id="addPayment"
                                         disabled>Add
@@ -223,16 +231,17 @@
                             </div>
 
                             <div class="form-group">
-                                <button id="clearPayments" type="button" class="btn btn-warning payment-attr btn-block" disabled>
-                                    Clear
+                                <button id="clearPayments" type="button" class="btn btn-warning payment-attr btn-block"
+                                        disabled>
+                                    Clear payments
                                 </button>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <button id="addAnotherContract" type="button" class="btn btn-info  btn-block" disabled>Add
-                            another contract
+                        <button id="saveContract" type="button" class="btn btn-info  btn-block" disabled>Save
+                            contract
                         </button>
                     </div>
 

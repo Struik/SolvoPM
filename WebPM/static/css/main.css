@@ -50,5 +50,17 @@
     display: none;
 }
 
+.hoverable{
+    color: #999999;
+}
+
+.hoverable:hover{
+    color: #333333;
+}
+
+.hoverable {
+    cursor: pointer;
+    cursor: hand;
+}
 
 

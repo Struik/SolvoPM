@@ -59,18 +59,18 @@ def new_project(request):
         projectObject.save()
         logger.info(params['contracts'])
         for contracts in params['contracts']:
-            logger.info('Created new contract:')
+            logger.info('Creating new contract:')
             logger.info(contracts)
             contractObject = Contracts(name=contracts['name'], contractType_id=contracts['type'],
                                        project_id=projectObject.id)
             contractObject.save()
             logger.info('Contract #' + str(contractObject.id) + ' created')
-            for payment in contracts['payments']:
+            for payment in contracts['payments'].items():
                 logger.info('Adding payment:')
                 logger.info(payment)
-                paymentDate = datetime.strptime(payment['date'], '%d.%m.%Y')
+                paymentDate = datetime.strptime(payment[1]['date'], '%d.%m.%Y')
                 paymentObject = Payments(contract_id=contractObject.id, paymentDate=paymentDate,
-                                         paymentAmount=payment['amount'])
+                                         paymentAmount=payment[1]['amount'])
                 paymentObject.save()
                 logger.info('Payment #' + str(paymentObject.id) + ' created')
     return HttpResponse(json.dumps({'newProjectId': projectObject.id}), content_type='application/json')
@@ -174,9 +174,9 @@ def get_projects_data(request):
             if paymentsByDates[month]['planned']:
                 paymentsByDates[month]['planned'] += item.paymentAmount if not (item.canceled or item.split) else 0
             else:
-                #TODO change to something more readable?
+                # TODO change to something more readable?
                 paymentsByDates[month]['planned'] = item.paymentAmount if not (
-                                                        item.canceled or item.split) else 0 if item.canceled else ''
+                    item.canceled or item.split) else 0 if item.canceled else ''
             if item.confirmed:
                 if paymentsByDates[month]['confirmed']:
                     paymentsByDates[month]['confirmed'] += item.paymentAmount if item.confirmed else 0

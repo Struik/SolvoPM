@@ -162,12 +162,12 @@ $(document).ready(function(){
             console.log('Contract type changed');
             if (!value.length){
                 $('.contract-attr').prop('disabled', true);
-                $('#addAnotherContract').prop('disabled', true);
+                $('#saveContract').prop('disabled', true);
                 $('.payment-attr').prop('disabled', true);
             }
             else{
                 $('.contract-attr').prop('disabled', false);
-                $('#addAnotherContract').prop('disabled', false);
+                $('#saveContract').prop('disabled', false);
                 $('.payment-attr').prop('disabled', false);
             }
             gotoNextTabIndex(this.$control_input[0]);
@@ -384,6 +384,7 @@ $(document).ready(function(){
 
 
     $('#addPayment').click(function() {
+        $('.save-alert').fadeOut();
         if(exForm.valid())
         {
             contractName = $('#contractName').val();
@@ -395,7 +396,7 @@ $(document).ready(function(){
 
             if (paymentsQty == 1)
             {
-                contracts.push({'name': contractName, 'type': contractType, 'payments': []});
+                contracts.push({'name': contractName, 'type': contractType, 'payments': {}});
                 console.log('New contract data created:');
                 console.log(contracts);
                 $('#paymentsListLabel').removeClass('hidden');
@@ -405,31 +406,48 @@ $(document).ready(function(){
             console.log('Payment adding. Payment date: ' + paymentDate + ', payment amount: ' + paymentAmount +
             '. New payments quantity: ' + paymentsQty);
 
-            $('#paymentsTableBody').append('<tr id="paymentRow' + paymentsQty + '">'
+            $('#paymentsTableBody').append('<tr payment-id="' + paymentsQty + '">'
                 + '<td>' + paymentsQty + '</td>'
+                + '<td>' + paymentAmount + '</td>'
                 + '<td>' + paymentDate + '</td>'
-                + '<td>' + paymentAmount + '</td></tr>');
+                + '<td><span class="remove-payment glyphicon glyphicon-remove hoverable"/></tr>');
 
-            contracts[contractsQty]['payments'].push({'id': paymentsQty, 'date': paymentDate, 'amount': paymentAmount});
-            console.log(contracts[contractsQty]['payments'][paymentsQty - 1]);
-            console.log(contracts);
+            contracts[contractsQty]['payments'][paymentsQty] = {'date': paymentDate, 'amount': paymentAmount};
+            console.log(contracts[contractsQty]['payments'][paymentsQty]);
             $('#paymentDate').val('');
             $('#paymentAmount').val('');
             console.log('Payment added');
-        };
+        }
     });
 
+    //Delete certain payment within current contract
+    $("#paymentsTableBody").on("click", ".remove-payment", function() {
+        var paymentId = $(this).parents('tr').attr('payment-id');
+        console.log(paymentId);
+        $('tr[payment-id=' + paymentId + ']').empty();
+        delete contracts[contractsQty]['payments'][paymentId]
+    });
+
+    //Clear all enter payments within current contract
     $('#clearPayments').click(function() {
+        $('.save-alert').fadeOut();
         console.log('#clearPayments clicked');
         $('#paymentsTableBody').empty();
         paymentsQty = 0;
         contracts[contractsQty]['payments'] = [];
     });
 
-    $('#addAnotherContract').click(function() {
-        console.log('#addAnotherContract clicked');
+    $('#saveContract').click(function() {
+        console.log('#saveContract clicked');
+        if($('#paymentDate').val() || $('#paymentAmount').val()){
+            $('.save-alert').removeClass('hidden');
+            $('.save-alert').fadeOut();
+            $('.save-alert').fadeIn();
+            return;
+        }
+        $('.save-alert').fadeOut();
         $('.contract-attr').prop('disabled', true);
-        $('#addAnotherContract').prop('disabled', true);
+        $('#saveContract').prop('disabled', true);
         $('.payment-attr').prop('disabled', true);
         stageSelectClearOnClick = true;
         $selectContractType[0].selectize.clear();
@@ -495,7 +513,7 @@ $(document).ready(function(){
         });
     };
 
-    //Got to next form field when presisng enter
+    //Got to next form field when pressing Enter
     $(document).on("keypress", "input" , function(e){
         //Only do something when the user presses enter
         if( e.keyCode ==  13 )
@@ -506,12 +524,13 @@ $(document).ready(function(){
 
     //Function to navigate through form fields according tabIndex attribute
     var gotoNextTabIndex = function(element){
-        console.log(element);
-        console.log(typeof(element));
-        console.log(element.tabIndex)
+        //Autoclick on addPayment when amount is filled and used clicked Enter
+        if(element.id == 'paymentAmount'){
+            $('#addPayment').click()
+            return;
+        }
         var nextElement = $('[tabindex="' + (element.tabIndex+1)  + '"]');
-        console.log( element , nextElement );
-        if(nextElement.length ){
+        if(nextElement.length){
             nextElement.focus()
         }
         else{

@@ -1,21 +1,7 @@
 /*TODO. Change to scalable values*/
-/*TODO. Change to 'hoverable' class to avoid duplication*/
 td span{
     font-size:11px;
     padding-top: 4px;
-}
-
-.hoverable{
-    color: #999999;
-}
-
-.hoverable:hover{
-    color: #333333;
-}
-
-.hoverable {
-    cursor: pointer;
-    cursor: hand;
 }
 
 .btn-file {
