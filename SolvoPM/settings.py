@@ -48,7 +48,27 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
+
+# Код языка по умолчанию
+LANGUAGE_CODE = 'ru'
+
+# Поддерживаемые языки
+LANGUAGES = (
+    ('ru', u'Русский'),
+    ('en', 'English'),
+)
+
+# Кортеж путей к папкам, в которых будут храниться файлы локализации
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
+# Включить использование интернационализации
+USE_I18N = True
+# Включить использование локализации
+USE_L10N = True
 
 ROOT_URLCONF = 'SolvoPM.urls'
 
