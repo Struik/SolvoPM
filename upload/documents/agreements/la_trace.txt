@@ -1,0 +1,60 @@
+2016-04-21T20:13:30.40777 /la_jni.cxx     :  394(Java_solvo_locassign):Native: locassign: Received add load message for load 5473411, loc 698039/698039
+2016-04-21T20:13:30.40781 /locmain.cxx    : 1321(send_to_core        ):wait for answer
+2016-04-21T20:13:30.40782 /locmain.cxx    : 1264(la_core             ):core : 3 ...
+2016-04-21T20:13:30.40786 /locmain.cxx    : 1271(la_core             ):core : got message.
+2016-04-21T20:13:30.40786 /locmain.cxx    :  425(switchMethod        ):locassign: Received add load message for load 5473411, loc 698039/698039
+2016-04-21T20:13:30.40784 /locmain.cxx    : 1324(send_to_core        ):wait for answer 1
+2016-04-21T20:13:30.40790 /locmain.cxx    : 1327(send_to_core        ):wait for answer 2
+2016-04-21T20:13:30.41096 /oralibc8.cxx   : 1684(get_column          ):Null for char column [22]
+2016-04-21T20:13:30.41105 /sku.cxx        :  293(getWhsFields        ):SkuWhs doesn't found for WmsWhsId=28 and SkuId=1073974
+2016-04-21T20:13:30.41107 /load_calc_size.:   57(CalcSizes           ):LoadId=5473411 WmsWhsId=28 SkuVelocity=0 SkuSortKey3=0 SkuSeasonId=0 StorageCondId=0 SkuSpecId=0 ABC=C
+2016-04-21T20:13:30.41108 /setup_interface:   77(GetSetupIntValue    ):SetupParamId = 2, SetupValue = 0
+2016-04-21T20:13:30.41110 /setup_interface:  121(GetSetupStringValue ):SetupParamId = 5, SetupValue = 0
+2016-04-21T20:13:30.41111 /codeinfo.cxx   :  165(GetUnitPack         ):GetUnitPack 239677/239676
+2016-04-21T20:13:30.41112 /codeinfo.cxx   :  165(GetUnitPack         ):GetUnitPack 239676/0
+2016-04-21T20:13:30.41113 /setup_interface:  121(GetSetupStringValue ):SetupParamId = 8, SetupValue = 5
+2016-04-21T20:13:30.41114 /load_calc_size.:  339(CalcSizes           ):LoadId=5473411, use calculated Cube 975052.812500
+2016-04-21T20:13:30.41121 /load_add.cxx   :   42(LAAddLoad           ):Load: 5473411, Loc: 698039, RealLoc: 698039, Cube: 975052.812500, Weight: 1944.000000
+2016-04-21T20:13:30.41123 /load_add.cxx   :   55(LAAddLoad           ): p->CurWeight : 47628.000000 += L.Weight : 1944.000000
+2016-04-21T20:13:30.41141 /place_context_i:   36(AddLocContext       ):try AddLoad 5473411 698039
+2016-04-21T20:13:30.41148 /comp_rule.cxx  :  138(CheckRule           ):rule -102 not matched, wrong type 10/9
+2016-04-21T20:13:30.41153 /comp_rule.cxx  :  138(CheckRule           ):rule -100 not matched, wrong type 5/9
+2016-04-21T20:13:30.41154 /comp_rule.cxx  :  138(CheckRule           ):rule 8 not matched, wrong type 2/9
+2016-04-21T20:13:30.41156 /comp_rule.cxx  :  138(CheckRule           ):rule 170 not matched, wrong type 4/9
+2016-04-21T20:13:30.41157 /comp_rule.cxx  :  138(CheckRule           ):rule 191 not matched, wrong type 6/9
+2016-04-21T20:13:30.41159 /comp_rule.cxx  :  138(CheckRule           ):rule 192 not matched, wrong type 1/9
+2016-04-21T20:13:30.41160 /comp_rule.cxx  :  138(CheckRule           ):rule 198 not matched, wrong type 10/9
+2016-04-21T20:13:30.41162 /comp_rule.cxx  :  138(CheckRule           ):rule 200 not matched, wrong type 1/9
+2016-04-21T20:13:30.41164 /comp_rule.cxx  :  138(CheckRule           ):rule 201 not matched, wrong type 1/9
+2016-04-21T20:13:30.41165 /comp_rule.cxx  :  138(CheckRule           ):rule 202 not matched, wrong type 1/9
+2016-04-21T20:13:30.41166 /comp_rule.cxx  :  138(CheckRule           ):rule 203 not matched, wrong type 4/9
+2016-04-21T20:13:30.41168 /comp_rule.cxx  :  138(CheckRule           ):rule 204 not matched, wrong type 4/9
+2016-04-21T20:13:30.41169 /comp_rule.cxx  :  138(CheckRule           ):rule 207 not matched, wrong type 10/9
+2016-04-21T20:13:30.41173 /comp_rule.cxx  :  138(CheckRule           ):rule 208 not matched, wrong type 10/9
+2016-04-21T20:13:30.41174 /comp_rule.cxx  :  138(CheckRule           ):rule 209 not matched, wrong type 10/9
+2016-04-21T20:13:30.41176 /comp_rule.cxx  :  138(CheckRule           ):rule 210 not matched, wrong type 4/9
+2016-04-21T20:13:30.41178 /comp_rule.cxx  :  138(CheckRule           ):rule 211 not matched, wrong type 4/9
+2016-04-21T20:13:30.41180 /comp_rule.cxx  :  138(CheckRule           ):rule 214 not matched, wrong type 4/9
+2016-04-21T20:13:30.41182 /comp_rule.cxx  :  138(CheckRule           ):rule 215 not matched, wrong type 4/9
+2016-04-21T20:13:30.41188 /comp_rule.cxx  :  138(CheckRule           ):rule -102 not matched, wrong type 10/1
+2016-04-21T20:13:30.41191 /comp_rule.cxx  :  138(CheckRule           ):rule -100 not matched, wrong type 5/1
+2016-04-21T20:13:30.41192 /comp_rule.cxx  :  138(CheckRule           ):rule 8 not matched, wrong type 2/1
+2016-04-21T20:13:30.41194 /comp_rule.cxx  :  138(CheckRule           ):rule 170 not matched, wrong type 4/1
+2016-04-21T20:13:30.41196 /comp_rule.cxx  :  138(CheckRule           ):rule 191 not matched, wrong type 6/1
+2016-04-21T20:13:30.41200 /comp_rule.cxx  :  138(CheckRule           ):rule 198 not matched, wrong type 10/1
+2016-04-21T20:13:30.41204 /comp_rule.cxx  :  231(match_load_mask_rule):comp rule #201 rejected by WMS_WHS_ID
+2016-04-21T20:13:30.41206 /comp_rule.cxx  :  231(match_load_mask_rule):comp rule #201 rejected by WMS_WHS_ID
+2016-04-21T20:13:30.41208 /comp_rule.cxx  :  138(CheckRule           ):rule 203 not matched, wrong type 4/1
+2016-04-21T20:13:30.41209 /comp_rule.cxx  :  138(CheckRule           ):rule 204 not matched, wrong type 4/1
+2016-04-21T20:13:30.41211 /comp_rule.cxx  :  138(CheckRule           ):rule 207 not matched, wrong type 10/1
+2016-04-21T20:13:30.41213 /comp_rule.cxx  :  138(CheckRule           ):rule 208 not matched, wrong type 10/1
+2016-04-21T20:13:30.41214 /comp_rule.cxx  :  138(CheckRule           ):rule 209 not matched, wrong type 10/1
+2016-04-21T20:13:30.41216 /comp_rule.cxx  :  138(CheckRule           ):rule 210 not matched, wrong type 4/1
+2016-04-21T20:13:30.41217 /comp_rule.cxx  :  138(CheckRule           ):rule 211 not matched, wrong type 4/1
+2016-04-21T20:13:30.41219 /comp_rule.cxx  :  138(CheckRule           ):rule 214 not matched, wrong type 4/1
+2016-04-21T20:13:30.41221 /comp_rule.cxx  :  138(CheckRule           ):rule 215 not matched, wrong type 4/1
+2016-04-21T20:13:30.41241 /merge_interface:  172(AddMergeLoad        ):Try to add load 5473411 for loc 698039 in mergeable list
+2016-04-21T20:13:30.41243 /merge_engine.cx:  189(IsLoadMergeable     ):  load 5473411 is not mergeable. wrong bitmap 2
+2016-04-21T20:13:30.41246 /locmain.cxx    : 1277(la_core             ):answer ready
+2016-04-21T20:13:30.41248 /locmain.cxx    : 1288(la_core             ):locassign: Execution time 0.004626
+2016-04-21T20:13:30.41249 /locmain.cxx    : 1329(send_to_core        ):wait for answer 3

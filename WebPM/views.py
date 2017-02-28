@@ -1,5 +1,7 @@
+import os
+from django.conf import settings
 from django.shortcuts import render, render_to_response
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Max, Min
 from datetime import datetime
@@ -183,19 +185,27 @@ def get_projects_data(request):
                 else:
                     paymentsByDates[month]['confirmed'] = item.paymentAmount if item.confirmed else ''
             payment['amount'] = item.paymentAmount
-            payment['split'] = item.split
             payment['parentPayment'] = item.parentPayment.id if item.parentPayment else 0
             payment['date'] = item.paymentDate.strftime('%d.%m.%y')
             payment['confirmed'] = item.confirmed
             payment['confirmedDate'] = item.confirmedDate.strftime('%d.%m.%y') if item.confirmed else ''
             payment['postponed'] = item.postponed
-            payment['initialDate'] = item.beforePostponedDate.strftime('%d.%m.%y') if item.postponed else ''
+            if item.postponed:
+                payment['initialDate'] = item.beforePostponedDate.strftime('%d.%m.%y')
+                payment['postponeAgreementId'] = item.postponeAgreement.id
+                payment['postponeAgreementName'] = item.postponeAgreement.name
             payment['canceled'] = item.canceled
+            if item.canceled:
+                payment['cancelAgreementId'] = item.cancelAgreement.id
+                payment['cancelAgreementName'] = item.cancelAgreement.name
+                payment['confirmedDate'] = 'Canceled'
+            payment['split'] = item.split
             if item.split:
                 logger.info('Payment is split')
                 logger.info(
                     'Agreement id is: ' + str(item.splitAgreement.id) + ', name: ' + str(item.splitAgreement.name))
-                payment['agreementName'] = item.splitAgreement.name
+                payment['splitAgreementId'] = item.splitAgreement.id
+                payment['splitAgreementName'] = item.splitAgreement.name
                 payment['childPayments'] = []
                 childPayments = Payments.objects.filter(parentPayment=item.id)
                 logger.info(childPayments)
@@ -359,3 +369,25 @@ def split_payment(request):
             childPaymentObject.save()
             logger.info('Payment #' + str(childPaymentObject.id) + ' created')
     return HttpResponse('')
+
+#Downloading specified agreement
+def download_agreement(request):
+    logger.info('Download agreement request')
+    logger.info(request)
+    if(request.GET):
+        logger.info('Request is GET:')
+        params = request.GET
+        logger.info('GET request params:')
+        logger.info(params)
+        splitPayment = Agreements.objects.get(pk=params['id'])
+        file_path = splitPayment.document.file.name
+        logger.info(file_path);
+        logger.info('Agreement path: ' + str(file_path))
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type="application/force-download")
+                response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
+                return response
+        else:
+            raise Http404
+

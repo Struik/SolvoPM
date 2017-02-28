@@ -107,15 +107,20 @@
                     </div>
 
                     <div class="alert alert-info postponed-alert hidden" role="alert">Payment was
-                        <strong>postponed.</strong> Initial date - <p id="initialDate"/>
+                        <strong>postponed</strong> from <em id="initialDate"></em><br/>Authority - <a
+                                id="downloadPostponeAgreement" href="" class="alert-link"></a>
                     </div>
 
                     <div class="alert alert-warning inherited-alert hidden" role="alert">Payment is inherited from
-                        <a href="#" class="alert-link">this one</a>
+                        <a href="#" class="alert-link">this one</a><br/>Authority - <a id="downloadSplitAgreement"
+                                                                                       href=""
+                                                                                       class="alert-link"></a>
                     </div>
 
                     <div class="alert alert-danger canceled-alert hidden" role="alert">Payment is
-                        <strong>canceled.</strong> No actions available
+                        <strong>canceled.</strong> No actions available<br/>Authority - <a id="downloadCancelAgreement"
+                                                                                           href=""
+                                                                                           class="alert-link"></a>
                     </div>
 
                     <div id="paymentInfoPanel" class="panel panel-default">

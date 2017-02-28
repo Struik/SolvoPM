@@ -310,7 +310,7 @@ $(document).ready(function() {
     $("#paymentsTable").on("click", ".show-payment", function() {
         var row = $(this).parents('tr');
         var paymentId = row.attr('id');
-        //console.log(paymentsFullData[paymentId]);
+        console.log(paymentsFullData[paymentId]);
         $('#paymentInfo').attr('payment-id', paymentId);
         $('#paymentInfoAmount').html(paymentsFullData[paymentId].amount);
         $('#paymentInfoPlanned').html(paymentsFullData[paymentId].date);
@@ -339,17 +339,23 @@ $(document).ready(function() {
 
         if(paymentsFullData[paymentId].postponed){
             console.log('Is postponed');
+            $('#downloadPostponeAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentId].postponeAgreementId);
+            $('#downloadPostponeAgreement').html(paymentsFullData[paymentId].postponeAgreementName);
             $('#initialDate').html(paymentsFullData[paymentId].initialDate);
             $('.postponed-alert').removeClass('hidden');
         }
 
         if(paymentsFullData[paymentId].parentPayment){
             console.log('Has parent');
+            $('#downloadSplitAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementId);
+            $('#downloadSplitAgreement').html(paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementName);
             $('.inherited-alert').removeClass('hidden');
         }
 
         if(paymentsFullData[paymentId].canceled){
             console.log('Is canceled');
+            $('#downloadCancelAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentId].cancelAgreementId);
+            $('#downloadCancelAgreement').html(paymentsFullData[paymentId].cancelAgreementName);
             $('.canceled-alert').removeClass('hidden');
             $('.confirm-panel').addClass('hidden');
             $('.postpone-panel').addClass('hidden');

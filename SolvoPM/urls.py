@@ -28,5 +28,6 @@ urlpatterns = [
     url(r'^postpone_payment', views.postpone_payment, name='postpone_payment'),
     url(r'^cancel_payment', views.cancel_payment, name='cancel_payment'),
     url(r'^split_payment', views.split_payment, name='split_payment'),
+    url(r'^download_agreement', views.download_agreement, name='download_agreement'),
     url(r'^admin/', admin.site.urls),
 ]
