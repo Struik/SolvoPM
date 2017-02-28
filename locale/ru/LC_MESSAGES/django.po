@@ -21,4 +21,4 @@ msgstr ""
 
 #: .\templates\projects.html:93
 msgid "hai"
-msgstr "Привет"
+msgstr "hehehey"

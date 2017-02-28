@@ -108,7 +108,7 @@ def new_ref_value(request):
 # Page with projects info. Table with all the data from DB
 def projects(request):
     logger.info('Projects page requested')
-    return render_to_response('projects.html')
+    return render(request, 'projects.html', {'LANGUAGES': settings.LANGUAGES})
 
 
 @csrf_exempt

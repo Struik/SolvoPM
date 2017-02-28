@@ -13,12 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from WebPM import views
 
 urlpatterns = [
     url(r'^$', views.index, name='pm'),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^projects', views.projects, name='projects'),
     url(r'^get_projects_data', views.get_projects_data, name='get_projects_data'),
     url(r'^new_project', views.new_project, name='new_project'),

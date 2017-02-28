@@ -25,6 +25,19 @@
 {% block page-header %}Projects {% endblock %}
 
 {% block content %}
+
+{% for lang in LANGUAGES %}
+    <li>
+	  <form name="setLang{{ lang.1}}" action="i18n/setlang/" method="POST">
+	  {% csrf_token %}
+	    <input name="next" type="hidden" value="/">
+	    <input type="hidden" name="language" value="{{ lang.0 }}">
+	    <a href="#" onclick="document.setLang{{ lang.1 }}.submit();
+		    return false;">{{ lang.1 }}</a>
+	  </form>
+	</li>
+  {% endfor %}
+
 <table id="projects" class="table table-bordered " cellspacing="0" width="100%">
     <thead>
     <tr id="projectsHeaderFirst">
