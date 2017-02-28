@@ -27,16 +27,16 @@
 {% block content %}
 
 {% for lang in LANGUAGES %}
-    <li>
-	  <form name="setLang{{ lang.1}}" action="i18n/setlang/" method="POST">
-	  {% csrf_token %}
-	    <input name="next" type="hidden" value="/">
-	    <input type="hidden" name="language" value="{{ lang.0 }}">
-	    <a href="#" onclick="document.setLang{{ lang.1 }}.submit();
+<li>
+    <form name="setLang{{ lang.1}}" action="i18n/setlang/" method="POST">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="/">
+        <input type="hidden" name="language" value="{{ lang.0 }}">
+        <a href="#" onclick="document.setLang{{ lang.1 }}.submit();
 		    return false;">{{ lang.1 }}</a>
-	  </form>
-	</li>
-  {% endfor %}
+    </form>
+</li>
+{% endfor %}
 
 <table id="projects" class="table table-bordered " cellspacing="0" width="100%">
     <thead>
@@ -53,8 +53,8 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <form id="infoForm" enctype="multipart/form-data">
-                <h3>Month info</h3>
-                <h3>Payment info</h3>
+                <h3>{% trans "Month info" %}</h3>
+                <h3>{% trans "Payment info" %}</h3>
                 <section>
                     <div class="panel panel-default">
                         <div class="panel-body">
@@ -64,31 +64,31 @@
                                     </thead>
                                     <tbody id="monthInfoTableBody">
                                     <tr>
-                                        <td>Project name:</td>
+                                        <td>{% trans "Project name" %}:</td>
                                         <td id="projectName"></td>
                                     </tr>
                                     <tr>
-                                        <td>Manager:</td>
+                                        <td>{% trans "Manager" %}:</td>
                                         <td id="manager"></td>
                                     </tr>
                                     <tr>
-                                        <td>Current state:</td>
+                                        <td>{% trans "Current state" %}:</td>
                                         <td id="currentState"></td>
                                     </tr>
                                     <tr>
-                                        <td>Contract type:</td>
+                                        <td>{% trans "Contract type" %}:</td>
                                         <td id="contractType"></td>
                                     </tr>
                                     <tr>
-                                        <td>Contract name:</td>
+                                        <td>{% trans "Contract name" %}:</td>
                                         <td id="contractName"></td>
                                     </tr>
                                     <tr>
-                                        <td>Planned:</td>
+                                        <td>{% trans "Planned" %}:</td>
                                         <td id="planned"></td>
                                     </tr>
                                     <tr>
-                                        <td>Confirmed:</td>
+                                        <td>{% trans "Confirmed" %}:</td>
                                         <td id="confirmed"></td>
                                     </tr>
                                     </tbody>
@@ -100,10 +100,10 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Amount</th>
-                                        <th>Planned</th>
-                                        <th>Confirmed</th>
-                                        <th>{% trans "hai" %}</th>
+                                        <th>{% trans "Amount" %}</th>
+                                        <th>{% trans "Planned" %}</th>
+                                        <th>{% trans "Confirmed" %}</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody id="paymentsTableBody">
@@ -117,11 +117,11 @@
                 <section>
                     <div class="alert alert-success confirmed-alert hidden" role="alert">Payment is
                         <strong>confirmed.</strong>
-                        You may only unconfirm it
+                        {% trans "You may only unconfirm it
                     </div>
 
                     <div class="alert alert-info postponed-alert hidden" role="alert">Payment was
-                        <strong>postponed</strong> from <em id="initialDate"></em><br/>Authority - <a
+                        <strong>postponed</strong> from <em id="initialDate"></em><br/>{% trans "Authority" %} - <a
                                 id="downloadPostponeAgreement" href="" class="alert-link"></a>
                     </div>
 
@@ -132,9 +132,8 @@
                     </div>
 
                     <div class="alert alert-danger canceled-alert hidden" role="alert">Payment is
-                        <strong>canceled.</strong> No actions available<br/>Authority - <a id="downloadCancelAgreement"
-                                                                                           href=""
-                                                                                           class="alert-link"></a>
+                        <strong>canceled.</strong> No actions available<br/>{% trans "Authority" %} - <a
+                                id="downloadCancelAgreement" href="" class="alert-link"></a>
                     </div>
 
                     <div id="paymentInfoPanel" class="panel panel-default">
@@ -146,15 +145,15 @@
                                     </thead>
                                     <tbody id="paymentInfoTableBody">
                                     <tr>
-                                        <td>Amount:</td>
+                                        <td>{% trans "Amount" %}:</td>
                                         <td id="paymentInfoAmount"></td>
                                     </tr>
                                     <tr>
-                                        <td>Planned:</td>
+                                        <td>{% trans "Planned" %}:</td>
                                         <td id="paymentInfoPlanned"></td>
                                     </tr>
                                     <tr>
-                                        <td>Confirmed:</td>
+                                        <td>{% trans "Confirmed" %}:</td>
                                         <td id="paymentInfoConfirmed"></td>
                                     </tr>
                                     </tbody>
@@ -164,7 +163,7 @@
                             <div class="form-group unconfirm-action">
                                 <button type="button" class="btn btn-warning btn-block"
                                         id="unconfirmPayment">
-                                    Unconfirm payment
+                                    {% trans "Unconfirm payment" %}
                                 </button>
                             </div>
 
@@ -176,8 +175,8 @@
                         <div class="panel panel-default confirm-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a id="panel-confirm-title" data-toggle="collapse"
-                                                                       data-parent="#actions"
-                                                                       href="#collapse-confirm">Confirm</a>
+                                                                       data-parent="#actions" href="#collapse-confirm">
+                                    {% trans "Confirm" %}</a>
                                 </h3>
                             </div>
                             <div id="collapse-confirm" class="panel-collapse collapse">
@@ -196,7 +195,7 @@
 
                                     <div class="form-group confirm-action">
                                         <button type="button" class="btn btn-success btn-block" id="confirmPayment">
-                                            Confirm payment
+                                            {% trans "Confirm payment" %}
                                         </button>
                                     </div>
 
@@ -207,7 +206,8 @@
                         <div class="panel panel-default postpone-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
-                                                                       href="#collapse-postpone">Postpone</a>
+                                                                       href="#collapse-postpone">{% trans "Postpone"
+                                    %}</a>
                                 </h3>
                             </div>
                             <div id="collapse-postpone" class="panel-collapse collapse">
@@ -245,7 +245,7 @@
 
                                     <div class="form-group">
                                         <button type="button" class="btn btn-success btn-block" id="postponePayment">
-                                            Postpone payment
+                                            {% trans "Postpone payment" %}
                                         </button>
                                     </div>
 
@@ -256,7 +256,7 @@
                         <div class="panel panel-default split-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
-                                                                       href="#collapse-split">Split
+                                                                       href="#collapse-split">{% trans "Split" %}
                                 </a></h3>
                             </div>
                             <div id="collapse-split" class="panel-collapse collapse">
@@ -283,16 +283,16 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label id="childPaymentsListLabel" class="control-label text-center hidden">Payments
-                                            info</label>
+                                        <label id="childPaymentsListLabel" class="control-label text-center hidden">
+                                                                                {% trans "Payments info" %}</label>
 
                                         <table id="childPaymentsTable"
                                                class="table table-condensed table-hover hidden">
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Amount</th>
-                                                <th>Date</th>
+                                                <th>{% trans "Amount" %}</th>
+                                                <th>{% trans "Date" %}</th>
                                             </tr>
                                             </thead>
                                             <tbody id="childPaymentsTableBody">
@@ -335,13 +335,13 @@
 
                                     <div class="form-group">
                                         <button type="button" class="btn btn-success btn-block" id="addPayment">
-                                            Add payment
+                                            {% trans "Add payment" %}
                                         </button>
                                     </div>
 
                                     <div class="form-group">
                                         <button type="button" class="btn btn-info btn-block" id="save">
-                                            Save
+                                            {% trans "Save" %}
                                         </button>
                                     </div>
                                 </div>
@@ -351,7 +351,7 @@
                         <div class="panel panel-default cancel-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
-                                                                       href="#collapse-cancel">Cancel payment</a>
+                                                           href="#collapse-cancel">{% trans "Cancel payment" %}</a>
                                 </h3>
                             </div>
                             <div id="collapse-cancel" class="panel-collapse collapse">
@@ -378,7 +378,7 @@
 
                                     <div class="form-group">
                                         <button type="button" class="btn btn-success btn-block" id="cancelPayment">
-                                            Cancel payment
+                                            {% trans "Cancel payment" %}
                                         </button>
                                     </div>
 
