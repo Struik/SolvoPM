@@ -117,11 +117,11 @@
                 <section>
                     <div class="alert alert-success confirmed-alert hidden" role="alert">Payment is
                         <strong>confirmed.</strong>
-                        {% trans "You may only unconfirm it
+                        {% trans "You may only unconfirm it" %}
                     </div>
 
-                    <div class="alert alert-info postponed-alert hidden" role="alert">Payment was
-                        <strong>postponed</strong> from <em id="initialDate"></em><br/>{% trans "Authority" %} - <a
+                    <div class="alert alert-info postponed-alert hidden" role="alert">{% trans Payment was
+                        <strong>postponed</strong> from %}<em id="initialDate"></em><br/>{% trans "Authority" %} - <a
                                 id="downloadPostponeAgreement" href="" class="alert-link"></a>
                     </div>
 
@@ -206,8 +206,7 @@
                         <div class="panel panel-default postpone-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
-                                                                       href="#collapse-postpone">{% trans "Postpone"
-                                    %}</a>
+                                                               href="#collapse-postpone">{% trans "Postpone" %} </a>
                                 </h3>
                             </div>
                             <div id="collapse-postpone" class="panel-collapse collapse">

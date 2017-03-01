@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-28 18:51+0300\n"
+"POT-Creation-Date: 2017-03-01 16:07+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,93 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\templates\projects.html:93
-msgid "hai"
-msgstr "Hey"
+#: .\templates\projects.html:56
+msgid "Month info"
+msgstr ""
+
+#: .\templates\projects.html:57
+msgid "Payment info"
+msgstr ""
+
+#: .\templates\projects.html:67
+msgid "Project name"
+msgstr ""
+
+#: .\templates\projects.html:71
+msgid "Manager"
+msgstr ""
+
+#: .\templates\projects.html:75
+msgid "Current state"
+msgstr ""
+
+#: .\templates\projects.html:79
+msgid "Contract type"
+msgstr ""
+
+#: .\templates\projects.html:83
+msgid "Contract name"
+msgstr ""
+
+#: .\templates\projects.html:87 .\templates\projects.html:104
+#: .\templates\projects.html:152
+msgid "Planned"
+msgstr ""
+
+#: .\templates\projects.html:91 .\templates\projects.html:105
+#: .\templates\projects.html:156
+msgid "Confirmed"
+msgstr ""
+
+#: .\templates\projects.html:103 .\templates\projects.html:148
+#: .\templates\projects.html:293
+msgid "Amount"
+msgstr ""
+
+#: .\templates\projects.html:124 .\templates\projects.html:135
+msgid "Authority"
+msgstr ""
+
+#: .\templates\projects.html:166
+msgid "Unconfirm payment"
+msgstr ""
+
+#: .\templates\projects.html:179
+msgid "Confirm"
+msgstr ""
+
+#: .\templates\projects.html:198
+msgid "Confirm payment"
+msgstr ""
+
+#: .\templates\projects.html:209
+msgid "Postpone"
+msgstr ""
+
+#: .\templates\projects.html:247
+msgid "Postpone payment"
+msgstr ""
+
+#: .\templates\projects.html:258
+msgid "Split"
+msgstr ""
+
+#: .\templates\projects.html:286
+msgid "Payments info"
+msgstr ""
+
+#: .\templates\projects.html:294
+msgid "Date"
+msgstr ""
+
+#: .\templates\projects.html:337
+msgid "Add payment"
+msgstr ""
+
+#: .\templates\projects.html:343
+msgid "Save"
+msgstr ""
+
+#: .\templates\projects.html:353 .\templates\projects.html:380
+msgid "Cancel payment"
+msgstr ""
