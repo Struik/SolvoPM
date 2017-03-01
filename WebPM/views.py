@@ -4,12 +4,14 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Max, Min
+from django.utils.translation import ugettext as _
 from datetime import datetime
 from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, AttributeTypes, ProjectAttributes
 from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments, Agreements
 from itertools import groupby
 from operator import itemgetter, methodcaller
 import logging, json, WebPM
+
 
 from WebPM.models import models
 
@@ -131,7 +133,7 @@ def get_projects_data(request):
     logger.info('Payment period is ' + str(paymentPeriod))
 
     # Rather putting several lines in one column "Project" than having 2 extra columns (not implemented - table size issue)
-    columnsBasic = ['Project name', 'Manager', 'Current state', 'Contract type', 'Contract name', 'DT_RowId']
+    columnsBasic = [_('Project name'), _('Manager'), _('Current state'), _('Contract type'), _('Contract name'), 'DT_RowId']
     # columnsBasic = ['Project', 'Contract type', 'Contract name', 'DT_RowId']
     logger.info('Basic column headers: ' + str(columnsBasic))
 
@@ -198,7 +200,7 @@ def get_projects_data(request):
             if item.canceled:
                 payment['cancelAgreementId'] = item.cancelAgreement.id
                 payment['cancelAgreementName'] = item.cancelAgreement.name
-                payment['confirmedDate'] = 'Canceled'
+                payment['confirmedDate'] = _('Canceled')
             payment['split'] = item.split
             if item.split:
                 logger.info('Payment is split')
