@@ -15,11 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import url, include, i18n
 from django.contrib import admin
+from django.views.i18n import JavaScriptCatalog
 from WebPM import views
+
+js_info_dict = {
+    'domain': 'djangojs',
+    'packages': ('WebPM',),
+}
 
 urlpatterns = [
     url(r'^$', views.index, name='pm'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     url(r'^projects', views.projects, name='projects'),
     url(r'^get_projects_data', views.get_projects_data, name='get_projects_data'),
     url(r'^new_project', views.new_project, name='new_project'),

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-01 23:33+0300\n"
+"POT-Creation-Date: 2017-03-05 22:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,101 +19,148 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: .\WebPM\views.py:136 .\templates\projects.html:67
+#: .\WebPM\views.py:138 .\templates\projects.html:55
 msgid "Project name"
 msgstr "Имя проекта"
 
-#: .\WebPM\views.py:136 .\templates\projects.html:71
+#: .\WebPM\views.py:138 .\templates\projects.html:59
 msgid "Manager"
 msgstr "Менеджер проекта"
 
-#: .\WebPM\views.py:136 .\templates\projects.html:75
+#: .\WebPM\views.py:138 .\templates\projects.html:63
 msgid "Current state"
 msgstr "Текущий статус"
 
-#: .\WebPM\views.py:136 .\templates\projects.html:79
+#: .\WebPM\views.py:138 .\templates\projects.html:67
 msgid "Contract type"
 msgstr "Тип договора"
 
-#: .\WebPM\views.py:136 .\templates\projects.html:83
+#: .\WebPM\views.py:138 .\templates\projects.html:71
 msgid "Contract name"
 msgstr "Имя договора"
 
-#: .\WebPM\views.py:203
+#: .\WebPM\views.py:205
 msgid "Canceled"
 msgstr "Отменен"
 
-#: .\templates\projects.html:56
+#: .\templates\projects.html:44
 msgid "Month info"
 msgstr "Информация по месяцу"
 
-#: .\templates\projects.html:57
+#: .\templates\projects.html:45
 msgid "Payment info"
 msgstr "Информация по платежу"
 
-#: .\templates\projects.html:87 .\templates\projects.html:104
-#: .\templates\projects.html:152
+#: .\templates\projects.html:75 .\templates\projects.html:92
+#: .\templates\projects.html:140
 msgid "Planned"
 msgstr "Ожидается"
 
-#: .\templates\projects.html:91 .\templates\projects.html:105
-#: .\templates\projects.html:156
+#: .\templates\projects.html:79 .\templates\projects.html:93
+#: .\templates\projects.html:144
 msgid "Confirmed"
 msgstr "Поступило"
 
-#: .\templates\projects.html:103 .\templates\projects.html:148
-#: .\templates\projects.html:293
+#: .\templates\projects.html:91 .\templates\projects.html:136
+#: .\templates\projects.html:281
 msgid "Amount"
 msgstr "Сумма"
 
-#: .\templates\projects.html:120
-msgid "You may only unconfirm it"
-msgstr ""
+#: .\templates\projects.html:106 .\templates\projects.html:111
+#: .\templates\projects.html:116 .\templates\projects.html:122
+msgid "Payment is"
+msgstr "Платеж"
 
-#: .\templates\projects.html:124 .\templates\projects.html:135
+#: .\templates\projects.html:107
+msgid "confirmed"
+msgstr "поступил"
+
+#: .\templates\projects.html:108
+msgid "You may only unconfirm it"
+msgstr "Доступен только откат поступления"
+
+#: .\templates\projects.html:112
+msgid "postponed"
+msgstr "отложен"
+
+#: .\templates\projects.html:112
+msgid "from"
+msgstr "с"
+
+#: .\templates\projects.html:113 .\templates\projects.html:119
+#: .\templates\projects.html:124
 msgid "Authority"
 msgstr "Основание"
 
-#: .\templates\projects.html:166
+#: .\templates\projects.html:117
+msgid "inherited from"
+msgstr "создан из"
+
+#: .\templates\projects.html:118
+msgid "this one"
+msgstr "другого"
+
+#: .\templates\projects.html:123
+msgid "canceled"
+msgstr "отменен"
+
+#: .\templates\projects.html:123
+msgid "No actions available"
+msgstr "Нет доступных действий"
+
+#: .\templates\projects.html:154
 msgid "Unconfirm payment"
 msgstr "Откатить поступление"
 
-#: .\templates\projects.html:179
+#: .\templates\projects.html:167
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: .\templates\projects.html:198
+#: .\templates\projects.html:186
 msgid "Confirm payment"
 msgstr "Подтвердить поступление"
 
-#: .\templates\projects.html:209
+#: .\templates\projects.html:197
 msgid "Postpone"
 msgstr "Отложить"
 
-#: .\templates\projects.html:247
+#: .\templates\projects.html:219 .\templates\projects.html:269
+#: .\templates\projects.html:363
+msgid "Document name"
+msgstr "Имя документа"
+
+#: .\templates\projects.html:226 .\templates\projects.html:304
+msgid "Payment date"
+msgstr "Дата платежа"
+
+#: .\templates\projects.html:235
 msgid "Postpone payment"
 msgstr "Отложить платеж"
 
-#: .\templates\projects.html:258
+#: .\templates\projects.html:246
 msgid "Split"
 msgstr "Разделить"
 
-#: .\templates\projects.html:286
+#: .\templates\projects.html:274
 msgid "Payments info"
 msgstr "Информация по платежам"
 
-#: .\templates\projects.html:294
+#: .\templates\projects.html:282
 msgid "Date"
 msgstr "Дата"
 
-#: .\templates\projects.html:337
+#: .\templates\projects.html:314
+msgid "Payment amount"
+msgstr "Сумма платежа"
+
+#: .\templates\projects.html:325
 msgid "Add payment"
 msgstr "Добавить платеж"
 
-#: .\templates\projects.html:343
+#: .\templates\projects.html:331
 msgid "Save"
 msgstr "Сохранить"
 
-#: .\templates\projects.html:353 .\templates\projects.html:380
+#: .\templates\projects.html:341 .\templates\projects.html:368
 msgid "Cancel payment"
 msgstr "Отменить платеж"

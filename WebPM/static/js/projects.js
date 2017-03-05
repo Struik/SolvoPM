@@ -121,10 +121,10 @@ $(document).ready(function() {
         for (var i = staticColumns.length; i < (paymentsColumns.length + staticColumns.length); i++){
             if (i % 2){
                 projectsHeaderFirst.append('<th colspan="2">' + columns[i].caption + '</th>');
-                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '">Plan</th>');
+                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '">' + gettext('Plan') + '</th>');
             }
             else{
-                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '">Fact</th>');
+                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '">' + gettext('Fact') + '</th>');
             }
         }
 
@@ -294,11 +294,11 @@ $(document).ready(function() {
         }
 
         //Might consider serializing it instead of
-        $('#projectName').html(rowData['Project name']);
-        $('#manager').html(rowData['Manager']);
-        $('#currentState').html(rowData['Current state']);
-        $('#contractType').html(rowData['Contract type']);
-        $('#contractName').html(rowData['Contract name']);
+        $('#projectName').html(rowData[gettext('Project name')]);
+        $('#manager').html(rowData[gettext('Manager')]);
+        $('#currentState').html(rowData[gettext('Current state')]);
+        $('#contractType').html(rowData[gettext('Contract type')]);
+        $('#contractName').html(rowData[gettext('Contract name')]);
         $('#planned').html(rowData[columnTitle]['planned']);
         $('#confirmed').html(rowData[columnTitle]['confirmed']);
 

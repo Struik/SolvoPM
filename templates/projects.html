@@ -13,6 +13,7 @@
 {% block extrajs %}
 <script src="{% static 'js/jquery.steps.js' %}"></script>
 <script src="{% static 'js/jquery.validate.js' %}"></script>
+<script src="{% static 'js/validate.fix.js' %}"></script>
 <script src="{% static 'js/datatables.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap.js' %}"></script>
 <script src="{% static 'js/dataTables.rowsGroup.js' %}"></script>
@@ -25,18 +26,6 @@
 {% block page-header %}Projects {% endblock %}
 
 {% block content %}
-
-{% for lang in LANGUAGES %}
-<li>
-    <form name="setLang{{ lang.1}}" action="i18n/setlang/" method="POST">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="/">
-        <input type="hidden" name="language" value="{{ lang.0 }}">
-        <a href="#" onclick="document.setLang{{ lang.1 }}.submit();
-		    return false;">{{ lang.1 }}</a>
-    </form>
-</li>
-{% endfor %}
 
 <table id="projects" class="table table-bordered " cellspacing="0" width="100%">
     <thead>
@@ -115,25 +104,25 @@
                 </section>
 
                 <section>
-                    <div class="alert alert-success confirmed-alert hidden" role="alert">Payment is
-                        <strong>confirmed.</strong>
+                    <div class="alert alert-success confirmed-alert hidden" role="alert">{% trans "Payment is" %}
+                        <strong>{% trans "confirmed" %}.</strong>
                         {% trans "You may only unconfirm it" %}
                     </div>
 
-                    <div class="alert alert-info postponed-alert hidden" role="alert">{% trans Payment was
-                        <strong>postponed</strong> from %}<em id="initialDate"></em><br/>{% trans "Authority" %} - <a
-                                id="downloadPostponeAgreement" href="" class="alert-link"></a>
+                    <div class="alert alert-info postponed-alert hidden" role="alert">{% trans "Payment is" %}
+                        <strong>{% trans "postponed" %} </strong>{% trans "from" %} <em id="initialDate"></em><br/>
+                        {% trans "Authority" %} - <a id="downloadPostponeAgreement" href="" class="alert-link"></a>
                     </div>
 
-                    <div class="alert alert-warning inherited-alert hidden" role="alert">Payment is inherited from
-                        <a href="#" class="alert-link">this one</a><br/>Authority - <a id="downloadSplitAgreement"
-                                                                                       href=""
-                                                                                       class="alert-link"></a>
+                    <div class="alert alert-warning inherited-alert hidden" role="alert">{% trans "Payment is" %}
+                        {% trans "inherited from" %}
+                        <a href="#" class="alert-link">{% trans "this one" %}</a><br/>
+                        {% trans "Authority" %} - <a id="downloadSplitAgreement" href="" class="alert-link"></a>
                     </div>
 
-                    <div class="alert alert-danger canceled-alert hidden" role="alert">Payment is
-                        <strong>canceled.</strong> No actions available<br/>{% trans "Authority" %} - <a
-                                id="downloadCancelAgreement" href="" class="alert-link"></a>
+                    <div class="alert alert-danger canceled-alert hidden" role="alert">{% trans "Payment is" %}
+                        <strong>{% trans "canceled" %}. </strong>{% trans "No actions available" %}<br/>
+                        {% trans "Authority" %} - <a id="downloadCancelAgreement" href="" class="alert-link"></a>
                     </div>
 
                     <div id="paymentInfoPanel" class="panel panel-default">
@@ -228,14 +217,14 @@
                                     <div class="form-group">
                                         <input type="text" class="form-control payment-attr" id="postponeDocumentName"
                                                name="postponeDocumentName"
-                                               placeholder="Document name">
+                                               placeholder="{% trans 'Document name' %}">
                                     </div>
 
                                     <div class="form-group">
                                         <div class='input-group date' id='postponeDatePicker'>
                                             <input type="text" class="form-control datepicker"
                                                    id="postponePaymentDate"
-                                                   name="postponePaymentDate" placeholder="Payment date">
+                                                   name="postponePaymentDate" placeholder="{% trans 'Payment date' %}">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
@@ -278,12 +267,12 @@
                                     <div class="form-group">
                                         <input type="text" class="form-control payment-attr" id="splitDocumentName"
                                                name="splitDocumentName"
-                                               placeholder="Document name">
+                                               placeholder="{% trans 'Document name' %}">
                                     </div>
 
                                     <div class="form-group">
                                         <label id="childPaymentsListLabel" class="control-label text-center hidden">
-                                                                                {% trans "Payments info" %}</label>
+                                            {% trans "Payments info" %}</label>
 
                                         <table id="childPaymentsTable"
                                                class="table table-condensed table-hover hidden">
@@ -313,7 +302,7 @@
                                         <div class='input-group date' id='splitDatePicker'>
                                             <input type="text" class="form-control datepicker"
                                                    id="childPaymentDate"
-                                                   name="childPaymentDate" placeholder="Payment date">
+                                                   name="childPaymentDate" placeholder="{% trans 'Payment date' %}">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
@@ -323,7 +312,7 @@
                                     <div class="form-group">
                                         <input type="text" class="form-control payment-attr" id="childPaymentAmount"
                                                name="childPaymentAmount"
-                                               placeholder="Payment amount">
+                                               placeholder="{% trans 'Payment amount' %}">
                                     </div>
 
                                     <!--<div class="form-group">-->
@@ -350,7 +339,7 @@
                         <div class="panel panel-default cancel-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
-                                                           href="#collapse-cancel">{% trans "Cancel payment" %}</a>
+                                                               href="#collapse-cancel">{% trans "Cancel payment" %}</a>
                                 </h3>
                             </div>
                             <div id="collapse-cancel" class="panel-collapse collapse">
@@ -372,7 +361,7 @@
                                     <div class="form-group">
                                         <input type="text" class="form-control payment-attr" id="cancelDocumentName"
                                                name="cancelDocumentName"
-                                               placeholder="Document name">
+                                               placeholder="{% trans 'Document name' %}">
                                     </div>
 
                                     <div class="form-group">

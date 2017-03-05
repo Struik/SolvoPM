@@ -12,11 +12,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
     <!--<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-theme.css' %}"/>-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-xlgrid.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flags.css' %}"/>
 
     {% block extracss %}{% endblock %}
 
     <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
 
     {% block extrajs %}{% endblock %}
 
@@ -31,7 +33,9 @@
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
-</script>
+
+
+    </script>
 
     {% block head %}{% endblock %}
 
@@ -56,18 +60,31 @@
                 <!--<li><a href="#about">About</a></li>-->
                 <!--<li><a href="#contact">Contact</a></li>-->
                 <!--<li class="dropdown">-->
-                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
-                       <!--aria-expanded="false">Dropdown <span class="caret"></span></a>-->
-                    <!--<ul class="dropdown-menu">-->
-                        <!--<li><a href="#">Action</a></li>-->
-                        <!--<li><a href="#">Another action</a></li>-->
-                        <!--<li><a href="#">Something else here</a></li>-->
-                        <!--<li role="separator" class="divider"></li>-->
-                        <!--<li class="dropdown-header">Nav header</li>-->
-                        <!--<li><a href="#">Separated link</a></li>-->
-                        <!--<li><a href="#">One more separated link</a></li>-->
-                    <!--</ul>-->
+                <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
+                <!--aria-expanded="false">Dropdown <span class="caret"></span></a>-->
+                <!--<ul class="dropdown-menu">-->
+                <!--<li><a href="#">Action</a></li>-->
+                <!--<li><a href="#">Another action</a></li>-->
+                <!--<li><a href="#">Something else here</a></li>-->
+                <!--<li role="separator" class="divider"></li>-->
+                <!--<li class="dropdown-header">Nav header</li>-->
+                <!--<li><a href="#">Separated link</a></li>-->
+                <!--<li><a href="#">One more separated link</a></li>-->
+                <!--</ul>-->
                 <!--</li>-->
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% for lang in LANGUAGES %}
+                <li style="margin-right: 10px;">
+                    <form name="setLang{{ lang.1}}" action="i18n/setlang/" method="POST">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="/">
+                        <input type="hidden" name="language" value="{{ lang.0 }}">
+                        <a href="#" onclick="document.setLang{{ lang.1 }}.submit(); return false;"><i
+                                class="flag-{{ lang.0|upper }} "></i></a>
+                    </form>
+                </li>
+                {% endfor %}
             </ul>
         </div><!--/.nav-collapse -->
     </div>

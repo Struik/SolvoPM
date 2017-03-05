@@ -1,0 +1,117 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-05 16:51+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\WebPM\views.py:138 .\templates\projects.html:55
+msgid "Project name"
+msgstr ""
+
+#: .\WebPM\views.py:138 .\templates\projects.html:59
+msgid "Manager"
+msgstr ""
+
+#: .\WebPM\views.py:138 .\templates\projects.html:63
+msgid "Current state"
+msgstr ""
+
+#: .\WebPM\views.py:138 .\templates\projects.html:67
+msgid "Contract type"
+msgstr ""
+
+#: .\WebPM\views.py:138 .\templates\projects.html:71
+msgid "Contract name"
+msgstr ""
+
+#: .\WebPM\views.py:205
+msgid "Canceled"
+msgstr ""
+
+#: .\templates\projects.html:44
+msgid "Month info"
+msgstr ""
+
+#: .\templates\projects.html:45
+msgid "Payment info"
+msgstr ""
+
+#: .\templates\projects.html:75 .\templates\projects.html:92
+#: .\templates\projects.html:140
+msgid "Planned"
+msgstr ""
+
+#: .\templates\projects.html:79 .\templates\projects.html:93
+#: .\templates\projects.html:144
+msgid "Confirmed"
+msgstr ""
+
+#: .\templates\projects.html:91 .\templates\projects.html:136
+#: .\templates\projects.html:281
+msgid "Amount"
+msgstr ""
+
+#: .\templates\projects.html:108
+msgid "You may only unconfirm it"
+msgstr ""
+
+#: .\templates\projects.html:112 .\templates\projects.html:123
+msgid "Authority"
+msgstr ""
+
+#: .\templates\projects.html:154
+msgid "Unconfirm payment"
+msgstr ""
+
+#: .\templates\projects.html:167
+msgid "Confirm"
+msgstr ""
+
+#: .\templates\projects.html:186
+msgid "Confirm payment"
+msgstr ""
+
+#: .\templates\projects.html:197
+msgid "Postpone"
+msgstr ""
+
+#: .\templates\projects.html:235
+msgid "Postpone payment"
+msgstr ""
+
+#: .\templates\projects.html:246
+msgid "Split"
+msgstr ""
+
+#: .\templates\projects.html:274
+msgid "Payments info"
+msgstr ""
+
+#: .\templates\projects.html:282
+msgid "Date"
+msgstr ""
+
+#: .\templates\projects.html:325
+msgid "Add payment"
+msgstr ""
+
+#: .\templates\projects.html:331
+msgid "Save"
+msgstr ""
+
+#: .\templates\projects.html:341 .\templates\projects.html:368
+msgid "Cancel payment"
+msgstr ""

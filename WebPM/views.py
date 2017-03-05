@@ -10,13 +10,14 @@ from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, Attri
 from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments, Agreements
 from itertools import groupby
 from operator import itemgetter, methodcaller
-import logging, json, WebPM
+import logging, json, WebPM, locale
 
 
 from WebPM.models import models
 
 logger = logging.getLogger('WebPM')
 logger.info('started');
+
 
 
 # Create your views here.
@@ -116,6 +117,7 @@ def projects(request):
 @csrf_exempt
 def get_projects_data(request):
     logger.info('Preparing projects data')
+    locale.setlocale(locale.LC_ALL, 'ru')
 
     paymentsObject = Payments.objects.order_by('contract', 'paymentDate')
 
@@ -169,7 +171,7 @@ def get_projects_data(request):
             payment = paymentsFullData[item.id]
 
             logger.info(item.paymentDate)
-            month = item.paymentDate.strftime('%b%y')
+            month = item.paymentDate.strftime('%B%y')
             logger.info('month: ' + str(month))
             logger.info('id: ' + str(item.id))
             logger.info('payment amount: ' + str(item.paymentAmount))
@@ -236,7 +238,7 @@ def getMonthList(minDate, maxDate):
     i = 0
     for monthsRange in range(totalMonths(minDate) - 1, totalMonths(maxDate)):
         y, m = divmod(monthsRange, 12)
-        monthsDict[(datetime(y, m + 1, 1).strftime('%b %y'))] = i
+        monthsDict[(datetime(y, m + 1, 1).strftime('%B %y'))] = i
         i += 1
     return monthsDict
 
