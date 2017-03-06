@@ -290,7 +290,7 @@ $(document).ready(function(){
     //Enabling datetimepicker fields
     $('#paymentDatePicker').datetimepicker({
         format: 'DD.MM.YYYY',
-        minDate: moment(),
+        //minDate: moment(),
         allowInputToggle: true,
     });
 

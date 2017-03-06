@@ -3,6 +3,7 @@ from django.conf import settings
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import never_cache
 from django.db.models import Max, Min
 from django.utils.translation import ugettext as _
 from datetime import datetime
@@ -11,6 +12,7 @@ from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Co
 from itertools import groupby
 from operator import itemgetter, methodcaller
 import logging, json, WebPM, locale
+
 
 
 from WebPM.models import models
@@ -36,7 +38,7 @@ def index(request):
 def getProjectFormAttrs():
     logger.info('Fetching project attributes')
     data = {}
-    projectModels = [Companies, Countries, Cities, StageTypes, PaymentTypes, ContractTypes]
+    projectModels = [Projects, Companies, Countries, Cities, StageTypes, PaymentTypes, ContractTypes]
     for Model in projectModels:
         data[Model.__name__] = []
         for value in Model.objects.all():
@@ -109,11 +111,12 @@ def new_ref_value(request):
 
 
 # Page with projects info. Table with all the data from DB
+@never_cache
 def projects(request):
     logger.info('Projects page requested')
     return render(request, 'projects.html', {'LANGUAGES': settings.LANGUAGES})
 
-
+@never_cache
 @csrf_exempt
 def get_projects_data(request):
     logger.info('Preparing projects data')

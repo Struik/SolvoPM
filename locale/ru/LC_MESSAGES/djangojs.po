@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-05 22:29+0300\n"
+"POT-Creation-Date: 2017-03-06 16:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,23 +28,27 @@ msgstr "План"
 msgid "Fact"
 msgstr "Факт"
 
-#: .\WebPM\static\js\projects.js:297
+#: .\WebPM\static\js\projects.js:188
+msgid "Specified amount exceeds initial payment amount"
+msgstr "Указанная сумма превышает размер исходного платежа"
+
+#: .\WebPM\static\js\projects.js:298
 msgid "Project name"
 msgstr "Имя проекта"
 
-#: .\WebPM\static\js\projects.js:298
+#: .\WebPM\static\js\projects.js:299
 msgid "Manager"
 msgstr "Менеджер проекта"
 
-#: .\WebPM\static\js\projects.js:299
+#: .\WebPM\static\js\projects.js:300
 msgid "Current state"
 msgstr "Текущий статус"
 
-#: .\WebPM\static\js\projects.js:300
+#: .\WebPM\static\js\projects.js:301
 msgid "Contract type"
 msgstr "Тип договора"
 
-#: .\WebPM\static\js\projects.js:301
+#: .\WebPM\static\js\projects.js:302
 msgid "Contract name"
 msgstr "Имя договора"
 

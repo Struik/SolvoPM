@@ -145,6 +145,7 @@ $(document).ready(function() {
             rowsGroup: staticColumns,
             paging: false,
             ordering: false,
+//            autoWidth: true,
             columnDefs: [{
                 //Searching on some columns may distort the table. Thus leaving search only for stable columns
                 targets: columnsNoSearch,
@@ -153,6 +154,7 @@ $(document).ready(function() {
             {
                 //Bootstrap popovers (tooltip) for each payment in the table
                 targets: paymentsColumns,
+//                "width": "50%",
                 "createdCell": function (td, cellData, rowData, row, col) {
                     if(typeof(cellData) == 'number'){
                         var key = columns[col]['data'].replace('.planned','').replace('.confirmed','');
@@ -179,12 +181,13 @@ $(document).ready(function() {
 
     //Extra validator method for jquery validation plugin
     $.validator.addMethod('checkChildSumIsMore', function (value, element, param) {
-        var sum = parseInt(value) + parseInt($('#childPaymentSum').text());
+        var sum = parseInt(value) + (parseInt($('#childPaymentSum').text()) || 0);
+        console.log(sum);
         if (sum > parseInt($('#paymentInfoAmount').text())){
             return false;
         }
         return true;
-    }, 'Specified amount exceeds initial payment amount');
+    }, gettext('Specified amount exceeds initial payment amount'));
 
     //Enabling jquery validation addon on payment form
     infoForm.validate({
