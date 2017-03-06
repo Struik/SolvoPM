@@ -66,7 +66,25 @@
     width: 350px;
 }
 
-th{
-    /*font-weight: normal;
-    background-color: #d9edf7;*/
+.dataTable th{
+    font-weight: normal;
+    background-color: #337ab7;
+    color: white;
+}
+
+/*Hiding second column header*/
+#projectsHeaderSecond{
+    height: 0px !important;
+    padding: 0px;
+}
+
+/*Hiding second column header*/
+#projectsHeaderSecond th{
+    height: 0px !important;
+    padding: 0px;
+    border: 0px;
+}
+
+td.payment{
+    width: 83px;
 }

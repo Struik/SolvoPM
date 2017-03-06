@@ -98,13 +98,13 @@ $(document).ready(function() {
         var data =  projectData['payments']
         //ES6 structure below (Array...), might not be supported by some browsers
         //Indexes of static columns
-        var staticColumns = [...Array(5).keys()];
+        var staticColumns = [...Array(4).keys()];
         console.log('staticColumns: ' + staticColumns)
         var allColumns = [...Array(columns.length).keys()];
         console.log('allColumns: ' + allColumns)
         //Indexes of columns for which search function shouldn't work
         var columnsNoSearch = allColumns.slice();
-        columnsNoSearch.splice(0, 5)
+        columnsNoSearch.splice(0, 4)
         console.log('columnsNoSearch: ' + columnsNoSearch)
         //Indexes of columns with payment data
         var paymentsColumns = allColumns.slice()
@@ -116,19 +116,20 @@ $(document).ready(function() {
         var projectsHeaderFirst = $("#projectsHeaderFirst");
         var projectsHeaderSecond = $("#projectsHeaderSecond");
         for (var i = 0; i < staticColumns.length; i++){
-            projectsHeaderFirst.append('<th rowspan="2">' + columns[i].caption + '</th>');
+            projectsHeaderFirst.append('<th rowspan="2" class="text-center">' + columns[i].caption + '</th>');
         }
         for (var i = staticColumns.length; i < (paymentsColumns.length + staticColumns.length); i++){
             if (i % 2){
-                projectsHeaderFirst.append('<th colspan="2">' + columns[i].caption + '</th>');
-                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '">' + gettext('Plan') + '</th>');
+                projectsHeaderFirst.append('<th colspan="2" class="text-center">' + columns[i].caption + '</th>');
+                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '"></th>');
             }
             else{
-                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '">' + gettext('Fact') + '</th>');
+                //projectsHeaderFirst.append('<th class="header-left">' + columns[i].caption + '</th>');
+                projectsHeaderSecond.append('<th parent-title="' + columns[i].caption + '"></th>');
             }
         }
 
-
+//        debugger;
         //(plugin datatables.js)
         //Creating datatable, table headers and table data are generated in required way (array) on server side
         projectTable = $('#projects').DataTable({
@@ -145,24 +146,37 @@ $(document).ready(function() {
             rowsGroup: staticColumns,
             paging: false,
             ordering: false,
-//            autoWidth: true,
+            searching: false,
+            info: false,
+            autoWidth: false,
             columnDefs: [{
                 //Searching on some columns may distort the table. Thus leaving search only for stable columns
                 targets: columnsNoSearch,
-                searchable: false,
+                //searchable: false,
+            },
+            //TODO switch to variable
+            {
+                targets: [1,2,3,4,5],
+                width: '100px',
+            },
+            {
+                targets: [0],
+                width: '30px',
             },
             {
                 //Bootstrap popovers (tooltip) for each payment in the table
                 targets: paymentsColumns,
 //                "width": "50%",
-                "createdCell": function (td, cellData, rowData, row, col) {
+                render: $.fn.dataTable.render.number( ' ', '.', 0 ),
+                createdCell: function (td, cellData, rowData, row, col) {
+                    $(td).addClass('payment');
                     if(typeof(cellData) == 'number'){
                         var key = columns[col]['data'].replace('.planned','').replace('.confirmed','');
                         if(rowData[key].planned === rowData[key].confirmed){
                             $(td).addClass('bg-success');
                         }
                         $(td).append(' <span class="show-month glyphicon glyphicon-search hoverable pull-right"></span>');
-                        $(td).addClass('payment');
+
                     }
                 },
             }],
@@ -171,12 +185,11 @@ $(document).ready(function() {
         //Trigger event for bootstrap popover can be set for each element or one for all elements like here
         $('.payment').popover({
                 trigger: "hover",
-        })
+        });
 
         $('#splitTab').popover({
                 trigger: "hover",
-        })
-
+        });
     }
 
     //Extra validator method for jquery validation plugin

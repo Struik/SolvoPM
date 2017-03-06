@@ -138,7 +138,7 @@ def get_projects_data(request):
     logger.info('Payment period is ' + str(paymentPeriod))
 
     # Rather putting several lines in one column "Project" than having 2 extra columns (not implemented - table size issue)
-    columnsBasic = [_('Project name'), _('Manager'), _('Current state'), _('Contract type'), _('Contract name'), 'DT_RowId']
+    columnsBasic = ['#', _('Project name'), _('Contract type'), _('Contract name'), 'DT_RowId']
     # columnsBasic = ['Project', 'Contract type', 'Contract name', 'DT_RowId']
     logger.info('Basic column headers: ' + str(columnsBasic))
 
@@ -159,15 +159,22 @@ def get_projects_data(request):
     logger.info('PaymentDict: ' + str(paymentDict))
 
     paymentsFullData = {}
+    projectCounter = 0
+    currentProjectName = '';
 
-    for (key, group) in groupby(paymentsObject, lambda x: dict(zip(columnsBasic, [x.contract.project.name,
-                                                                                  'Ahmetshin',
-                                                                                  'Configuration',
+    for (key, group) in groupby(paymentsObject, lambda x: dict(zip(columnsBasic, [0, x.contract.project.name,
                                                                                   x.contract.contractType.name,
                                                                                   x.contract.name,
                                                                                   x.contract.id]))):
         paymentsByDates = {month: {'planned': '', 'confirmed': '', 'paymentIds': []} for month in paymentDict}
         logger.info('key: ' + str(key))
+        logger.info(key[_('Project name')])
+        logger.info(currentProjectName)
+        logger.info(key['#'])
+        logger.info(projectCounter)
+        if currentProjectName != key[_('Project name')]:
+            currentProjectName = key[_('Project name')]
+            projectCounter += 1
         logger.info(paymentsByDates)
         for item in group:
             paymentsFullData[item.id] = {}
@@ -221,6 +228,7 @@ def get_projects_data(request):
                         {'id': childPayment.id, 'date': childPayment.paymentDate.strftime('%d.%m.%y'),
                          'amount': childPayment.paymentAmount})
         paymentsByDates.update(key)
+        paymentsByDates['#'] = projectCounter
         logger.info('paymentsByDates: ' + str(paymentsByDates))
         logger.info('paymentsFullData: ' + str(paymentsFullData))
         # Python 3.5 syntax

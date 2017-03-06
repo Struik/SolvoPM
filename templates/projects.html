@@ -27,7 +27,7 @@
 
 {% block content %}
 
-<table id="projects" class="table table-bordered " cellspacing="0" width="100%">
+<table id="projects" class="table table-bordered " cellspacing="0">
     <thead>
     <tr id="projectsHeaderFirst">
     </tr>
@@ -118,12 +118,12 @@
                     <div class="alert alert-warning inherited-alert hidden" role="alert">{% trans "Payment is" %}
                         {% trans "inherited from" %}
                         <a href="#" class="alert-link show-split-payment">{% trans "this one" %}</a><br/>
-                        {% trans "Authority" %} - <a id="downloadSplitAgreement" href="" class="alert-link"></a>
+                        {% trans "Authority" %} - <u><a id="downloadSplitAgreement" href="" class="alert-link"></a></u>
                     </div>
 
                     <div class="alert alert-danger canceled-alert hidden" role="alert">{% trans "Payment is" %}
                         <strong>{% trans "canceled" %}. </strong>{% trans "No actions available" %}<br/>
-                        {% trans "Authority" %} - <a id="downloadCancelAgreement" href="" class="alert-link"></a>
+                        {% trans "Authority" %} - <u><a id="downloadCancelAgreement" href="" class="alert-link"></a></u>
                     </div>
 
                     <div id="paymentInfoPanel" class="panel panel-default">
