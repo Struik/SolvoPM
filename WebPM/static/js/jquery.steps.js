@@ -1457,10 +1457,20 @@ $.fn.steps.remove = function (index)
  * @param index {Integer} An integer that belongs to the position of a step
  * @param step {Object} The step object to change
  **/
-$.fn.steps.setStep = function (index, step)
+ //Changed according http://stackoverflow.com/questions/19957432/going-to-a-custom-step-with-jquery-steps/20683212#20683212
+$.fn.steps.setStep = function (step)
 {
-    throw new Error("Not yet implemented!");
+    var options = getOptions(this),
+        state = getState(this);
+
+    return _goToStep(this, options, state, step);
 };
+//Added according http://stackoverflow.com/questions/19957432/going-to-a-custom-step-with-jquery-steps/20683212#20683212
+function _goToStep(wizard, options, state, index)
+{
+    return paginationClick(wizard, options, state, index);
+}
+
 
 /**
  * Skips an certain amount of steps.

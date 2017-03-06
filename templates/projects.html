@@ -44,6 +44,7 @@
             <form id="infoForm" enctype="multipart/form-data">
                 <h3>{% trans "Month info" %}</h3>
                 <h3>{% trans "Payment info" %}</h3>
+                <h3>{% trans "Split payment info" %}</h3>
                 <section>
                     <div class="panel panel-default">
                         <div class="panel-body">
@@ -116,7 +117,7 @@
 
                     <div class="alert alert-warning inherited-alert hidden" role="alert">{% trans "Payment is" %}
                         {% trans "inherited from" %}
-                        <a href="#" class="alert-link">{% trans "this one" %}</a><br/>
+                        <a href="#" class="alert-link show-split-payment">{% trans "this one" %}</a><br/>
                         {% trans "Authority" %} - <a id="downloadSplitAgreement" href="" class="alert-link"></a>
                     </div>
 
@@ -376,6 +377,50 @@
 
                     </div>
                 </section>
+
+                <section>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div id="splitPaymentInfo" class="form-group" style="margin-bottom: 5px;">
+                                <table id="splitPaymentInfoTable"
+                                       class="table table-condensed table-borderless no-margin-bottom">
+                                    <thead>
+                                    </thead>
+                                    <tbody id="splitPaymentInfoTableBody">
+                                    <tr>
+                                        <td>{% trans "Amount" %}:</td>
+                                        <td id="splitPaymentInfoAmount"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "Planned" %}:</td>
+                                        <td id="splitPaymentInfoPlanned"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "Document name" %}:</td>
+                                        <td><a id="splitPaymentInfoDocument" href=""></a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="form-group">
+                                <table id="splitPaymentChildsTable" class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>{% trans "Amount" %}</th>
+                                        <th>{% trans "Planned" %}</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="splitPaymentChildsTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </form>
         </div>
     </div>

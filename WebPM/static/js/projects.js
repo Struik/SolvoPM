@@ -307,7 +307,7 @@ $(document).ready(function() {
     });
 
     //Showing page with payment actions on modal form page
-    $("#paymentsTable").on("click", ".show-payment", function() {
+    $("#infoForm").on("click", ".show-payment", function() {
         var row = $(this).parents('tr');
         var paymentId = row.attr('id');
         console.log(paymentsFullData[paymentId]);
@@ -350,6 +350,7 @@ $(document).ready(function() {
             $('#downloadSplitAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementId);
             $('#downloadSplitAgreement').html(paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementName);
             $('.inherited-alert').removeClass('hidden');
+            $('.inherited-alert').attr('parent-id', paymentsFullData[paymentId].parentPayment);
         }
 
         if(paymentsFullData[paymentId].canceled){
@@ -363,8 +364,34 @@ $(document).ready(function() {
             $('.cancel-panel').addClass('hidden');
         }
 
+        infoForm.steps('setStep', 1);
+    });
+
+    //Showing page with payment actions on modal form page
+    $("#infoForm").on("click", "a.show-split-payment", function(e) {
+        e.preventDefault();
+        $("#splitPaymentChildsTableBody tr").remove();
+        var parentPaymentId =  $('.inherited-alert').attr('parent-id');
+        $('#splitPaymentInfo').attr('payment-id', parentPaymentId);
+        $('#splitPaymentInfoAmount').html(paymentsFullData[parentPaymentId].amount);
+        $('#splitPaymentInfoPlanned').html(paymentsFullData[parentPaymentId].date);
+        $('#splitPaymentInfoDocument').attr('href','download_agreement?id=' + paymentsFullData[parentPaymentId].splitAgreementId);
+        $('#splitPaymentInfoDocument').html(paymentsFullData[parentPaymentId].splitAgreementName);
+        var payment;
+
+        for (var i = 0; i < paymentsFullData[parentPaymentId].childPayments.length; i++) {
+            payment = paymentsFullData[parentPaymentId].childPayments[i];
+
+            $('#splitPaymentChildsTableBody').append('<tr id="' + payment.id + '">'
+                + '<td>' + (i + 1) + '</td>'
+                + '<td>' + payment.amount + '</td>'
+                + '<td>' + payment.date + '</td>'
+                + '<td><span class="show-payment glyphicon glyphicon-pencil hoverable"/></td></tr>');
+        }
+
         infoForm.steps('next');
     });
+
 
     //Enabling datetimepicker fields
     $('#confirmDatePicker').datetimepicker({

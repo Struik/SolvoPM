@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-01 16:07+0300\n"
+"POT-Creation-Date: 2017-03-02 14:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,32 +17,36 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: .\WebPM\views.py:136 .\templates\projects.html:67
+msgid "Project name"
+msgstr ""
+
+#: .\WebPM\views.py:136 .\templates\projects.html:71
+msgid "Manager"
+msgstr ""
+
+#: .\WebPM\views.py:136 .\templates\projects.html:75
+msgid "Current state"
+msgstr ""
+
+#: .\WebPM\views.py:136 .\templates\projects.html:79
+msgid "Contract type"
+msgstr ""
+
+#: .\WebPM\views.py:136 .\templates\projects.html:83
+msgid "Contract name"
+msgstr ""
+
+#: .\WebPM\views.py:203
+msgid "Canceled"
+msgstr ""
+
 #: .\templates\projects.html:56
 msgid "Month info"
 msgstr ""
 
 #: .\templates\projects.html:57
 msgid "Payment info"
-msgstr ""
-
-#: .\templates\projects.html:67
-msgid "Project name"
-msgstr ""
-
-#: .\templates\projects.html:71
-msgid "Manager"
-msgstr ""
-
-#: .\templates\projects.html:75
-msgid "Current state"
-msgstr ""
-
-#: .\templates\projects.html:79
-msgid "Contract type"
-msgstr ""
-
-#: .\templates\projects.html:83
-msgid "Contract name"
 msgstr ""
 
 #: .\templates\projects.html:87 .\templates\projects.html:104
@@ -58,6 +62,17 @@ msgstr ""
 #: .\templates\projects.html:103 .\templates\projects.html:148
 #: .\templates\projects.html:293
 msgid "Amount"
+msgstr ""
+
+#: .\templates\projects.html:120
+msgid "You may only unconfirm it"
+msgstr ""
+
+#: .\templates\projects.html:123
+msgid ""
+" Payment was\n"
+"                        <strong>postponed</strong> from <em id=\"initialDate"
+"\"></em>"
 msgstr ""
 
 #: .\templates\projects.html:124 .\templates\projects.html:135

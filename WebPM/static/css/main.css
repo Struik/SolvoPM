@@ -1,5 +1,4 @@
 .btn-ghost{
-
 	background: transparent;
 	/*color: #777;*/
 
@@ -63,4 +62,6 @@
     cursor: hand;
 }
 
-
+.modal-sm {
+    width: 350px;
+}
