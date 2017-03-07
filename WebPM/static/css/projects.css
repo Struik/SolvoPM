@@ -36,3 +36,46 @@ td span{
 .no-margin-bottom {
     margin-bottom: 0px;
 }
+
+
+.dataTable th{
+    font-weight: normal;
+    background-color: #337ab7;
+    color: white;
+}
+
+.static-columns:first-child{
+    min-width: 30px;
+}
+
+.static-columns:not(:first-child){
+    min-width: 100px;
+}
+
+/*Hiding second column header*/
+#projectsHeaderSecond{
+    height: 0px !important;
+    padding: 0px;
+}
+
+/*Hiding second column header*/
+#projectsHeaderSecond th{
+    height: 0px !important;
+    padding: 0px;
+    border: 0px;
+}
+
+td.payment{
+    width: 78px;
+    min-width: 78px;
+}
+
+td.payment:nth-child(odd) {
+    border-right-style: dashed;
+    border-right-color: rgb(230, 230, 230);
+}
+
+td.payment:nth-child(event) {
+    border-left-style: dashed;
+    border-left-color: rgb(230, 230, 230);
+}

@@ -96,6 +96,8 @@ $(document).ready(function() {
         console.log(projectData)
         var columns = projectData['columns']
         var data =  projectData['payments']
+        //Variable will be used for createdCell option in datatables
+        var key;
         //ES6 structure below (Array...), might not be supported by some browsers
         //Indexes of static columns
         var staticColumns = [...Array(4).keys()];
@@ -116,7 +118,7 @@ $(document).ready(function() {
         var projectsHeaderFirst = $("#projectsHeaderFirst");
         var projectsHeaderSecond = $("#projectsHeaderSecond");
         for (var i = 0; i < staticColumns.length; i++){
-            projectsHeaderFirst.append('<th rowspan="2" class="text-center">' + columns[i].caption + '</th>');
+            projectsHeaderFirst.append('<th rowspan="2" class="static-columns text-center">' + columns[i].caption + '</th>');
         }
         for (var i = staticColumns.length; i < (paymentsColumns.length + staticColumns.length); i++){
             if (i % 2){
@@ -152,31 +154,30 @@ $(document).ready(function() {
             columnDefs: [{
                 //Searching on some columns may distort the table. Thus leaving search only for stable columns
                 targets: columnsNoSearch,
-                //searchable: false,
-            },
-            //TODO switch to variable
-            {
-                targets: [1,2,3,4,5],
-                width: '100px',
-            },
-            {
-                targets: [0],
-                width: '30px',
+                searchable: false,
             },
             {
                 //Bootstrap popovers (tooltip) for each payment in the table
                 targets: paymentsColumns,
-//                "width": "50%",
-                render: $.fn.dataTable.render.number( ' ', '.', 0 ),
+                render:     $.fn.dataTable.render.number( ' ', '.', 0 ),
                 createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).addClass('payment');
+                    $(td).addClass('payment').addClass('td-hoverable');
+
                     if(typeof(cellData) == 'number'){
-                        var key = columns[col]['data'].replace('.planned','').replace('.confirmed','');
+                        key = columns[col]['data'].replace('.planned','').replace('.confirmed','');
                         if(rowData[key].planned === rowData[key].confirmed){
                             $(td).addClass('bg-success');
                         }
-                        $(td).append(' <span class="show-month glyphicon glyphicon-search hoverable pull-right"></span>');
-
+                    }
+                    var column = columns[col]['data'].split('.')
+                    if(column[1] == 'planned'){
+                        $(td).addClass('text-center').addClass('td-planned').addClass('show-month');
+                    }
+                    if(column[1] == 'confirmed'){
+                        $(td).addClass('td-confirmed').addClass('show-month');
+                        if(column[0] == key){
+                            $(td).append(' <span class="glyphicon glyphicon-search hoverable pull-right"></span>');
+                        }
                     }
                 },
             }],
@@ -270,10 +271,29 @@ $(document).ready(function() {
         },
     });
 
+    $("#projects").on("mouseenter", ".td-planned", function() {
+        $(this).addClass('bg-info').next('td').addClass('bg-info');
+        console.log('AAA');
+    });
+    $("#projects").on("mouseenter", ".td-confirmed", function() {
+        $(this).addClass('bg-info').prev('td').addClass('bg-info');
+        console.log('AAA1');
+    });
+    $("#projects").on("mouseleave", ".td-planned", function() {
+        $(this).removeClass('bg-info').next('td').removeClass('bg-info');
+        console.log('AAA2');
+    });
+    $("#projects").on("mouseleave", ".td-confirmed", function() {
+        $(this).removeClass('bg-info').prev('td').removeClass('bg-info');
+        console.log('AAA3');
+    });
+
+
+
     //Showing modal form with info and actions for each payment when zoom icon is clicked
     $("#projects").on("click", ".show-month", function() {
         $("#paymentsTableBody tr").remove();
-        var cell = $(this).parents('td');
+        var cell = $(this);
         var cellIndex = projectTable.cell( cell ).index();
         console.log(cellIndex);
         var rowData = projectTable.row( cellIndex['row'] ).data();

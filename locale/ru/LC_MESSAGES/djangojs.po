@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-06 16:57+0300\n"
+"POT-Creation-Date: 2017-03-07 13:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,35 +20,27 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\WebPM\static\js\projects.js:124
-msgid "Plan"
-msgstr "План"
-
-#: .\WebPM\static\js\projects.js:127
-msgid "Fact"
-msgstr "Факт"
-
-#: .\WebPM\static\js\projects.js:188
+#: .\WebPM\static\js\projects.js:203
 msgid "Specified amount exceeds initial payment amount"
 msgstr "Указанная сумма превышает размер исходного платежа"
 
-#: .\WebPM\static\js\projects.js:298
+#: .\WebPM\static\js\projects.js:313
 msgid "Project name"
 msgstr "Имя проекта"
 
-#: .\WebPM\static\js\projects.js:299
+#: .\WebPM\static\js\projects.js:314
 msgid "Manager"
 msgstr "Менеджер проекта"
 
-#: .\WebPM\static\js\projects.js:300
+#: .\WebPM\static\js\projects.js:315
 msgid "Current state"
 msgstr "Текущий статус"
 
-#: .\WebPM\static\js\projects.js:301
+#: .\WebPM\static\js\projects.js:316
 msgid "Contract type"
 msgstr "Тип договора"
 
-#: .\WebPM\static\js\projects.js:302
+#: .\WebPM\static\js\projects.js:317
 msgid "Contract name"
 msgstr "Имя договора"
 
@@ -59,3 +51,12 @@ msgstr "Заполните это поле"
 #: .\WebPM\static\js\validate.fix.js:3
 msgid "Please enter only digits"
 msgstr "Вводите только цифры"
+
+#: .\WebPM\static\js\validate.fix.js:4
+msgid "Please enter no more than {0} characters"
+msgstr "Введите не более {0} символов"
+
+#: .\WebPM\static\js\validate.fix.js:5
+msgid "Please enter at least {0} characters"
+msgstr "Введите не менее {0} символов"
+

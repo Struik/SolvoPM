@@ -49,11 +49,11 @@
     display: none;
 }
 
-.hoverable{
+.hoverable {
     color: #999999;
 }
 
-.hoverable:hover{
+.hoverable:hover {
     color: #333333;
 }
 
@@ -62,29 +62,15 @@
     cursor: hand;
 }
 
+.td-hoverable {
+    cursor: pointer;
+    cursor: hand;
+}
+
+.td-hoverable:hover .hoverable{
+    color: #333333;
+}
+
 .modal-sm {
     width: 350px;
-}
-
-.dataTable th{
-    font-weight: normal;
-    background-color: #337ab7;
-    color: white;
-}
-
-/*Hiding second column header*/
-#projectsHeaderSecond{
-    height: 0px !important;
-    padding: 0px;
-}
-
-/*Hiding second column header*/
-#projectsHeaderSecond th{
-    height: 0px !important;
-    padding: 0px;
-    border: 0px;
-}
-
-td.payment{
-    width: 83px;
 }
