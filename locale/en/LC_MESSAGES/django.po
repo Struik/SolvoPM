@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-06 18:46+0300\n"
+"POT-Creation-Date: 2017-03-07 17:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\WebPM\views.py:141 .\templates\main.html:74 .\templates\projects.html:57
+#: .\WebPM\views.py:141 .\WebPM\views.py:171 .\WebPM\views.py:175
+#: .\WebPM\views.py:176 .\templates\main.html:74 .\templates\projects.html:57
 msgid "Project name"
-msgstr ""
-
-#: .\WebPM\views.py:141 .\templates\projects.html:61
-msgid "Manager"
-msgstr ""
-
-#: .\WebPM\views.py:141 .\templates\projects.html:65
-msgid "Current state"
 msgstr ""
 
 #: .\WebPM\views.py:141 .\templates\projects.html:69
@@ -37,7 +30,7 @@ msgstr ""
 msgid "Contract name"
 msgstr ""
 
-#: .\WebPM\views.py:208
+#: .\WebPM\views.py:215
 msgid "Canceled"
 msgstr ""
 
@@ -80,6 +73,14 @@ msgstr ""
 
 #: .\templates\projects.html:47
 msgid "Split payment info"
+msgstr ""
+
+#: .\templates\projects.html:61
+msgid "Manager"
+msgstr ""
+
+#: .\templates\projects.html:65
+msgid "Current state"
 msgstr ""
 
 #: .\templates\projects.html:77 .\templates\projects.html:94

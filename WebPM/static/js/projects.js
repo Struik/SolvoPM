@@ -161,22 +161,22 @@ $(document).ready(function() {
                 targets: paymentsColumns,
                 render:     $.fn.dataTable.render.number( ' ', '.', 0 ),
                 createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).addClass('payment').addClass('td-hoverable');
+                    $(td).addClass('payment');
+                    var column = columns[col]['data'].split('.')
 
                     if(typeof(cellData) == 'number'){
+                        $(td).addClass('text-center').addClass('show-month').addClass('td-hoverable');
                         key = columns[col]['data'].replace('.planned','').replace('.confirmed','');
                         if(rowData[key].planned === rowData[key].confirmed){
                             $(td).addClass('bg-success');
                         }
                     }
-                    var column = columns[col]['data'].split('.')
-                    if(column[1] == 'planned'){
-                        $(td).addClass('text-center').addClass('td-planned').addClass('show-month');
-                    }
-                    if(column[1] == 'confirmed'){
-                        $(td).addClass('td-confirmed').addClass('show-month');
-                        if(column[0] == key){
-                            $(td).append(' <span class="glyphicon glyphicon-search hoverable pull-right"></span>');
+
+                    if(column[1] === 'confirmed' && column[0] === key){
+                        console.log(cellData);
+                        $(td).append(' <span class="glyphicon glyphicon-search hoverable pull-right"></span>');
+                        if(!cellData){
+                            $(td).addClass('td-confirmed').addClass('show-month').addClass('td-hoverable');
                         }
                     }
                 },
@@ -376,7 +376,7 @@ $(document).ready(function() {
         if(paymentsFullData[paymentId].postponed){
             console.log('Is postponed');
             $('#downloadPostponeAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentId].postponeAgreementId);
-            $('#downloadPostponeAgreement').html(paymentsFullData[paymentId].postponeAgreementName);
+            $('#downloadPostponeAgreement').prepend(paymentsFullData[paymentId].postponeAgreementName);
             $('#initialDate').html(paymentsFullData[paymentId].initialDate);
             $('.postponed-alert').removeClass('hidden');
         }
@@ -384,7 +384,7 @@ $(document).ready(function() {
         if(paymentsFullData[paymentId].parentPayment){
             console.log('Has parent');
             $('#downloadSplitAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementId);
-            $('#downloadSplitAgreement').html(paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementName);
+            $('#downloadSplitAgreement').prepend(paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementName);
             $('.inherited-alert').removeClass('hidden');
             $('.inherited-alert').attr('parent-id', paymentsFullData[paymentId].parentPayment);
         }
@@ -392,7 +392,7 @@ $(document).ready(function() {
         if(paymentsFullData[paymentId].canceled){
             console.log('Is canceled');
             $('#downloadCancelAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentId].cancelAgreementId);
-            $('#downloadCancelAgreement').html(paymentsFullData[paymentId].cancelAgreementName);
+            $('#downloadCancelAgreement').prepend(paymentsFullData[paymentId].cancelAgreementName);
             $('.canceled-alert').removeClass('hidden');
             $('.confirm-panel').addClass('hidden');
             $('.postpone-panel').addClass('hidden');

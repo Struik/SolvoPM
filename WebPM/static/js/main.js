@@ -543,6 +543,13 @@ $(document).ready(function(){
     var handler = function() { gotoNextTabIndex(this.$control_input[0]); };
     selectCountry.on('change', handler);
 
+    //Focus on first form field when opening form
+    /*TODO Form could be hidden and shown again when user is on the first page.
+    Consider setting focus on the first page field.*/
+    $('#myModal').on('shown.bs.modal', function (e) {
+        $('[tabindex="1"]').focus();
+    })
+
 //    $("#paymentDatePicker").on("dp.change", function(e) {
 //        alert('hey');
 //    });
