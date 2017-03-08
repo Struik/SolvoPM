@@ -164,20 +164,26 @@ $(document).ready(function() {
                     $(td).addClass('payment');
                     var column = columns[col]['data'].split('.')
 
-                    if(typeof(cellData) == 'number'){
+                    if(rowData[column[0]].planned.length == 0){
+                        key = '';
+                        return;
+                    }
+
+                    if(typeof(cellData) === 'number' && column[1] === 'planned'){
+                        key = column[0];
                         $(td).addClass('text-center').addClass('show-month').addClass('td-hoverable');
-                        key = columns[col]['data'].replace('.planned','').replace('.confirmed','');
-                        if(rowData[key].planned === rowData[key].confirmed){
-                            $(td).addClass('bg-success');
+                        if(column[1] === 'planned'){
+                            $(td).addClass('td-planned');
                         }
                     }
 
                     if(column[1] === 'confirmed' && column[0] === key){
-                        console.log(cellData);
                         $(td).append(' <span class="glyphicon glyphicon-search hoverable pull-right"></span>');
-                        if(!cellData){
-                            $(td).addClass('td-confirmed').addClass('show-month').addClass('td-hoverable');
-                        }
+                        $(td).addClass('td-confirmed').addClass('show-month').addClass('td-hoverable');
+                    }
+
+                    if(rowData[key].planned === rowData[key].confirmed && rowData[key].planned){
+                        $(td).addClass('bg-success');
                     }
                 },
             }],
@@ -273,19 +279,15 @@ $(document).ready(function() {
 
     $("#projects").on("mouseenter", ".td-planned", function() {
         $(this).addClass('bg-info').next('td').addClass('bg-info');
-        console.log('AAA');
     });
     $("#projects").on("mouseenter", ".td-confirmed", function() {
         $(this).addClass('bg-info').prev('td').addClass('bg-info');
-        console.log('AAA1');
     });
     $("#projects").on("mouseleave", ".td-planned", function() {
         $(this).removeClass('bg-info').next('td').removeClass('bg-info');
-        console.log('AAA2');
     });
     $("#projects").on("mouseleave", ".td-confirmed", function() {
         $(this).removeClass('bg-info').prev('td').removeClass('bg-info');
-        console.log('AAA3');
     });
 
 
