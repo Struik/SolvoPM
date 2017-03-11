@@ -58,9 +58,9 @@ $(document).ready(function() {
 
     //Changing heading color when showing panel body
     $('.collapse').on('show.bs.collapse', function(){
-        $(this).parents('.panel').addClass("panel-info");
+        $(this).parents('.panel').addClass("panel-expanded");
     }).on('hide.bs.collapse', function(){
-        $(this).parents('.panel').removeClass("panel-info");
+        $(this).parents('.panel').removeClass("panel-expanded");
     });
 
 
@@ -290,6 +290,13 @@ $(document).ready(function() {
         $(this).removeClass('bg-info').prev('td').removeClass('bg-info');
     });
 
+    $("#infoForm").on("mouseenter", ".tr-hoverable", function() {
+        $(this).addClass('bg-info');
+    });
+    $("#infoForm").on("mouseleave", ".tr-hoverable", function() {
+        $(this).removeClass('bg-info');
+    });
+
 
 
     //Showing modal form with info and actions for each payment when zoom icon is clicked
@@ -323,12 +330,13 @@ $(document).ready(function() {
                 paymentClass = ''
             }
 
-            $('#paymentsTableBody').append('<tr id="' + paymentIds[i] + '" class="' + paymentClass + '">'
+            $('#paymentsTableBody').
+                append('<tr id="' + paymentIds[i] + '" class=" tr-hoverable show-payment ' + paymentClass + '">'
                 + '<td>' + (i + 1) + '</td>'
                 + '<td>' + payment.amount + '</td>'
                 + '<td>' + payment.date + '</td>'
                 + '<td>' + payment.confirmedDate + '</td>'
-                + '<td><span class="show-payment glyphicon glyphicon-pencil hoverable"/></td></tr>');
+                + '<td><span class="glyphicon glyphicon-pencil hoverable"/></td></tr>');
         }
 
         //Might consider serializing it instead of
@@ -346,11 +354,12 @@ $(document).ready(function() {
 
     //Showing page with payment actions on modal form page
     $("#infoForm").on("click", ".show-payment", function() {
-        var row = $(this).parents('tr');
+        var row = $(this);
         var paymentId = row.attr('id');
         console.log(paymentsFullData[paymentId]);
         $('#paymentInfo').attr('payment-id', paymentId);
         $('#paymentInfoAmount').html(paymentsFullData[paymentId].amount);
+        $('#parentPaymentAmount').html(paymentsFullData[paymentId].amount);
         $('#paymentInfoPlanned').html(paymentsFullData[paymentId].date);
         $('#paymentInfoConfirmed').html(paymentsFullData[paymentId].confirmedDate);
 
@@ -378,7 +387,7 @@ $(document).ready(function() {
         if(paymentsFullData[paymentId].postponed){
             console.log('Is postponed');
             $('#downloadPostponeAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentId].postponeAgreementId);
-            $('#downloadPostponeAgreement').prepend(paymentsFullData[paymentId].postponeAgreementName);
+            $('#postponeAgreementName').html(paymentsFullData[paymentId].postponeAgreementName);
             $('#initialDate').html(paymentsFullData[paymentId].initialDate);
             $('.postponed-alert').removeClass('hidden');
         }
@@ -386,7 +395,7 @@ $(document).ready(function() {
         if(paymentsFullData[paymentId].parentPayment){
             console.log('Has parent');
             $('#downloadSplitAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementId);
-            $('#downloadSplitAgreement').prepend(paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementName);
+            $('#splitAgreementName').html(paymentsFullData[paymentsFullData[paymentId].parentPayment].splitAgreementName);
             $('.inherited-alert').removeClass('hidden');
             $('.inherited-alert').attr('parent-id', paymentsFullData[paymentId].parentPayment);
         }
@@ -394,7 +403,7 @@ $(document).ready(function() {
         if(paymentsFullData[paymentId].canceled){
             console.log('Is canceled');
             $('#downloadCancelAgreement').attr('href','download_agreement?id=' + paymentsFullData[paymentId].cancelAgreementId);
-            $('#downloadCancelAgreement').prepend(paymentsFullData[paymentId].cancelAgreementName);
+            $('#cancelAgreementName').html(paymentsFullData[paymentId].cancelAgreementName);
             $('.canceled-alert').removeClass('hidden');
             $('.confirm-panel').addClass('hidden');
             $('.postpone-panel').addClass('hidden');
@@ -420,11 +429,11 @@ $(document).ready(function() {
         for (var i = 0; i < paymentsFullData[parentPaymentId].childPayments.length; i++) {
             payment = paymentsFullData[parentPaymentId].childPayments[i];
 
-            $('#splitPaymentChildsTableBody').append('<tr id="' + payment.id + '">'
+            $('#splitPaymentChildsTableBody').append('<tr id="' + payment.id + '" class="tr-hoverable show-payment">'
                 + '<td>' + (i + 1) + '</td>'
                 + '<td>' + payment.amount + '</td>'
                 + '<td>' + payment.date + '</td>'
-                + '<td><span class="show-payment glyphicon glyphicon-pencil hoverable"/></td></tr>');
+                + '<td><span class="glyphicon glyphicon-pencil hoverable"/></td></tr>');
         }
 
         infoForm.steps('next');
@@ -601,6 +610,7 @@ $(document).ready(function() {
     var paymentAmount;
     var paymentId;
     var paymentSum = 0;
+    var paymentRemainder = 0;
     var splitPayment = {'paymentId': '', 'childPayments': ''};
 
 
@@ -616,6 +626,8 @@ $(document).ready(function() {
             paymentsQty++;
             paymentSum += parseInt(paymentAmount);
             $('#childPaymentSum').text(paymentSum);
+            paymentRemainder = parseInt($('#paymentInfoAmount').text()) - paymentSum;
+            $('#remainder').text(paymentRemainder);
 
             if (paymentsQty == 1)
             {
@@ -625,6 +637,7 @@ $(document).ready(function() {
                 console.log(splitPayment);
                 $('#paymentsListLabel').removeClass('hidden');
                 $('#childPaymentsTable').removeClass('hidden');
+                $('#splitPaymentHint').removeClass('hidden');
             }
 
             console.log('Payment adding. Payment date: ' + paymentDate + ', payment amount: ' + paymentAmount +

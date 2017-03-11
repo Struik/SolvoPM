@@ -64,14 +64,21 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <form id="projectAddForm" method="post">
-                <h3>Description</h3>
+                <h3>{% trans "Description" %}</h3>
                 <!--<h3>Stages</h3>-->
-                <h3>Contracts</h3>
+                <h3>{% trans "Contracts" %}</h3>
 
                 <section>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="projectName" name="projectName" value=""
-                               placeholder="{% trans 'Project name' %}" tabindex="1">
+                        <select class="form-control selfselectized" id="selectProject" name="selectProject"
+                                placeholder="{% trans 'Select or add project' %}" reference_id="Projects" tabindex="1">
+                            <option value="">Select a project</option>
+                            {% for query in projectAttrs.Projects %}
+                            <option value="{{query.id}}">{{query.name}}</option>
+                            {% endfor %}
+                        </select>
+                        <!--<input type="text" class="form-control" id="projectName" name="projectName" value=""-->
+                               <!--placeholder="{% trans 'Project name' %}" tabindex="1">-->
                     </div>
 
                     <!--<div class="alert alert-info alert-dismissible" role="alert">-->
@@ -186,23 +193,30 @@
                                        value="" placeholder="{% trans 'Contract name' %}" tabindex="7" disabled>
                             </div>
 
+                            <hr>
 
                             <div class="form-group">
-                                <label id="paymentsListLabel" class="control-label text-center hidden">Payments
-                                    info</label>
+                                <label id="paymentsListLabel" class="control-label text-center hidden">
+                                    {% trans "Payment schedule" %}
+                                </label>
 
                                 <table id="paymentsTable" class="table table-condensed table-hover hidden">
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Amount</th>
-                                        <th>Date</th>
+                                        <th>{% trans "Amount" %}</th>
+                                        <th>{% trans "Date" %}</th>
                                         <th></th>
                                     </tr>
                                     </thead>
                                     <tbody id="paymentsTableBody">
                                     </tbody>
                                 </table>
+                            </div>
+
+                            <div id="paymentHint" class="form-group text-right hidden">
+                                <p class="text-inline">{% trans 'Total' %}: </p>
+                                <em id="paymentSum" class="text-inline">0</em>
                             </div>
 
                             <div class="form-group">
@@ -221,29 +235,27 @@
                                        placeholder="{% trans 'Payment amount' %}" tabindex="9" disabled>
                             </div>
 
-                            <div class="alert alert-danger save-alert hidden" role="alert">Please add payment or clear
-                                fields
+                            <div class="alert alert-danger save-alert hidden" role="alert">
+                                {% trans "Please add payment or clear fields" %}
                             </div>
 
                             <div class="form-group">
                                 <button type="button" class="btn btn-success payment-attr btn-block" id="addPayment"
-                                        disabled>Add
-                                    payment
+                                        disabled>{% trans "Add payment" %}
                                 </button>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group hidden">
                                 <button id="clearPayments" type="button" class="btn btn-warning payment-attr btn-block"
-                                        disabled>
-                                    Clear payments
+                                        disabled>{% trans "Clear payments" %}
                                 </button>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <button id="saveContract" type="button" class="btn btn-info  btn-block" disabled>Save
-                            contract
+                        <button id="saveContract" type="button" class="btn btn-info  btn-block" disabled>
+                            {% trans "Save contract" %}
                         </button>
                     </div>
 

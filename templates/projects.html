@@ -58,12 +58,12 @@
                                         <td id="projectName"></td>
                                     </tr>
                                     <!--<tr>-->
-                                        <!--<td>{% trans "Manager" %}:</td>-->
-                                        <!--<td id="manager"></td>-->
+                                    <!--<td>{% trans "Manager" %}:</td>-->
+                                    <!--<td id="manager"></td>-->
                                     <!--</tr>-->
                                     <!--<tr>-->
-                                        <!--<td>{% trans "Current state" %}:</td>-->
-                                        <!--<td id="currentState"></td>-->
+                                    <!--<td>{% trans "Current state" %}:</td>-->
+                                    <!--<td id="currentState"></td>-->
                                     <!--</tr>-->
                                     <tr>
                                         <td>{% trans "Contract type" %}:</td>
@@ -113,6 +113,7 @@
                     <div class="alert alert-info postponed-alert hidden" role="alert">{% trans "Payment is" %}
                         <strong>{% trans "postponed" %} </strong>{% trans "from" %} <em id="initialDate"></em><br/>
                         {% trans "Authority" %} - <a id="downloadPostponeAgreement" href="" class="alert-link">
+                            <p id="postponeAgreementName" class="text-inline"></p>
                             <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -121,6 +122,7 @@
                         {% trans "inherited from" %}
                         <a href="#" class="alert-link show-split-payment">{% trans "this one" %}</a><br/>
                         {% trans "Authority" %} - <a id="downloadSplitAgreement" href="" class="alert-link">
+                            <p id="splitAgreementName" class="text-inline"></p>
                             <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -128,6 +130,7 @@
                     <div class="alert alert-danger canceled-alert hidden" role="alert">{% trans "Payment is" %}
                         <strong>{% trans "canceled" %}. </strong>{% trans "No actions available" %}<br/>
                         {% trans "Authority" %} - <a id="downloadCancelAgreement" href="" class="alert-link">
+                            <p id="cancelAgreementName" class="text-inline"></p>
                             <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -292,16 +295,22 @@
                                             </thead>
                                             <tbody id="childPaymentsTableBody">
                                             </tbody>
-                                            <tfoot>
-                                            <tr>
-                                                <td><p class="pull-right">Total: </p></td>
-                                                <td><p id="childPaymentSum" name="childPaymentSum"/></td>
-                                                <td/>
-                                            </tr>
-                                            </tfoot>
                                         </table>
-                                        <div class="alert alert-danger sum-alert hidden" role="alert">Child payment's
-                                            sum is <strong>less</strong> than initial amount
+                                    </div>
+
+                                    <div id="splitPaymentHint" class="form-group text-right hidden">
+                                        <p class="text-inline">{% trans 'Total' %}: </p>
+                                        <em id="childPaymentSum" class="text-inline">0</em>
+                                        <p class="text-inline">{% trans 'of' %} </p>
+                                        <em id="parentPaymentAmount" class="text-inline"></em>
+                                        <br>
+                                        <p class="text-inline">{% trans 'Remainder' %}: </p>
+                                        <em id="remainder" class="text-inline"></em>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="alert alert-danger sum-alert hidden" role="alert">
+                                            {% trans "Child payment's sum is less than initial amount" %}
                                         </div>
                                     </div>
 

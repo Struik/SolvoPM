@@ -117,6 +117,12 @@ $(document).ready(function(){
 
     //This variables are needed to have possibility to programmatically clear and update selectized fields.
     //One variable for each select
+    var selectProject = $('#selectProject').selectize({
+        create: true,
+        onChange: function(value) {
+            gotoNextTabIndex(this.$control_input[0]);
+        },
+    });
     var $selectStage = $('#selectStage').selectize();
     var $selectPayment = $('#selectPayment').selectize();
     var $selectCity = $('#selectCity').selectize({
@@ -185,6 +191,7 @@ $(document).ready(function(){
     //is selected. When there is no value selected then <select> is shown which has "form-control" class from the base
     //html. Thus "has-error" (plus "has-danger") class works correctly and lights borders with red but "has-success"
     //wasn't visible
+    //It's fun reading comments few weeks later and getting no clue what do they mean
     $('div .selectize-input').addClass('form-control');
 
     //Enabling jquery validation addon on project adding form
@@ -194,9 +201,8 @@ $(document).ready(function(){
         onsubmit: false,
         //debug: true,
         rules: {
-            projectName: {
+            selectProject: {
                 required: true,
-                minlength: 3,
             },
             selectCompany: {
                 required: true,

@@ -62,15 +62,19 @@
     cursor: hand;
 }
 
-.td-hoverable {
+.tr-hoverable td, .td-hoverable {
     cursor: pointer;
     cursor: hand;
 }
 
-.td-hoverable:hover .hoverable{
+.tr-hoverable:hover .hoverable, .td-hoverable:hover .hoverable{
     color: #333333;
 }
 
 .modal-sm {
     width: 360px;
+}
+
+.text-inline {
+    display: inline;
 }

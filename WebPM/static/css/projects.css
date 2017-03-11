@@ -79,3 +79,7 @@ td.payment:nth-child(event) {
     border-left-style: dashed;
     border-left-color: rgb(230, 230, 230);
 }
+
+.panel-expanded {
+    border-color:  #000000;
+}
