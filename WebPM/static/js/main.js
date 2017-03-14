@@ -124,9 +124,9 @@ $(document).ready(function(){
             var project = $.grep(projects.Projects, function(e){ return e.pk == value; })[0];
             if(project){
                 console.log('Existing project chosen. Changing other fields.');
-                $selectCompany[0].selectize.setValue(project.fields.company);
-                $selectCountry[0].selectize.setValue(project.fields.country);
-                $selectCity[0].selectize.setValue(project.fields.city);
+                $selectCompany[0].selectize.setValue(project.fields.company, true);
+                $selectCountry[0].selectize.setValue(project.fields.country, true);
+                $selectCity[0].selectize.setValue(project.fields.city, true);
             }
             gotoNextTabIndex(this.$control_input[0]);
         },
