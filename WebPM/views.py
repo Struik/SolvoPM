@@ -13,7 +13,7 @@ from itertools import groupby
 from operator import itemgetter, methodcaller
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
-import logging, json, WebPM, locale, simplejson
+import logging, json, WebPM, locale
 
 
 
@@ -65,16 +65,20 @@ def new_project(request):
         logger.info('POST request params:')
         logger.info(params)
 
-        projectObject = Projects(name=params['projectName'], company_id=params['selectCompany'],
+        if Projects.objects.filter(id = params['selectProject']).exists():
+            projectId = params['selectProject']
+        else:
+            projectObject = Projects(name=params['selectProject'], company_id=params['selectCompany'],
                                  country_id=params['selectCountry'], city_id=params['selectCity'],
                                  address=params['Address'])
-        projectObject.save()
+            projectObject.save()
+            projectId = projectObject.id
         logger.info(params['contracts'])
         for contracts in params['contracts']:
             logger.info('Creating new contract:')
             logger.info(contracts)
             contractObject = Contracts(name=contracts['name'], contractType_id=contracts['type'],
-                                       project_id=projectObject.id)
+                                       project_id=projectId)
             contractObject.save()
             logger.info('Contract #' + str(contractObject.id) + ' created')
             for payment in contracts['payments'].items():
@@ -85,7 +89,7 @@ def new_project(request):
                                          paymentAmount=payment[1]['amount'])
                 paymentObject.save()
                 logger.info('Payment #' + str(paymentObject.id) + ' created')
-    return HttpResponse(json.dumps({'newProjectId': projectObject.id}), content_type='application/json')
+    return HttpResponse(json.dumps({'newProjectId': projectId}), content_type='application/json')
 
 
 # Saving new reference value to the database. Value can be added via project adding form

@@ -22,6 +22,10 @@ $(document).ready(function(){
         labels:
         {
             current: "",
+            cancel: gettext('Cancel'),
+            previous: gettext('Previous'),
+            next: gettext('Next'),
+            finish: gettext('Save'),
         },
         onStepChanging: function (event, currentIndex, newIndex)
         {
@@ -103,7 +107,7 @@ $(document).ready(function(){
         },
     });
 
-    //Country change need special logic which is called via onChange event
+    //Country change needs special logic which is called via onChange event
     //Couldn't find a way to reinitialize it when select node is already selectized
     $('.selectize:not(.fixed-values)').selectize({
         create: function (input, callback){
@@ -122,18 +126,34 @@ $(document).ready(function(){
         onChange: function(value) {
             console.log('selectProject changed');
             var project = $.grep(projects.Projects, function(e){ return e.pk == value; })[0];
+            //If project exists then automatically set other project attribute values and disable selection
+            //Project with another attribute = new project
             if(project){
                 console.log('Existing project chosen. Changing other fields.');
                 $selectCompany[0].selectize.setValue(project.fields.company, true);
                 $selectCountry[0].selectize.setValue(project.fields.country, true);
                 $selectCity[0].selectize.setValue(project.fields.city, true);
+                $selectCompany[0].selectize.disable();
+                $selectCountry[0].selectize.disable();
+                $selectCity[0].selectize.disable();
+                $('#selectCompany').valid()
+                $('#selectCountry').valid()
+                $('#selectCity').valid()
+                $('#Address').prop('disabled', true);
+                return;
             }
+            //If it's a new project, then enable selection in case it was disabled earlier except for selectCity field
+            //which has special handling in selectCountry onChange event
+            $selectCompany[0].selectize.clear();
+            $selectCountry[0].selectize.clear();
+            $selectCity[0].selectize.clear();
+            $selectCompany[0].selectize.enable();
+            $selectCountry[0].selectize.enable();
+            $('#Address').prop('disabled', false);
             gotoNextTabIndex(this.$control_input[0]);
         },
     });
     var $selectCompany = $('#selectCompany').selectize();
-    var $selectStage = $('#selectStage').selectize();
-    var $selectPayment = $('#selectPayment').selectize();
     var $selectCity = $('#selectCity').selectize({
         create: function (input, callback){
             //Passing extra argument for cities since it has foreign key to countries reference
