@@ -11,7 +11,9 @@ from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, Attri
 from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments, Agreements
 from itertools import groupby
 from operator import itemgetter, methodcaller
-import logging, json, WebPM, locale
+from django.core.serializers.json import DjangoJSONEncoder
+from django.core import serializers
+import logging, json, WebPM, locale, simplejson
 
 
 
@@ -38,11 +40,14 @@ def index(request):
 def getProjectFormAttrs():
     logger.info('Fetching project attributes')
     data = {}
+    json_serializer = serializers.get_serializer("json")()
     projectModels = [Projects, Companies, Countries, Cities, StageTypes, PaymentTypes, ContractTypes]
     for Model in projectModels:
-        data[Model.__name__] = []
-        for value in Model.objects.all():
-            data[Model.__name__].append(value)
+        data[Model.__name__] = json.loads(json_serializer.serialize(Model.objects.all()))
+        logger.info(json_serializer.serialize(Model.objects.all()))
+        # for value in list(Model.objects.all()):
+        #     logger.info(value)
+        #     data[Model.__name__].append(value)
 
     logger.info('Fetched project attributes: ')
     logger.info(data)

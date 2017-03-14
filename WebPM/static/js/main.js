@@ -117,12 +117,21 @@ $(document).ready(function(){
 
     //This variables are needed to have possibility to programmatically clear and update selectized fields.
     //One variable for each select
-    var selectProject = $('#selectProject').selectize({
+    var $selectProject = $('#selectProject').selectize({
         create: true,
         onChange: function(value) {
+            console.log('selectProject changed');
+            var project = $.grep(projects.Projects, function(e){ return e.pk == value; })[0];
+            if(project){
+                console.log('Existing project chosen. Changing other fields.');
+                $selectCompany[0].selectize.setValue(project.fields.company);
+                $selectCountry[0].selectize.setValue(project.fields.country);
+                $selectCity[0].selectize.setValue(project.fields.city);
+            }
             gotoNextTabIndex(this.$control_input[0]);
         },
     });
+    var $selectCompany = $('#selectCompany').selectize();
     var $selectStage = $('#selectStage').selectize();
     var $selectPayment = $('#selectPayment').selectize();
     var $selectCity = $('#selectCity').selectize({
@@ -148,9 +157,9 @@ $(document).ready(function(){
             var country = $('#selectCountry').text()
             selectCity.disable();
             selectCity.clearOptions();
-            if (cities[country]){
-                for (var i = 0; i < cities[country].length; i++) {
-                    selectCity.addOption({value: cities[country][i]['id'], text: cities[country][i]['name']})
+            for (var i = 0; i < projects.Cities.length; i++) {
+                if (projects.Cities[i].fields.country == value) {
+                    selectCity.addOption({value: projects.Cities[i].pk, text: projects.Cities[i].fields.name});
                 }
             }
             selectCity.enable();

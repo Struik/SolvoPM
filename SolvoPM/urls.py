@@ -24,7 +24,7 @@ js_info_dict = {
 }
 
 urlpatterns = [
-    url(r'^$', views.index, name='pm'),
+    url(r'^$', views.index, name='index'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     url(r'^projects', views.projects, name='projects'),
