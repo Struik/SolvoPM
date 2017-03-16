@@ -3,7 +3,6 @@
 $(document).ready(function() {
     var infoForm = $("#infoForm");
 
-    
     //Enabling jquery steps addon on info form
     infoForm.steps({
         headerTag: "h3",
@@ -35,18 +34,19 @@ $(document).ready(function() {
             }
         }
     });
+
     //Enabling bootstrap classes on info form
-    $('.wizard .steps').addClass("modal-header");
-    $('.wizard .content').addClass("modal-body");
-    $('.wizard .actions').addClass("modal-footer");
-    $('.steps ul li').each(function (i) {
+    $('#infoModal .wizard .steps').addClass("modal-header");
+    $('#infoModal .wizard .content').addClass("modal-body");
+    $('#infoModal .wizard .actions').addClass("modal-footer");
+    $('#infoModal .steps ul li').each(function (i) {
         var title = $(this).find("a").contents().filter(function() {
             return this.nodeType == 3;
         }).text();
         $(this).append('<h4 class="modal-title">' + title + '<span class="glyphicon glyphicon-arrow-left pull-right '
                                                                     + 'previous-step hoverable hidden"></span></h4>');
     });
-    $('.actions ul').addClass("pager");
+    $('#infoModal .actions ul').addClass("pager");
     //Button for moving to the first step with month info
     $(document).on("click", ".previous-step", function() {
         infoForm.steps('previous');
@@ -63,7 +63,6 @@ $(document).ready(function() {
         $(this).parents('.panel').removeClass("panel-expanded");
     });
 
-
     var projectTable;
     //Global variable for storing full payments data so it's available for all functions on the page
     var paymentsFullData;
@@ -79,7 +78,7 @@ $(document).ready(function() {
             success: function (response) {
                 console.log('Project data returned');
                     if (response == 'No data'){
-                        alert('No data found, nothing to display');
+                        console.log('No data found, nothing to display');
                         return;
                     }
                 paymentsFullData = response['paymentsFullData']
@@ -134,7 +133,7 @@ $(document).ready(function() {
 //        debugger;
         //(plugin datatables.js)
         //Creating datatable, table headers and table data are generated in required way (array) on server side
-        projectTable = $('#projects').DataTable({
+        projectTable = $('#projectsTable').DataTable({
             processing: true,
             columns: columns,
             data: data,
@@ -188,21 +187,13 @@ $(document).ready(function() {
                 },
             }],
         });
-
-        //Trigger event for bootstrap popover can be set for each element or one for all elements like here
-        $('.payment').popover({
-                trigger: "hover",
-        });
-
-        $('#splitTab').popover({
-                trigger: "hover",
-        });
     }
 
     //Extra validator method for jquery validation plugin
     $.validator.addMethod('checkChildSumIsMore', function (value, element, param) {
         var sum = parseInt(value) + (parseInt($('#childPaymentSum').text()) || 0);
         console.log(sum);
+        console.log(parseInt($('#paymentInfoAmount').text()))
         if (sum > parseInt($('#paymentInfoAmount').text())){
             return false;
         }
@@ -277,16 +268,18 @@ $(document).ready(function() {
         },
     });
 
-    $("#projects").on("mouseenter", ".td-planned", function() {
+    //Handling hovering over cells in tables with payments
+    //For main table #projectsTable
+    $("#projectsTable").on("mouseenter", ".td-planned", function() {
         $(this).addClass('bg-info').next('td').addClass('bg-info');
     });
-    $("#projects").on("mouseenter", ".td-confirmed", function() {
+    $("#projectsTable").on("mouseenter", ".td-confirmed", function() {
         $(this).addClass('bg-info').prev('td').addClass('bg-info');
     });
-    $("#projects").on("mouseleave", ".td-planned", function() {
+    $("#projectsTable").on("mouseleave", ".td-planned", function() {
         $(this).removeClass('bg-info').next('td').removeClass('bg-info');
     });
-    $("#projects").on("mouseleave", ".td-confirmed", function() {
+    $("#projectsTable").on("mouseleave", ".td-confirmed", function() {
         $(this).removeClass('bg-info').prev('td').removeClass('bg-info');
     });
 
@@ -297,11 +290,9 @@ $(document).ready(function() {
         $(this).removeClass('bg-info');
     });
 
-
-
     //Showing modal form with info and actions for each payment when zoom icon is clicked
-    $("#projects").on("click", ".show-month", function() {
-        $("#paymentsTableBody tr").remove();
+    $("#projectsTable").on("click", ".show-month", function() {
+        $("#monthInfoPaymentsTableBody tr").remove();
         var cell = $(this);
         var cellIndex = projectTable.cell( cell ).index();
         console.log(cellIndex);
@@ -330,7 +321,7 @@ $(document).ready(function() {
                 paymentClass = ''
             }
 
-            $('#paymentsTableBody').
+            $('#monthInfoPaymentsTableBody').
                 append('<tr id="' + paymentIds[i] + '" class=" tr-hoverable show-payment ' + paymentClass + '">'
                 + '<td>' + (i + 1) + '</td>'
                 + '<td>' + payment.amount + '</td>'
@@ -340,13 +331,11 @@ $(document).ready(function() {
         }
 
         //Might consider serializing it instead of
-        $('#projectName').html(rowData[gettext('Project name')]);
-        $('#manager').html(rowData[gettext('Manager')]);
-        $('#currentState').html(rowData[gettext('Current state')]);
-        $('#contractType').html(rowData[gettext('Contract type')]);
-        $('#contractName').html(rowData[gettext('Contract name')]);
-        $('#planned').html(rowData[columnTitle]['planned']);
-        $('#confirmed').html(rowData[columnTitle]['confirmed']);
+        $('#monthInfoProjectName').html(rowData[gettext('Project name')]);
+        $('#monthInfoContractType').html(rowData[gettext('Contract type')]);
+        $('#monthInfoContractName').html(rowData[gettext('Contract name')]);
+        $('#monthInfoPlanned').html(rowData[columnTitle]['planned']);
+        $('#monthInfoConfirmed').html(rowData[columnTitle]['confirmed']);
 
         $('#infoModal').modal('show');
 
@@ -443,7 +432,7 @@ $(document).ready(function() {
     //Enabling datetimepicker fields
     $('#confirmDatePicker').datetimepicker({
         format: 'DD.MM.YYYY',
-        maxDate: moment(),
+//        maxDate: moment(),
         allowInputToggle: true,
     });
 
@@ -466,25 +455,19 @@ $(document).ready(function() {
         input.trigger('fileselect', [numFiles, label]);
     });
 
+    //Handling buttons for uploading files
     $(document).ready( function() {
-      $(':file').on('fileselect', function(event, numFiles, label) {
+        $(':file').on('fileselect', function(event, numFiles, label) {
+            var input = $(this).parents('.input-group').find(':text'),
+            log = numFiles > 1 ? numFiles + ' files selected' : label;
 
-          var input = $(this).parents('.input-group').find(':text'),
-              log = numFiles > 1 ? numFiles + ' files selected' : label;
-
-          if( input.length ) {
-              input.val(log);
-          } else {
-              if( log ) alert(log);
-          }
-
-      });
-  });
-
-//    $('#projects').on( 'click', 'tr', function () {
-//        var cell = projectTable.row( this ).data();
-//        console.log(cell);
-//    });
+            if( input.length ) {
+                input.val(log);
+            } else {
+                if( log ) alert(log);
+            }
+        });
+    });
 
     $.fn.serializeObject = function(){
         console.log('Serializing');
@@ -614,10 +597,11 @@ $(document).ready(function() {
     var splitPayment = {'paymentId': '', 'childPayments': ''};
 
 
-    $('#addPayment').click(function() {
+    $('#addChildPayment').click(function() {
         if($('#splitFileName').valid() & $('#splitDocumentName').valid() & $('#childPaymentDate').valid() &
                                                                         $('#childPaymentAmount').valid())
         {
+            console.log('Adding split payment');
             $('.sum-alert').addClass('hidden');
             paymentId = $('#paymentInfo').attr('payment-id');
             paymentDate = $('#childPaymentDate').val();

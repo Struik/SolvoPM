@@ -1,0 +1,333 @@
+*** Start time: 25-01-2017 17:41:30:234389
+Plan type: plan
+SkuId: 1011985
+Req Units: 47160
+Src load id: 159986260
+Status: A
+Category: 0
+Package: 110285
+Package: 110284
+Load select logic: 7 - FIFO LIFO FEFO 
+Driver bitmap: 2
+Delivery period: 0
+FIFO interval: 0
+DDay interval: 0
+VAP parameter: 0
+Order id: 1614454
+Order type: F
+Client id: 94802
+Processing method: C
+Line number: 1
+Except Loc Id: 0
+Marker: -, 
+Marker3: *, 
+Marker4: *, 
+Marker5: *, 
+Lot logic: equal
+Lots: *, 
+SSCC: *, 
+Holder Id: 93398
+Rcn Id: -1
+Inc Id: -1
+Warehouse Id: 0
+Score Type bitmap: 65535
+Negative pallet pick percent: 100
+DTD logic: begin with equal or greater
+DTD for loads: 0
+DTDMax for loads: -1000000
+Place marker: 0
+MarkedFlag: -1
+SerialNum: *
+BatchStatuses: *
+RoundType: 0
+Marker2: *
+Full only requirement: 0
+PD logic: none
+PD round: day
+PD is not used
+PD2 is not used
+Shipable only requirement: -1
+BatchFlag: 0
+Physical warehouse id: 0
+Number of diff DTDs: 0
+LoadId: 159986202 Name: 03159986202 Units: 5304 Mark: 0 PickBM: 14 Age: 55 TrueAge: 55 DaysToLive: -42 DaysToExp: -42 PD: 2016-12-1T0:0:0.0 rejected - wrong load id
+LoadId: 159986205 Name: 03159986205 Units: 4968 Mark: 0 PickBM: 14 Age: 50 TrueAge: 50 DaysToLive: -37 DaysToExp: -37 PD: 2016-12-6T0:0:0.0 rejected - wrong load id
+LoadId: 159986206 Name: 03159986206 Units: 5376 Mark: 0 PickBM: 14 Age: 50 TrueAge: 50 DaysToLive: -37 DaysToExp: -37 PD: 2016-12-6T0:0:0.0 rejected - wrong load id
+LoadId: 159986207 Name: 03159986207 Units: 5112 Mark: 0 PickBM: 14 Age: 50 TrueAge: 50 DaysToLive: -37 DaysToExp: -37 PD: 2016-12-6T0:0:0.0 rejected - wrong load id
+LoadId: 159986215 Name: 02159986214 Units: 240 Mark: 0 PickBM: 14 Age: 50 TrueAge: 50 DaysToLive: -37 DaysToExp: -37 PD: 2016-12-6T0:0:0.0 rejected - wrong load id
+LoadId: 159986260 Name: 03159986260 Units: 5376 Mark: 0 PickBM: 14 Age: 108 TrueAge: 108 DaysToLive: 228 DaysToExp: 228 PD: 2016-10-9T0:0:0.0 - valid
+SubLocNone: AddLoad with subloc_pos 0 called.
+LoadId: 159986223 Name: 03159986223 Units: 144 Mark: 0 PickBM: 14 Age: 35 TrueAge: 35 DaysToLive: -22 DaysToExp: -22 PD: 2016-12-21T0:0:0.0 rejected - wrong load id
+LoadId: 159986225 Name: 02159986225 Units: 10 Mark: 0 PickBM: 14 Age: 44 TrueAge: 44 DaysToLive: -31 DaysToExp: -31 PD: 2016-12-12T0:0:0.0 rejected - wrong load id
+LoadId: 159986226 Name: 03159986226 Units: 5376 Mark: 0 PickBM: 14 Age: 44 TrueAge: 44 DaysToLive: -31 DaysToExp: -31 PD: 2016-12-12T0:0:0.0 rejected - wrong load id
+LoadId: 159986257 Name: 03159986257 Units: 11 Mark: 0 PickBM: 14 Age: 24 TrueAge: 24 DaysToLive: -11 DaysToExp: -11 PD: 2017-1-1T0:0:0.0 rejected - wrong load id
+LoadId: 159986258 Name: 03159986258 Units: 12 Mark: 0 PickBM: 14 Age: 44 TrueAge: 44 DaysToLive: -31 DaysToExp: -31 PD: 2016-12-12T0:0:0.0 rejected - wrong load id
+LoadId: 159986259 Name: 03159986259 Units: 10 Mark: 0 PickBM: 14 Age: 9 TrueAge: 9 DaysToLive: 4 DaysToExp: 4 PD: 2017-1-16T0:0:0.0 rejected - wrong load id
+Valid loads:
+Load: 03159986260 Qty: 5376 RealLocId: 3221 LocId: 0 Pack: 24 Type: 3 SLP: 0 SLT: f LPlPr: 0 LPtPr: 0 LPkPr: 0 T/A/G: 4/1/0 BatchStat: V BatchId: 528386 PwhId: 0 SkuSpec: 0
+Read loads: 1/12
+Read locs: 4
+Total units: 5376
+Loads loaded in: 0.019108
+rule 50 is rejected by HolderId=95002 key HolderId=93398
+rule 1000 is rejected by SkuId=1006429 key SkuId=1011985
+rule 1150 is rejected by SkuId=1007836 key SkuId=1011985
+rule 1155 is rejected by SkuId=1007836 key SkuId=1011985
+rule 1160 is rejected by SkuId=1007836 key SkuId=1011985
+rule 40000 is rejected by OrderType=s key OrderType=F
+Matched requirement plan entries:
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 999 Priority: 105 StopFlag:0 Place: 3231938 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:4 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 1012 Priority: 135 StopFlag:0 Place: 2646 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:4 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 1004 Priority: 140 StopFlag:0 Place: 965 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:4 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 1141 Priority: 141 StopFlag:0 Place: 1818944 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:4 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 1142 Priority: 142 StopFlag:0 Place: 3563814 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:4 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 1145 Priority: 145 StopFlag:0 Place: 51 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:4 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 10600 Priority: 600 StopFlag:0 Place: 2349192 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 10605 Priority: 605 StopFlag:0 Place: 2222637 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 10610 Priority: 610 StopFlag:0 Place: 4859868 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 10615 Priority: 615 StopFlag:0 Place: 2350551 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 10620 Priority: 620 StopFlag:0 Place: 4804226 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 10626 Priority: 626 StopFlag:0 Place: 4804255 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+   DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 10630 Priority: 630 StopFlag:0 Place: 3231938 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 10635 Priority: 635 StopFlag:0 Place: 2646 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 10640 Priority: 640 StopFlag:0 Place: 965 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 20000 Priority: 20000 StopFlag:0 Place: 1702158 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+DrvBM: 2 PlanType: 5 ProcMethod: * BatchStatus: * StorageCond: -1 SkuSpec:  -1 Stage: 0 OrderType: * HolderId: 93398 ClientId: -1 SkuId: -3 PlaceMarker: 0 Warehouse: 0 PwhId: 0
+   PlanNum: 30000 Priority: 30000 StopFlag:0 Place: 2998160 PlaceFlag:1 PlaceSeq: 1 LoadTypeBM: 7 ScoreBM:10 ParamFlag: 1
+
+Process planning stage: 0
+Use FEFO strategy
+Use IANY strategy
+Check loads in strict FEFO
+DTL: 228 - 1 loads to check
+DTL/Batch 1 loads to check
+Use plan num: 999 Rule params: (FULLONLY,PRIO_LPLAN,USE_NUMLOADS)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC80210(PPQ_DSC,PRIO_LPLAN,USE_NUMLOADS,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1012 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1004 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1141 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1142 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1145 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+SubLocNone: SubLocPrio for 0 is 0
+Add fo index table: 03159986260 Qty: 5376 PackQty: 24 RealLocId: 3221 LocId: 3221 AS: 0 Partial: 0 LocPrio: 0 Priority: 4772000000 PlacePrio: 0
+Number of pallets to analyze: 1
+Id: 159986260 RealLocId: 3221 ContId: 0 Qty: 5376
+SubLocNone: Load fully allocated from 0
+Alloc pallet: 03159986260 Qty: 5376 PackQty: 24 LocId: 3221
+Consider pallets
+Prepare loads for next run
+Use plan num: 10600 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10605 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10610 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10615 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10620 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10626 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10630 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10635 Rule params: (CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0x800000(ADJPACK,)
+PickType: 2 Param_mask: 0x800000(ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10640 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 20000 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 30000 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Prepare loads for next run
+DTL: 1000000 - 1 loads to check
+DTL/Batch 0 loads to check
+Check all loads - 1 loads to check
+Use plan num: 999 Rule params: (FULLONLY,PRIO_LPLAN,USE_NUMLOADS)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC80210(PPQ_DSC,PRIO_LPLAN,USE_NUMLOADS,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1012 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1004 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1141 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1142 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 1145 Rule params: (FULLONLY)
+Plan params in effect:
+PickType: 4 Param_mask: 0xC00010(PPQ_DSC,FULLONLY,ADJPACK,)
+Consider pallets
+Use plan num: 10600 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10605 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10610 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10615 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10620 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10626 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10630 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10635 Rule params: (CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0x800000(ADJPACK,)
+PickType: 2 Param_mask: 0x800000(ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 10640 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 20000 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Use plan num: 30000 Rule params: (FULLONLY,CCQ_ASC,CPQ_ASC)
+Plan params in effect:
+PickType: 8 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+PickType: 2 Param_mask: 0xC00000(FULLONLY,ADJPACK,)
+Consider cartons from containers
+Consider cartons from pallets
+Prepare loads for next run
+Found best loads in: 0.00425
+Loads allocated:
+Load Id: 159986260 Qty: 5376 Type: 3 Pack: 110284 RuleId: 1145
+Qty left: 41784
+Plan result: 16
+*** End time: 25-01-2017 17:41:30:259088

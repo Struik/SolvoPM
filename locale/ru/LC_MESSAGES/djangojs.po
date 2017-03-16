@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-14 22:21+0300\n"
+"POT-Creation-Date: 2017-03-15 17:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,43 +20,39 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\WebPM\static\js\main.js:22
+#: .\WebPM\static\js\main.js:16
 msgid "Cancel"
 msgstr "Отменить"
 
-#: .\WebPM\static\js\main.js:23
+#: .\WebPM\static\js\main.js:17
 msgid "Previous"
 msgstr "Назад"
 
-#: .\WebPM\static\js\main.js:24
+#: .\WebPM\static\js\main.js:18
 msgid "Next"
 msgstr "Далее"
 
-#: .\WebPM\static\js\main.js:25
+#: .\WebPM\static\js\main.js:19
 msgid "Save"
 msgstr "Сохранить"
 
-#: .\WebPM\static\js\projects.js:210
+#: .\WebPM\static\js\main.js:24
+msgid "Add"
+msgstr "Добавить"
+
+#: .\WebPM\static\js\projects.js:200
 msgid "Specified amount exceeds initial payment amount"
 msgstr "Указанная сумма превышает размер исходного платежа"
 
-#: .\WebPM\static\js\projects.js:343
+#: .\WebPM\static\js\projects.js:333
 msgid "Project name"
 msgstr "Имя проекта"
 
-#: .\WebPM\static\js\projects.js:344
-msgid "Manager"
-msgstr "Менеджер проекта"
-
-#: .\WebPM\static\js\projects.js:345
-msgid "Current state"
-msgstr "Текущий статус"
-
-#: .\WebPM\static\js\projects.js:346
+#: .\WebPM\static\js\projects.js:334
 msgid "Contract type"
 msgstr "Тип договора"
 
-#: .\WebPM\static\js\projects.js:347
+#: .\WebPM\static\js\projects.js:335
 msgid "Contract name"
 msgstr "Имя договора"
 
@@ -75,3 +71,9 @@ msgstr "Введите не более {0} символов"
 #: .\WebPM\static\js\validate.fix.js:5
 msgid "Please enter at least {0} characters"
 msgstr "Введите не менее {0} символов"
+
+#~ msgid "Manager"
+#~ msgstr "Менеджер проекта"
+
+#~ msgid "Current state"
+#~ msgstr "Текущий статус"

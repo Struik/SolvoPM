@@ -3,6 +3,7 @@
 {% load i18n %}
 
 {% block extracss %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/fixedColumns.bootstrap.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
@@ -11,14 +12,48 @@
 {% endblock %}
 
 {% block extrajs %}
+<script>
+    //Variable containing all cities with reference to countries which will be used in main.js
+    //Django variables are only accessible inside the template and can be passed to external javascript only this way
+    var cities = {};
+    {% for query in projectAttrs.Cities %}
+        if(cities['{{query.country.name}}'])
+        {
+            cities['{{query.country.name}}'].push({ 'id': '{{query.id}}', 'name': '{{query.name}}' })
+        }
+        else
+        {
+            cities['{{query.country.name}}']=[]
+            cities['{{query.country.name}}'].push({ 'id': '{{query.id}}', 'name': '{{query.name}}' })
+        }
+    {% endfor %}
+
+    {% for query, x in projectAttrs.items %}
+        console.log('{{query}}');
+        console.log({{x|safe}});
+    {% endfor %}
+
+    {% for query in projectAttrs.Countries %}
+        console.log('{{query.pk}}');
+        console.log('{{query.fields.name}}');
+    {% endfor %}
+
+    var projects = {{projectAttrs|safe }};
+    console.log(cities);
+    console.log(projects);
+</script>
+
+<script src="{% static 'js/selectize.js' %}"></script>
 <script src="{% static 'js/jquery.steps.js' %}"></script>
 <script src="{% static 'js/jquery.validate.js' %}"></script>
-<script src="{% static 'js/validate.fix.js' %}"></script>
+<script src="{% static 'js/localization.fix.js' %}"></script>
+<script src="{% static 'js/additional-methods.js' %}"></script>
 <script src="{% static 'js/datatables.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap.js' %}"></script>
 <script src="{% static 'js/dataTables.rowsGroup.js' %}"></script>
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
 <script src="{% static 'js/projects.js' %}"></script>
 {% endblock %}
 
@@ -26,9 +61,17 @@
 {% block page-header %}{% trans "Payment schedule" %}{% endblock %}
 
 {% block content %}
+<div class="" style="margin-bottom: 15px;">
+    <div class="btn-group">
+        <!-- Button trigger modal -->
+        <button id="add" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#addContractModal">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            {% trans "New contract" %}
+        </button>
+    </div>
+</div>
 
-
-<table id="projects" class="table table-bordered">
+<table id="projectsTable" class="table table-bordered">
     <thead>
     <tr id="projectsHeaderFirst">
     </tr>
@@ -37,7 +80,147 @@
     </thead>
 </table>
 
+<!-- Modal form for adding contracts -->
+<div class="modal fade" id="addContractModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="addContractForm" method="post">
+                <h3>{% trans "Description" %}</h3>
+                <h3>{% trans "Contract" %}</h3>
 
+                <section>
+
+                    <div class="form-group">
+                        <select class="form-control selfselectized" id="selectProject" name="selectProject"
+                                placeholder="{% trans 'Select or add project' %}" reference_id="Projects" tabindex="1">
+                            <option value="">Select a project</option>
+                            {% for query in projectAttrs.Projects %}
+                            <option value="{{query.pk}}">{{query.fields.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control selectize" id="selectCompany" name="selectCompany"
+                                placeholder="{% trans 'Select or add company' %}" reference_id="Companies" tabindex="2">
+                            <option value="">Select a company</option>
+                            {% for query in projectAttrs.Companies %}
+                            <option value="{{query.pk}}">{{query.fields.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control selfselectized" id="selectCountry" name="selectCountry"
+                                placeholder="{% trans 'Select or add country' %}" reference_id="Countries" tabindex="3">
+                            <option value="">Select a country</option>
+                            {% for query in projectAttrs.Countries %}
+                            <option value="{{query.pk}}">{{query.fields.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control selfselectized" id="selectCity" name="selectCity"
+                                placeholder="{% trans 'Select or add city' %}" reference_id="Cities" tabindex="4">
+                            <option value="">Select a city</option>
+                            {% for query in projectAttrs.Cities %}
+                            <option value="{{query.pk}}">{{query.fields.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea class="form-control" id="Address" name="Address" rows="3"
+                                  placeholder="{% trans 'Address' %}" tabindex="5"></textarea>
+                    </div>
+
+                </section>
+
+                <section>
+
+                    <div class="form-group">
+                        <select class="form-control selfselectized" id="selectContractType"
+                                name="selectContractType"
+                                placeholder="{% trans 'Select or add contract type' %}" reference_id="ContractTypes" tabindex="6">
+                            <option value="">Contract type</option>
+                            {% for query in projectAttrs.ContractTypes %}
+                            <option value="{{query.pk}}">{{query.fields.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control contract-attr" id="contractName"
+                               name="contractName"
+                               value="" placeholder="{% trans 'Contract name' %}" tabindex="7" disabled>
+                    </div>
+
+                    <hr>
+
+                    <div class="form-group">
+                        <label id="paymentsListLabel" class="control-label text-center hidden">
+                            {% trans "Payment schedule" %}
+                        </label>
+
+                        <table id="paymentsTable" class="table table-condensed table-hover hidden">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>{% trans "Amount" %}</th>
+                                <th>{% trans "Date" %}</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody id="paymentsTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="paymentHint" class="form-group text-right hidden">
+                        <p class="text-inline">{% trans 'Total' %}: </p>
+                        <em id="paymentSum" class="text-inline">0</em>
+                    </div>
+
+                    <div class="form-group">
+                        <div class='input-group date' id='paymentDatePicker'>
+                            <input type="text" class="form-control datepicker payment-attr" id="paymentDate"
+                                   name="paymentDate" placeholder="{% trans 'Payment date' %}" tabindex="8" disabled>
+                            <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control payment-attr" id="paymentAmount"
+                               name="paymentAmount"
+                               placeholder="{% trans 'Payment amount' %}" tabindex="9" disabled>
+                    </div>
+
+                    <div class="alert alert-danger save-alert hidden" role="alert">
+                        {% trans "Please add payment or clear fields" %}
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success payment-attr btn-block" id="addPayment"
+                                disabled>{% trans "Add payment" %}
+                        </button>
+                    </div>
+
+                    <div class="form-group hidden">
+                        <button id="clearPayments" type="button" class="btn btn-warning payment-attr btn-block"
+                                disabled>{% trans "Clear payments" %}
+                        </button>
+                    </div>
+
+                </section>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal form for working with payments (views and actions) -->
 <div class="modal fade" id="infoModal" tabindex="-1" role="dialog">
     <!--modal-sm is redefined in projects.css to make it wider-->
     <div class="modal-dialog modal-sm" role="document">
@@ -47,6 +230,7 @@
                 <h3>{% trans "Payment info" %}</h3>
                 <h3>{% trans "Split payment info" %}</h3>
                 <section>
+
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="monthInfo" class="form-group">
@@ -56,38 +240,30 @@
                                     <tbody id="monthInfoTableBody">
                                     <tr>
                                         <td>{% trans "Project name" %}:</td>
-                                        <td id="projectName"></td>
+                                        <td id="monthInfoProjectName"></td>
                                     </tr>
-                                    <!--<tr>-->
-                                    <!--<td>{% trans "Manager" %}:</td>-->
-                                    <!--<td id="manager"></td>-->
-                                    <!--</tr>-->
-                                    <!--<tr>-->
-                                    <!--<td>{% trans "Current state" %}:</td>-->
-                                    <!--<td id="currentState"></td>-->
-                                    <!--</tr>-->
                                     <tr>
                                         <td>{% trans "Contract type" %}:</td>
-                                        <td id="contractType"></td>
+                                        <td id="monthInfoContractType"></td>
                                     </tr>
                                     <tr>
                                         <td>{% trans "Contract name" %}:</td>
-                                        <td id="contractName"></td>
+                                        <td id="monthInfoContractName"></td>
                                     </tr>
                                     <tr>
                                         <td>{% trans "Planned" %}:</td>
-                                        <td id="planned"></td>
+                                        <td id="monthInfoPlanned"></td>
                                     </tr>
                                     <tr>
                                         <td>{% trans "Confirmed" %}:</td>
-                                        <td id="confirmed"></td>
+                                        <td id="monthInfoConfirmed"></td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
 
                             <div class="form-group">
-                                <table id="paymentsTable" class="table table-condensed">
+                                <table id="monthInfoPaymentsTable" class="table table-condensed">
                                     <thead>
                                     <tr>
                                         <th>#</th>
@@ -97,15 +273,17 @@
                                         <th></th>
                                     </tr>
                                     </thead>
-                                    <tbody id="paymentsTableBody">
+                                    <tbody id="monthInfoPaymentsTableBody">
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+
                 </section>
 
                 <section>
+
                     <div class="alert alert-success confirmed-alert hidden" role="alert">{% trans "Payment is" %}
                         <strong>{% trans "confirmed" %}.</strong>
                         {% trans "You may only unconfirm it" %}
@@ -332,14 +510,8 @@
                                                placeholder="{% trans 'Payment amount' %}">
                                     </div>
 
-                                    <!--<div class="form-group">-->
-                                    <!--<input type="text" class="form-control payment-attr" id="splitPaymentsum"-->
-                                    <!--name="splitPaymentsum"-->
-                                    <!--placeholder="Payments sum">-->
-                                    <!--</div>-->
-
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-success btn-block" id="addPayment">
+                                        <button type="button" class="btn btn-success btn-block" id="addChildPayment">
                                             {% trans "Add payment" %}
                                         </button>
                                     </div>
@@ -392,9 +564,11 @@
                         </div>
 
                     </div>
+
                 </section>
 
                 <section>
+
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="splitPaymentInfo" class="form-group" style="margin-bottom: 5px;">
@@ -435,6 +609,7 @@
                             </div>
                         </div>
                     </div>
+
                 </section>
 
             </form>

@@ -1,0 +1,229 @@
+<picking>
+  <shipmentExecution>
+    <delivery>
+      <com.solvo.ShipmentExecutionType_-Delivery>
+        <id>1301065475</id>
+        <timestamp>2017-02-15T12:34:00.000</timestamp>
+        <item>
+          <com.solvo.ItemType>
+            <id>000010</id>
+            <materialID>000000000000000072</materialID>
+            <warehouse>RU08</warehouse>
+            <storageLocation>1000</storageLocation>
+            <amount>160</amount>
+            <unit>PCE</unit>
+            <batch>P112460101</batch>
+            <parentItemID>000010</parentItemID>
+            <usageCode>0</usageCode>
+          </com.solvo.ItemType>
+          <com.solvo.ItemType>
+            <id>000020</id>
+            <materialID>000000000000000099</materialID>
+            <warehouse>RU08</warehouse>
+            <storageLocation>1000</storageLocation>
+            <amount>120</amount>
+            <unit>PCE</unit>
+            <batch>P102469001</batch>
+            <parentItemID>000020</parentItemID>
+            <usageCode>0</usageCode>
+          </com.solvo.ItemType>
+          <com.solvo.ItemType>
+            <id>000030</id>
+            <materialID>000000000000016895</materialID>
+            <warehouse>RU08</warehouse>
+            <storageLocation>1000</storageLocation>
+            <amount>30</amount>
+            <unit>PCE</unit>
+            <batch>P101076001</batch>
+            <parentItemID>000030</parentItemID>
+            <usageCode>0</usageCode>
+          </com.solvo.ItemType>
+          <com.solvo.ItemType>
+            <id>000040</id>
+			            <materialID>000000000000044292</materialID>
+            <warehouse>RU08</warehouse>
+            <storageLocation>1000</storageLocation>
+            <amount>115</amount>
+            <unit>PCE</unit>
+            <batch>P100469303</batch>
+            <parentItemID>000040</parentItemID>
+            <usageCode>0</usageCode>
+          </com.solvo.ItemType>
+        </item>
+        <handlingUnit>
+          <ShipmentExecutionType.Delivery.HandlingUnit>
+            <sscc>246007219900000019</sscc>
+            <carrierID/>
+            <ShipmentExecutionType.Delivery.HandlingUnit.Content>
+              <itemID/>
+              <materialID>000000000000000072</materialID>
+              <batch>P112460101</batch>
+              <amount>10</amount>
+              <unit/>
+            </ShipmentExecutionType.Delivery.HandlingUnit.Content>
+            <ShipmentExecutionType.Delivery.HandlingUnit.Content>
+              <itemID/>
+              <materialID>000000000000000099</materialID>
+              <batch>P102469001</batch>
+              <amount>10</amount>
+              <unit/>
+            </ShipmentExecutionType.Delivery.HandlingUnit.Content>
+            <ShipmentExecutionType.Delivery.HandlingUnit.Content>
+              <itemID/>
+              <materialID>000000000000016895</materialID>
+              <batch>P101076001</batch>
+              <amount>20</amount>
+              <unit/>
+            </ShipmentExecutionType.Delivery.HandlingUnit.Content>
+            <ShipmentExecutionType.Delivery.HandlingUnit.Content>
+              <itemID/>
+              <materialID>000000000000016895</materialID>
+              <batch>P101076001</batch>
+              <amount>10</amount>
+              <unit/>
+            </ShipmentExecutionType.Delivery.HandlingUnit.Content>
+			            <ShipmentExecutionType.Delivery.HandlingUnit.Content>
+              <itemID/>
+              <materialID>000000000000044292</materialID>
+              <batch>P100469303</batch>
+              <amount>5</amount>
+              <unit/>
+            </ShipmentExecutionType.Delivery.HandlingUnit.Content>
+          </ShipmentExecutionType.Delivery.HandlingUnit>
+          <ShipmentExecutionType.Delivery.HandlingUnit>
+            <sscc>146007219900000043</sscc>
+            <carrierID/>
+          </ShipmentExecutionType.Delivery.HandlingUnit>
+          <ShipmentExecutionType.Delivery.HandlingUnit>
+            <sscc>146007219900000067</sscc>
+            <carrierID/>
+          </ShipmentExecutionType.Delivery.HandlingUnit>
+          <ShipmentExecutionType.Delivery.HandlingUnit>
+            <sscc>146007219900000012</sscc>
+            <carrierID/>
+          </ShipmentExecutionType.Delivery.HandlingUnit>
+          <ShipmentExecutionType.Delivery.HandlingUnit>
+            <sscc>146007219900000036</sscc>
+            <carrierID/>
+          </ShipmentExecutionType.Delivery.HandlingUnit>
+          <ShipmentExecutionType.Delivery.HandlingUnit>
+            <sscc>146007219900000050</sscc>
+            <carrierID/>
+          </ShipmentExecutionType.Delivery.HandlingUnit>
+          <ShipmentExecutionType.Delivery.HandlingUnit>
+            <sscc>146007219900000029</sscc>
+            <carrierID/>
+          </ShipmentExecutionType.Delivery.HandlingUnit>
+        </handlingUnit>
+      </com.solvo.ShipmentExecutionType_-Delivery>
+    </delivery>
+  </shipmentExecution>
+  <iDocRef>22497016</iDocRef>
+</picking>
+
+
+2017-02-15T12:34:22,365 [loadWorker] ERROR: Got general exception on message id: 22497016, error: ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+---- Debugging information ----
+message             : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+cause-exception     : com.thoughtworks.xstream.mapper.CannotResolveClassException
+cause-message       : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+class               : com.solvo.WMS
+required-type       : java.util.ArrayList
+path                : /picking/shipmentExecution/delivery/com.solvo.ShipmentExecutionType$Delivery/handlingUnit/ShipmentExecutionType.Delivery.HandlingUnit
+line number         : 54
+-------------------------------
+com.thoughtworks.xstream.converters.ConversionException: ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+---- Debugging information ----
+message             : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+cause-exception     : com.thoughtworks.xstream.mapper.CannotResolveClassException
+cause-message       : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+class               : com.solvo.WMS
+required-type       : java.util.ArrayList
+path                : /picking/shipmentExecution/delivery/com.solvo.ShipmentExecutionType$Delivery/handlingUnit/ShipmentExecutionType.Delivery.HandlingUnit
+line number         : 54
+-------------------------------
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:89)
+        at com.thoughtworks.xstream.core.AbstractReferenceUnmarshaller.convert(AbstractReferenceUnmarshaller.java:63)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:76)
+        at com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter.unmarshallField(AbstractReflectionConverter.java:246)
+        at com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter.doUnmarshal(AbstractReflectionConverter.java:218)
+        at com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter.unmarshal(AbstractReflectionConverter.java:162)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:82)
+        at com.thoughtworks.xstream.core.AbstractReferenceUnmarshaller.convert(AbstractReferenceUnmarshaller.java:63)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:76)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:60)
+        at com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter.readItem(AbstractCollectionConverter.java:71)
+        at com.thoughtworks.xstream.converters.collections.CollectionConverter.populateCollection(CollectionConverter.java:68)
+        at com.thoughtworks.xstream.converters.collections.CollectionConverter.unmarshal(CollectionConverter.java:61)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:82)
+        at com.thoughtworks.xstream.core.AbstractReferenceUnmarshaller.convert(AbstractReferenceUnmarshaller.java:63)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:76)
+        at com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter.unmarshallField(AbstractReflectionConverter.java:246)
+        at com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter.doUnmarshal(AbstractReflectionConverter.java:218)
+        at com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter.unmarshal(AbstractReflectionConverter.java:162)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:82)
+		        at com.thoughtworks.xstream.core.AbstractReferenceUnmarshaller.convert(AbstractReferenceUnmarshaller.java:63)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:76)
+        at com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter.unmarshallField(AbstractReflectionConverter.java:246)
+        at com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter.doUnmarshal(AbstractReflectionConverter.java:218)
+        at com.thoughtworks.xstream.converters.reflection.AbstractReflectionConverter.unmarshal(AbstractReflectionConverter.java:162)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:82)
+        at com.thoughtworks.xstream.core.AbstractReferenceUnmarshaller.convert(AbstractReferenceUnmarshaller.java:63)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:76)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:60)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.start(TreeUnmarshaller.java:137)
+        at com.thoughtworks.xstream.core.AbstractTreeMarshallingStrategy.unmarshal(AbstractTreeMarshallingStrategy.java:33)
+        at com.thoughtworks.xstream.XStream.unmarshal(XStream.java:923)
+        at com.thoughtworks.xstream.XStream.unmarshal(XStream.java:909)
+        at com.thoughtworks.xstream.XStream.fromXML(XStream.java:853)
+        at com.thoughtworks.xstream.XStream.fromXML(XStream.java:845)
+        at solvo.gate.common.ObjectXML.fromXML(ObjectXML.java:72)
+        at solvo.gate.common.GateMessage.getObject(GateMessage.java:47)
+        at solvo.gate.common.UploadWorker.doWork(UploadWorker.java:146)
+        at solvo.bo.util.EventWaitingThread.processEvent(EventWaitingThread.java:121)
+        at solvo.bo.util.EventWaitingThread.run(EventWaitingThread.java:186)
+        at java.lang.Thread.run(Thread.java:745)
+Caused by: com.thoughtworks.xstream.mapper.CannotResolveClassException: ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+        at com.thoughtworks.xstream.mapper.DefaultMapper.realClass(DefaultMapper.java:68)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.DynamicProxyMapper.realClass(DynamicProxyMapper.java:71)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.PackageAliasingMapper.realClass(PackageAliasingMapper.java:88)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.ClassAliasingMapper.realClass(ClassAliasingMapper.java:86)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.ArrayMapper.realClass(ArrayMapper.java:96)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+		        at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:38)
+        at com.thoughtworks.xstream.mapper.CachingMapper.realClass(CachingMapper.java:52)
+        at com.thoughtworks.xstream.core.util.HierarchicalStreams.readClassType(HierarchicalStreams.java:29)
+        at com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter.readItem(AbstractCollectionConverter.java:70)
+        at com.thoughtworks.xstream.converters.collections.CollectionConverter.populateCollection(CollectionConverter.java:68)
+        at com.thoughtworks.xstream.converters.collections.CollectionConverter.unmarshal(CollectionConverter.java:61)
+        at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:82)
+        ... 40 more
+2017-02-15T12:34:22,376 [loadWorker] DEBUG: Commit transaction tx=org.hibernate.transaction.JDBCTransaction@43ceeae7 for Execution context (UploadWorker@97823)
+2017-02-15T12:34:22,377 [loadWorker] DEBUG: update to_host_header_message set status=?, start_date=?, err_code=?, err_descr=?, modified=?, modified_by=? where id=?
+2017-02-15T12:34:22,377 [loadWorker] TRACE: binding 'resend' to parameter: 1
+2017-02-15T12:34:22,377 [loadWorker] TRACE: binding '2017-02-15 12:34:22' to parameter: 2
+2017-02-15T12:34:22,377 [loadWorker] TRACE: binding '1003' to parameter: 3
+2017-02-15T12:34:22,377 [loadWorker] TRACE: binding 'ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+---- Debugging information ----
+message             : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+cause-exception     : com.thoughtworks.xstream.mapper.CannotResolveClassException
+cause-message       : ShipmentExecutionType.Delivery.HandlingUnit : ShipmentExecutionType.Delivery.HandlingUnit
+class               : com.solvo.WMS
+required-type       : java.util.ArrayList
+path                : /picking/shipmentExecution/delivery/com.solvo.ShipmentExecutionType$Delivery/handlingUnit/ShipmentExecutionType.Delivery.HandlingUnit
+line number         : 54
+-------------------------------' to parameter: 4

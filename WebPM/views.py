@@ -14,27 +14,21 @@ from operator import itemgetter, methodcaller
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
 import logging, json, WebPM, locale
-
-
-
 from WebPM.models import models
 
 logger = logging.getLogger('WebPM')
 logger.info('started');
 
-
-
 # Create your views here.
 
-# Main page which contains only two buttons at the moment: project adding and projects displaying
-def index(request):
-    logger.info('Request is: ')
-    logger.info(request)
+# Page with contracts info and button to add a new one
+@never_cache
+def projects(request):
+    logger.info('Projects page requested')
     projectAttrs = getProjectFormAttrs()
     logger.info('Redirecting to main with project next attrs:')
     logger.info(projectAttrs)
-    return render_to_response('main.html', {'projectAttrs': projectAttrs})
-
+    return render(request, 'projects.html', {'LANGUAGES': settings.LANGUAGES, 'projectAttrs': projectAttrs})
 
 # Preparing data for project adding form
 def getProjectFormAttrs():
@@ -65,7 +59,7 @@ def new_project(request):
         logger.info('POST request params:')
         logger.info(params)
 
-        if Projects.objects.filter(id = params['selectProject']).exists():
+        if params['selectProject'].isdigit() and Projects.objects.filter(id = params['selectProject']).exists():
             projectId = params['selectProject']
         else:
             projectObject = Projects(name=params['selectProject'], company_id=params['selectCompany'],
@@ -118,12 +112,6 @@ def new_ref_value(request):
         logger.info('New reference value id: ' + str(ref.id))
     return HttpResponse(json.dumps({'refId': ref.id}), content_type='application/json')
 
-
-# Page with projects info. Table with all the data from DB
-@never_cache
-def projects(request):
-    logger.info('Projects page requested')
-    return render(request, 'projects.html', {'LANGUAGES': settings.LANGUAGES})
 
 @never_cache
 @csrf_exempt

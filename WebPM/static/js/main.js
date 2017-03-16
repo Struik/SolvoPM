@@ -1,19 +1,10 @@
+'use strict'
+
 $(document).ready(function(){
-    //Only one unique stage is allowed within one project
-    $.validator.addMethod('uniqueStage', function (value, element, param) {
-        //Looks complicated because of selectize which puts select real value in generated nodes
-        var selectValue = $(element).siblings().find('div .item').text();
-        if($('#stagesList').find("a:contains(" + selectValue + ")").length > 0){
-            return false;
-        }
-        return true;
-    }, 'This stage is already added');
+    var addContractForm = $("#addContractForm");
 
-
-    var exForm = $("#projectAddForm");
-
-    //Enabling jquery steps addon on project adding form
-    exForm.steps({
+    //Enabling jquery steps addon on contract adding form
+    addContractForm.steps({
         headerTag: "h3",
         bodyTag: "section",
         transitionEffect: 1,
@@ -29,17 +20,13 @@ $(document).ready(function(){
         },
         onStepChanging: function (event, currentIndex, newIndex)
         {
-            console.log('2');
             // Always allow going backward even if the current step contains invalid fields!
             if (currentIndex > newIndex)
             {
-                //To remove success styles
-                //$(".body:eq(" + newIndex +  ") .has-success").removeClass("has-success");
                 return true;
             }
 
-            var form = $(this);
-
+            var form = $(this)
             // Clean up if user went backward before
             if (currentIndex < newIndex)
             {
@@ -52,30 +39,21 @@ $(document).ready(function(){
 
             // Start validation; Prevent going forward if false
             return form.valid();
-            //return true;
         },
         onFinishing: function (event, currentIndex)
         {
-            var form = $(this);
-            console.log('3');
-            // Disable validation on fields that are disabled.
-            // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
-            //form.validate().settings.ignore = ":disabled";
-
-            // Start validation; Prevent form submission if false
-            //return form.valid();
             return true;
         },
         onFinished: function (event, currentIndex)
         {
-            var form = $(this);
-            console.log('4');
+            if($('#paymentDate').val() || $('#paymentAmount').val()){
+                $('.save-alert').removeClass('hidden');
+                $('.save-alert').fadeOut();
+                $('.save-alert').fadeIn();
+                return false;
+            }
 
-            //Submit form input
-            //Submit isn't ready yet
-            //form.submit();
-
-            var projectData = exForm.serializeObject();
+            var projectData = addContractForm.serializeObject();
             projectData['contracts'] = contracts;
             console.log(projectData);
             console.log(JSON.stringify(projectData));
@@ -85,7 +63,6 @@ $(document).ready(function(){
                 url: "new_project",
                 data: {'projectData': JSON.stringify(projectData)},
                 dataType: "json",
-//                contentType: "application/json",
                 success: function (response) {
                     console.log('New project request returned successfully');
                     console.log(response);
@@ -100,6 +77,7 @@ $(document).ready(function(){
 
 
     //Enabled dynamic and static (values wise) select nodes with selectize plugin
+    //At 15.03.2017 only one such field left, other select fields are having own initialisation due to special handling
     $('.selectize.fixed-values').selectize({
         sortField: 'text',
         onChange: function(value) {
@@ -107,8 +85,6 @@ $(document).ready(function(){
         },
     });
 
-    //Country change needs special logic which is called via onChange event
-    //Couldn't find a way to reinitialize it when select node is already selectized
     $('.selectize:not(.fixed-values)').selectize({
         create: function (input, callback){
             newRefValue(input, callback, this);
@@ -119,8 +95,8 @@ $(document).ready(function(){
         },
     });
 
-    //This variables are needed to have possibility to programmatically clear and update selectized fields.
-    //One variable for each select
+    //Variables starting with $select... are needed to programmatically clear and update selectized fields
+
     var $selectProject = $('#selectProject').selectize({
         create: true,
         onChange: function(value) {
@@ -153,7 +129,9 @@ $(document).ready(function(){
             gotoNextTabIndex(this.$control_input[0]);
         },
     });
+
     var $selectCompany = $('#selectCompany').selectize();
+
     var $selectCity = $('#selectCity').selectize({
         create: function (input, callback){
             //Passing extra argument for cities since it has foreign key to countries reference
@@ -164,33 +142,28 @@ $(document).ready(function(){
         },
     });
 
-    selectCity = $selectCity[0].selectize;
-    selectCity.disable();
+    $selectCity[0].selectize.disable();
 
-    //Separate selectize initialisation on country select node
     //Populating cities select field with values on country change
-    //Variable cities is defined in html template
     var $selectCountry = $('#selectCountry').selectize({
         onChange: function(value) {
             console.log('Country changed');
             if (!value.length) return;
             var country = $('#selectCountry').text()
-            selectCity.disable();
-            selectCity.clearOptions();
+            $selectCity[0].selectize.disable();
+            $selectCity[0].selectize.clearOptions();
             for (var i = 0; i < projects.Cities.length; i++) {
                 if (projects.Cities[i].fields.country == value) {
-                    selectCity.addOption({value: projects.Cities[i].pk, text: projects.Cities[i].fields.name});
+                    $selectCity[0].selectize.addOption({value: projects.Cities[i].pk, text: projects.Cities[i].fields.name});
                 }
             }
-            selectCity.enable();
+            $selectCity[0].selectize.enable();
             gotoNextTabIndex(this.$control_input[0]);
         },
         create: function (input, callback){
             newRefValue(input, callback, this);
         },
     });
-
-
 
     $('#selectContractType').selectize({
         onChange: function(value) {
@@ -224,7 +197,7 @@ $(document).ready(function(){
     $('div .selectize-input').addClass('form-control');
 
     //Enabling jquery validation addon on project adding form
-    exForm.validate({
+    addContractForm.validate({
         //Fix to make selectize and validation working together.
         ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
         onsubmit: false,
@@ -308,19 +281,18 @@ $(document).ready(function(){
         },
     });
 
-
     //Enabling bootstrap classes on project adding form
-    $('.wizard .steps').addClass("modal-header");
-    $('.wizard .content').addClass("modal-body");
-    $('.wizard .actions').addClass("modal-footer");
-    $(".steps ul li").each(function (i) {
+    $('#addContractModal .wizard .steps').addClass("modal-header");
+    $('#addContractModal .wizard .content').addClass("modal-body");
+    $('#addContractModal .wizard .actions').addClass("modal-footer");
+    $("#addContractModal .steps ul li").each(function (i) {
         var title = $(this).find("a").contents().filter(function() {
             return this.nodeType == 3;
         }).text();
         $(this).append("<h4 class='modal-title'>" + title + "</h4>")
     })
-    $('.actions ul').addClass("pager");
-    $('a[href="#cancel"]').addClass("pull-left");
+    $('#addContractModal .actions ul').addClass("pager");
+    $('#addContractModal a[href="#cancel"]').addClass("pull-left");
 
     //Enabling datetimepicker fields
     $('#paymentDatePicker').datetimepicker({
@@ -329,17 +301,8 @@ $(document).ready(function(){
         allowInputToggle: true,
     });
 
-
-
-    $('#next').click(function() {
-        console.log('Next!');
-        /*console.log(projectForm.valid());*/
-    });
-
-    $('li').click(function() {
-        console.log('Next!');
-    });
-
+    //This code is needed to disable validation in some cases. For example when autoclearing fields after adding new
+    //values - filling payments for contract
     $('select').change(function() {
         if(stageSelectClearOnClick){
             stageSelectClearOnClick = false
@@ -348,11 +311,6 @@ $(document).ready(function(){
             $(this).valid();
         }
     });
-
-
-
-
-
 
     var stagesQty = 0;
     var stageText;
@@ -363,7 +321,7 @@ $(document).ready(function(){
 
 
     $('#addStage').click(function() {
-        if(exForm.valid())
+        if(addContractForm.valid())
         {
             stageText = $('#selectStage').text()
             cost = $('#cost').val()
@@ -420,7 +378,7 @@ $(document).ready(function(){
 
     $('#addPayment').click(function() {
         $('.save-alert').fadeOut();
-        if(exForm.valid())
+        if(addContractForm.valid())
         {
             contractName = $('#contractName').val();
             contractType = $('#selectContractType').val();
@@ -513,13 +471,6 @@ $(document).ready(function(){
         return o;
     };
 
-    exForm.submit(function() {
-        alert('12312');
-        console.log(exForm.serializeObject());
-
-        return false;
-    });
-
     //Function to add new value in DB references when it's added via select field on the form
     //parentReference is an extra argument for references which have foreign key to other reference
     var newRefValue = function(input, callback, object, parentReference){
@@ -584,14 +535,6 @@ $(document).ready(function(){
     $('#myModal').on('shown.bs.modal', function (e) {
         $('[tabindex="1"]').focus();
     })
-
-//    $("#paymentDatePicker").on("dp.change", function(e) {
-//        alert('hey');
-//    });
-
-    //Plugin for thousand separators and input number formatting
-    //$('#paymentAmount').maskNumber();
-
 });
 
 

@@ -1,0 +1,85 @@
+2017-01-10T15:30:53,920 [t=36      ] DEBUG: Got command:
+rdt(reflex(load_block_reason_change(40/8), load, [load='03159986206', new_reason=''], field)).
+2017-01-10T15:30:53,920 [t=36      ] DEBUG: Binding Execution context (channel@1432030279@32) elapsed: 00:00:00.000121482 to thread: Thread[t=36,5,main]
+2017-01-10T15:30:53,921 [u=1959    ] DEBUG: solve goal=rdt(reflex(load_block_reason_change(/(40,8)),load,[=(load,03159986206),=(new_reason,)],field))
+2017-01-10T15:30:53,921 [u=1959    ] DEBUG: solve goal=reflex(load_block_reason_change(/(40,8)),load,[=(load,03159986206),=(new_reason,)],field)
+2017-01-10T15:30:53,922 [u=1959    ] DEBUG: ReflexPredicate form=load_block_reason_change(40/8) field=load state={new_reason=, load=03159986206} action=field
+2017-01-10T15:30:53,922 [u=1959    ] DEBUG: solve goal=field
+2017-01-10T15:30:53,922 [u=1959    ] DEBUG: Set label: status; value: null
+2017-01-10T15:30:53,922 [u=1959    ] DEBUG: Start validate controls...
+2017-01-10T15:30:53,922 [u=1959    ] DEBUG: Changed fields : [load]
+2017-01-10T15:30:53,922 [u=1959    ] DEBUG: On change field : load
+2017-01-10T15:30:53,922 [u=1959    ] DEBUG: Call method `onChangeLoad` from class `solvo.wms.jsm.form.LoadBlockReasonChangeForm` for element `load`
+2017-01-10T15:30:53,922 [u=1959    ] INFO : Don't use load-statuses
+2017-01-10T15:30:53,993 [u=1959    ] ERROR: Exception : java.lang.reflect.InvocationTargetException . Tried call method : class solvo.wms.jsm.FormDiag onChangeLoad ( [interface solvo.wms.jsm.form.IFieldEvent] ) 
+2017-01-10T15:30:53,994 [u=1959    ] DEBUG: Create diag id : Exception : java.lang.reflect.InvocationTargetException . Tried call method : class solvo.wms.jsm.FormDiag onChangeLoad ( [interface solvo.wms.jsm.form.IFieldEvent] ) , mes : Exception : java.lang.reflect.InvocationTargetException . Tried call method : class solvo.wms.jsm.FormDiag onChangeLoad ( [interface solvo.wms.jsm.form.IFieldEvent] ) 
+2017-01-10T15:30:53,994 [u=1959    ] DEBUG: End validate controls.
+2017-01-10T15:30:53,994 [u=1959    ] DEBUG: Start form update...
+2017-01-10T15:30:53,994 [u=1959    ] DEBUG: Empty update
+2017-01-10T15:30:53,994 [u=1959    ] DEBUG: End form update.
+2017-01-10T15:30:53,994 [u=1959    ] DEBUG: Bind controls ...
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Bind : load_status , value : null
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Set label: load_status; value: null
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Bind : load , value : null
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Set field: load; value: null
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Bind : old_reason , value : null
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Set label: old_reason; value: null
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Bind : new_reason , value : null
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Set choice: new_reason; value: null
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: End bind.
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Start write result...
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: End write result.
+2017-01-10T15:30:53,995 [u=1959    ] DEBUG: Result logic...
+2017-01-10T15:30:53,996 [u=1959    ] DEBUG: java.lang.NullPointerException
+        at solvo.wms.jsm.form.LoadBlockReasonChangeForm.onChangeLoad(LoadBlockReasonChangeForm.java:238)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.lang.reflect.Method.invoke(Method.java:606)
+        at solvo.wms.jsm.form.BaseForm.onChangeField(BaseForm.java:607)
+		        at solvo.wms.jsm.form.BaseForm.validateControls(BaseForm.java:552)
+        at solvo.wms.jsm.form.BaseForm.service(BaseForm.java:142)
+        at solvo.wms.jsm.smlayer.formwrapers.FormProxyImpl.onRdtAction(FormProxyImpl.java:237)
+        at solvo.wms.jsm.smlayer.predicates.Field.exec(Field.java:39)
+        at solvo.sm.predicate.BaseInReflex.exec(BaseInReflex.java:41)
+        at solvo.prolog.java.Prolog.solve(Prolog.java:243)
+        at solvo.sm.predicate.Reflex.exec(Reflex.java:144)
+        at solvo.prolog.java.Prolog.solve(Prolog.java:243)
+        at solvo.sm.predicate.ExecTerm.exec(ExecTerm.java:62)
+        at solvo.prolog.java.Prolog.solve(Prolog.java:243)
+        at solvo.prolog.java.Prolog.solve(Prolog.java:203)
+        at solvo.prolog.java.Prolog.solve(Prolog.java:167)
+        at solvo.prolog.java.Prolog.solve(Prolog.java:142)
+        at solvo.sm.SessionChannel.processCommand(SessionChannel.java:374)
+        at solvo.sm.SessionChannel.run(SessionChannel.java:316)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+        at java.lang.Thread.run(Thread.java:745)
+
+2017-01-10T15:30:53,996 [u=1959    ] DEBUG: go to page: dialog(40/8)
+2017-01-10T15:30:53,996 [u=1959    ] DEBUG: Begin transaction tx=org.hibernate.transaction.JDBCTransaction@6e7a2b72 for Execution context (channel@1432030279@32)
+2017-01-10T15:30:53,996 [u=1959    ] DEBUG: SQL: insert into STAMP_OPERATOR_ACTION ( user_id, user_name, atime, context_id, scenario, scenario_path, type, flag, context_tag ) values (?, ?, ?, ?, ?, ?, ?, ?, ? )
+2017-01-10T15:30:53,997 [u=1959    ] DEBUG: Binding input parameter #1=213142
+2017-01-10T15:30:53,997 [u=1959    ] DEBUG: Binding input parameter #2=STRRDT
+2017-01-10T15:30:53,997 [u=1959    ] DEBUG: Binding input parameter #3=Tue Jan 10 15:30:53 MSK 2017
+2017-01-10T15:30:53,997 [u=1959    ] DEBUG: Binding input parameter #4=213142-1-6
+2017-01-10T15:30:53,997 [u=1959    ] DEBUG: Binding input parameter #5=load_block_reason_change
+2017-01-10T15:30:53,997 [u=1959    ] DEBUG: Binding input parameter #6=SessionManagerMainMenuTitle/sm_scenario_load_menu_title/load_block_reason_change/load_block_reason_change
+2017-01-10T15:30:53,997 [u=1959    ] DEBUG: Binding input parameter #7=WORK
+2017-01-10T15:30:53,997 [u=1959    ] DEBUG: Binding input parameter #8=F
+2017-01-10T15:30:53,997 [u=1959    ] DEBUG: Binding input parameter #9=-
+2017-01-10T15:30:54,001 [u=1959    ] DEBUG: Commit transaction tx=org.hibernate.transaction.JDBCTransaction@6e7a2b72 for Execution context (channel@1432030279@32)
+2017-01-10T15:30:54,004 [u=1959    ] DEBUG: Begin transaction tx=org.hibernate.transaction.JDBCTransaction@5cb79411 for Execution context (channel@1432030279@32)
+2017-01-10T15:30:54,004 [u=1959    ] DEBUG: SQL: insert into STAMP_OPERATOR_ACTION ( user_id, user_name, atime, context_id, scenario, scenario_path, type, flag, context_tag ) values (?, ?, ?, ?, ?, ?, ?, ?, ? )
+2017-01-10T15:30:54,004 [u=1959    ] DEBUG: Binding input parameter #1=213142
+2017-01-10T15:30:54,004 [u=1959    ] DEBUG: Binding input parameter #2=STRRDT
+2017-01-10T15:30:54,005 [u=1959    ] DEBUG: Binding input parameter #3=Tue Jan 10 15:30:54 MSK 2017
+2017-01-10T15:30:54,005 [u=1959    ] DEBUG: Binding input parameter #4=213142-1-7
+2017-01-10T15:30:54,005 [u=1959    ] DEBUG: Binding input parameter #5=dialog
+2017-01-10T15:30:54,005 [u=1959    ] DEBUG: Binding input parameter #6=SessionManagerMainMenuTitle/sm_scenario_load_menu_title/load_block_reason_change/dialog
+2017-01-10T15:30:54,006 [u=1959    ] DEBUG: Binding input parameter #7=WORK
+2017-01-10T15:30:54,006 [u=1959    ] DEBUG: Binding input parameter #8=S
+2017-01-10T15:30:54,006 [u=1959    ] DEBUG: Binding input parameter #9=-
+2017-01-10T15:30:54,009 [u=1959    ] DEBUG: Commit transaction tx=org.hibernate.transaction.JDBCTransaction@5cb79411 for Execution context (channel@1432030279@32)
+2017-01-10T15:30:54,020 [u=1959    ] DEBUG: Unbinding Execution context (channel@1432030279@32) elapsed: 00:00:00.099409890 from thread: Thread[u=1959,5,main]
+2017-01-10T15:30:54,020 [u=1959    ] DEBUG: Close Execution context (channel@1432030279@32) session=1833806111 stateless session=null

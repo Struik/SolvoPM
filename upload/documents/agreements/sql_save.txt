@@ -1,0 +1,25 @@
+order_driver:0.0 [26-01-2017 12:10:39:939924] BEGIN
+order_driver:0.1 [26-01-2017 12:10:39:940290] SELECT asn_id, auto_activate, auto_start, batch_processing, car_note, car_num, carrier_id, client_driver_identification, comm
+ents, created, created_by, date_shipped, date_to_auto_start, date_to_ship, delivery_time, display_name, doc_repository_id, dock, driver_fio, driver_phone, forwarder_fio, f
+orwarder_phone, gateway_id, holder_id, locked, modified, modified_by, pallets_qty, picknhold, power_of_attoney_date, power_of_attoney_number, priority, processing_method, 
+rec_usage_state, sdid, shipment_id, shipping_address, sorting, stage_loc, status, type, wave_pick, wms_whs_id FROM shipment  WHERE id='168363'
+order_driver:0.1 [26-01-2017 12:10:39:995635] SELECT id FROM orders  WHERE shipment='168363' AND consolidate_order_id=0 AND status='R' AND is_consolidate='f'
+order_driver:0.1 [26-01-2017 12:10:40:007832] SELECT after_plan_step, allow_modify, asn_id, assign_to_worker, auto_activate, auto_start, auto_start_date, auto_wave, car_nu
+m, carrier_id, client_address_id, client_doc_num, client_id, cnvt_req_id, comments, comments2, comments3, comments4, complete, confirmation_count, consolidate_mask, consol
+idate_order_id, conveyor_order_id, created, created_by, customer_id, date_completed, date_delivered, date_loaded, date_loading, date_ready_to_ship, date_shipped, date_star
+ted, date_status_change, date_to_auto_start, date_to_load, date_to_ship, delivery_period, display_name, dock, driver_fio, expected_pallet_count, gateway_id, gateway_packet
+_id, gateway_transmit_status, group_member, holder_id, is_consolidate, is_control_ean, is_moved, loaded_operator, loading_operator, loading_type, loc_ts, modified, modifie
+d_by, move_plan_id, name_consignee, need_packing, need_stage, occupancy, order_code, pack_worker_id, packed_cartons, parent_id, partial_pick, partial_ship, pick_cancel_rea
+son_id, pick_sequence, pick_type, picknhold, print_group, priority, processing_method, ramp, ready_to_group, rec_usage_state, responsible, sdid, ship_seq, ship_seq_group, 
+ship_seq_pick_group, shipment, shipping_address, shipping_method_id, shipping_method_name_id, skill_id, stage_loc, status, sub_status, task_id, team_id, type, volume, ware
+house, wave_id, weight, wms_whs_id FROM orders  WHERE id=1614437
+order_driver:0.1 [26-01-2017 12:10:40:010876] SELECT value FROM setup  WHERE param='order_consolidate_shipment_mask'
+order_driver:0.1 [26-01-2017 12:10:40:013238] SELECT after_plan_step, allow_modify, asn_id, assign_to_worker, auto_activate, auto_start, auto_start_date, auto_wave, car_nu
+m, carrier_id, client_address_id, client_doc_num, client_id, cnvt_req_id, comments, comments2, comments3, comments4, complete, confirmation_count, consolidate_order_id, co
+nveyor_order_id, created, created_by, customer_id, date_completed, date_delivered, date_loaded, date_loading, date_ready_to_ship, date_shipped, date_started, date_status_c
+hange, date_to_auto_start, date_to_load, date_to_ship, delivery_period, display_name, dock, driver_fio, expected_pallet_count, gateway_packet_id, gateway_transmit_status, 
+group_member, holder_id, id, is_control_ean, is_moved, loaded_operator, loading_operator, loading_type, loc_ts, modified, modified_by, move_plan_id, name_consignee, need_p
+acking, need_stage, occupancy, order_code, pack_worker_id, packed_cartons, parent_id, partial_pick, partial_ship, pick_cancel_reason_id, pick_sequence, pick_type, picknhol
+d, print_group, priority, ramp, rec_usage_state, responsible, sdid, ship_seq, ship_seq_group, ship_seq_pick_group, shipping_address, shipping_method_id, shipping_method_na
+me_id, skill_id, stage_loc, sub_status, task_id, team_id, volume, warehouse, wave_id, weight FROM orders  WHERE consolidate_mask='168363' AND gateway_id='*' AND is_consoli
+date='f' AND processing_method='C' AND ready_to_group='t' AND shipment='168363' AND status='R' AND type='F' AND wms_whs_id=0
