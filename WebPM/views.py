@@ -191,10 +191,13 @@ def get_projects_data(request):
                 paymentsByDates[month]['planned'] = item.paymentAmount if not (
                     item.canceled or item.split) else 0 if item.canceled else ''
             if item.confirmed:
-                if paymentsByDates[month]['confirmed']:
-                    paymentsByDates[month]['confirmed'] += item.paymentAmount if item.confirmed else 0
+                confirmedMonth = item.confirmedDate.strftime('%B%y')
+                if confirmedMonth != month:
+                    paymentsByDates[confirmedMonth]['paymentIds'].append(item.id)
+                if paymentsByDates[confirmedMonth]['confirmed']:
+                    paymentsByDates[confirmedMonth]['confirmed'] += item.paymentAmount if item.confirmed else 0
                 else:
-                    paymentsByDates[month]['confirmed'] = item.paymentAmount if item.confirmed else ''
+                    paymentsByDates[confirmedMonth]['confirmed'] = item.paymentAmount if item.confirmed else ''
             payment['amount'] = item.paymentAmount
             payment['parentPayment'] = item.parentPayment.id if item.parentPayment else 0
             payment['date'] = item.paymentDate.strftime('%d.%m.%y')
