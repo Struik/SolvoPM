@@ -1,0 +1,20 @@
+26-01-2017 12:10:39:939350 order_manager(interface(call, begin)) [interface_msg_route] -  *** CALL  #msg_type:msg_call#msg:shipment_activate('168363', 1013)#goal:order_dri
+ver_interface:order_driver_shipment_activate('168363', 1013, _G1343)
+26-01-2017 12:10:39:940765 order_manager(db(begin)) [solvo_db] -  DB.0 : BEGIN
+26-01-2017 12:10:39:940003 order_manager(shipment_activate) [order_driver_shipment_activate] -  ACTIVATE shipment '168363'
+26-01-2017 12:10:40:007866 order_manager(consolidate_process) [order_driver_shipment_auto_consolidate] -  started '168363'
+26-01-2017 12:10:40:007143 order_manager(consolidate_process_step) [order_driver_shipment_auto_consolidate] -  step 1 : orders 5, consolidated 0
+26-01-2017 12:10:40:007280 order_manager(consolidate_process) [order_driver_shipment_auto_consolidate] -  attempt consolidate order 1614437 
+26-01-2017 12:10:40:012431 order_manager(order_setup_consolidation) [order_setup] -  order_consolidate_shipment_mask = [consolidate_mask, gateway_id, processing_method, shipment, type]
+26-01-2017 12:10:40:013662 order_manager(consolidate) [order_driver_consolidate_process] -  Search order with mask [id/_G4927, wms_whs_id/0, ready_to_group/t, consolidate_mask/'168363', gateway_id/ (*), processing_method/'C', shipment/'168363', type/'F', status/'R', is_consolidate/f]
+26-01-2017 12:10:40:033176 order_manager(consolidate_process) [order_driver_shipment_auto_consolidate] -  attempt consolidate order 1614439 
+26-01-2017 12:10:40:037098 order_manager(consolidate) [order_driver_consolidate_process] -  Search order with mask [id/_G4939, wms_whs_id/0, ready_to_group/t, consolidate_mask/'168363', gateway_id/ (*), processing_method/'C', shipment/'168363', type/'F', status/'R', is_consolidate/f]
+26-01-2017 12:10:40:040327 order_manager(consolidate_process) [order_driver_shipment_auto_consolidate] -  attempt consolidate order 1614440 
+26-01-2017 12:10:40:044640 order_manager(consolidate) [order_driver_consolidate_process] -  Search order with mask [id/_G4933, wms_whs_id/0, ready_to_group/t, consolidate_mask/'0000003468', gateway_id/ (*), processing_method/'C', shipment/'168363', type/'F', status/'R', is_consolidate/f]
+26-01-2017 12:10:40:064359 order_manager(consolidate_process) [order_driver_shipment_auto_consolidate] -  attempt consolidate order 1614441 
+26-01-2017 12:10:40:068096 order_manager(consolidate) [order_driver_consolidate_process] -  Search order with mask [id/_G4945, wms_whs_id/0, ready_to_group/t, consolidate_mask/'1614441', gateway_id/ (*), processing_method/'C', shipment/'168363', type/'F', status/'R', is_consolidate/f]
+26-01-2017 12:10:40:071172 order_manager(consolidate_process) [order_driver_shipment_auto_consolidate] -  attempt consolidate order 1614442 
+26-01-2017 12:10:40:074377 order_manager(consolidate) [order_driver_consolidate_process] -  Search order with mask [id/_G4948, wms_whs_id/0, ready_to_group/t, consolidate_mask/'95247', gateway_id/ (*), processing_method/'C', shipment/'168363', type/'F', status/'R', is_consolidate/f]
+26-01-2017 12:10:40:077367 order_manager(consolidate_process_step) [order_driver_shipment_auto_consolidate] -  step last(1) : orders 5, consolidated 0
+26-01-2017 12:10:40:078574 order_manager(consolidate_process) [order_driver_shipment_auto_consolidate] -  close consolidated orders
+26-01-2017 12:10:40:078706 order_manager(consolidate_process) [order_driver_shipment_auto_consolidate] -  finished '168363'
