@@ -144,6 +144,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 STATICFILES_DIRS = (BASE_DIR, 'WebPM/static')
 STATIC_URL = '/WebPM/static/'
+STATIC_ROOT = (BASE_DIR, '/static')
 
 LOGGING = {
     'version': 1,
