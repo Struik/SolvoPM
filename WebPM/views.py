@@ -19,6 +19,7 @@ from WebPM.models import models
 logger = logging.getLogger('WebPM')
 logger.info('started');
 
+
 # Create your views here.
 
 # Page with contracts info and button to add a new one
@@ -29,6 +30,7 @@ def projects(request):
     logger.info('Redirecting to main with project next attrs:')
     logger.info(projectAttrs)
     return render(request, 'projects.html', {'LANGUAGES': settings.LANGUAGES, 'projectAttrs': projectAttrs})
+
 
 # Preparing data for project adding form
 def getProjectFormAttrs():
@@ -59,12 +61,12 @@ def new_project(request):
         logger.info('POST request params:')
         logger.info(params)
 
-        if params['selectProject'].isdigit() and Projects.objects.filter(id = params['selectProject']).exists():
+        if params['selectProject'].isdigit() and Projects.objects.filter(id=params['selectProject']).exists():
             projectId = params['selectProject']
         else:
             projectObject = Projects(name=params['selectProject'], company_id=params['selectCompany'],
-                                 country_id=params['selectCountry'], city_id=params['selectCity'],
-                                 address=params['Address'])
+                                     country_id=params['selectCountry'], city_id=params['selectCity'],
+                                     address=params['Address'])
             projectObject.save()
             projectId = projectObject.id
         logger.info(params['contracts'])
@@ -124,8 +126,10 @@ def get_projects_data(request):
     if not paymentsObject:
         return HttpResponse('No data')
 
-    minDate = min(payment.paymentDate for payment in paymentsObject)
-    maxDate = max(payment.paymentDate for payment in paymentsObject)
+    minDate = min(paymentsObject.aggregate(Min('paymentDate'))['paymentDate__min'],
+                  paymentsObject.aggregate(Min('confirmedDate'))['confirmedDate__min'])
+    maxDate = max(paymentsObject.aggregate(Max('paymentDate'))['paymentDate__max'],
+                  paymentsObject.aggregate(Max('confirmedDate'))['confirmedDate__max'])
     logger.info('Date period from ' + minDate.strftime('%d.%m.%Y') + ' to ' + maxDate.strftime('%d.%m.%Y'))
 
     monthsDict = getMonthList(minDate, maxDate)
@@ -385,11 +389,12 @@ def split_payment(request):
             logger.info('Payment #' + str(childPaymentObject.id) + ' created')
     return HttpResponse('')
 
-#Downloading specified agreement
+
+# Downloading specified agreement
 def download_agreement(request):
     logger.info('Download agreement request')
     logger.info(request)
-    if(request.GET):
+    if (request.GET):
         logger.info('Request is GET:')
         params = request.GET
         logger.info('GET request params:')
@@ -405,4 +410,3 @@ def download_agreement(request):
                 return response
         else:
             raise Http404
-
