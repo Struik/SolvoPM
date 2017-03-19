@@ -131,10 +131,10 @@ def get_projects_data(request):
     if not paymentsObject:
         return HttpResponse('No data')
 
-    minDate = min(paymentsObject.aggregate(Min('paymentDate'))['paymentDate__min'],
-                  paymentsObject.aggregate(Min('confirmedDate'))['confirmedDate__min'])
-    maxDate = max(paymentsObject.aggregate(Max('paymentDate'))['paymentDate__max'],
-                  paymentsObject.aggregate(Max('confirmedDate'))['confirmedDate__max'])
+    minDate = min(date for date in [paymentsObject.aggregate(Min('paymentDate'))['paymentDate__min'],
+                  paymentsObject.aggregate(Min('confirmedDate'))['confirmedDate__min']] if date is not None)
+    maxDate = max(date for date in [paymentsObject.aggregate(Max('paymentDate'))['paymentDate__max'],
+                  paymentsObject.aggregate(Max('confirmedDate'))['confirmedDate__max']] if date is not None)
     logger.info('Date period from ' + minDate.strftime('%d.%m.%Y') + ' to ' + maxDate.strftime('%d.%m.%Y'))
 
     monthsDict = getMonthList(minDate, maxDate)
