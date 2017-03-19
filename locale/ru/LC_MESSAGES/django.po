@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-15 16:31+0300\n"
+"POT-Creation-Date: 2017-03-19 18:23+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,23 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: .\WebPM\views.py:138 .\WebPM\views.py:168 .\WebPM\views.py:172
-#: .\WebPM\views.py:173 .\templates\main.html:86 .\templates\projects.html:242
+#: .\SolvoPM\urls.py:45
+msgid "Log In"
+msgstr "Вход"
+
+#: .\WebPM\views.py:148 .\WebPM\views.py:178 .\WebPM\views.py:182
+#: .\WebPM\views.py:183 .\templates\main.html:86 .\templates\projects.html:242
 msgid "Project name"
 msgstr "Имя проекта"
 
-#: .\WebPM\views.py:138 .\templates\projects.html:246
+#: .\WebPM\views.py:148 .\templates\projects.html:246
 msgid "Contract type"
 msgstr "Тип договора"
 
-#: .\WebPM\views.py:138 .\templates\main.html:149 .\templates\projects.html:156
+#: .\WebPM\views.py:148 .\templates\main.html:149 .\templates\projects.html:156
 #: .\templates\projects.html:250
 msgid "Contract name"
 msgstr "Имя договора"
 
-#: .\WebPM\views.py:212
+#: .\WebPM\views.py:225
 msgid "Canceled"
 msgstr "Отменен"
+
+#: .\templates\index.html:82
+msgid "Logout"
+msgstr "Выход"
 
 #: .\templates\main.html:72 .\templates\projects.html:88
 msgid "Description"
@@ -92,7 +100,8 @@ msgid "Total"
 msgstr "Итого"
 
 #: .\templates\main.html:181 .\templates\projects.html:188
-#: .\templates\projects.html:416 .\templates\projects.html:500
+#: .\templates\projects.html:367 .\templates\projects.html:416
+#: .\templates\projects.html:500
 msgid "Payment date"
 msgstr "Дата платежа"
 

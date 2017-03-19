@@ -15,13 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url, include, i18n
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.views.i18n import JavaScriptCatalog
 from WebPM import views
+from django.utils.translation import ugettext as _
 
 js_info_dict = {
     'domain': 'djangojs',
     'packages': ('WebPM',),
 }
+
+#admin.site.site_header = "Cute Cat Entreprise"
 
 urlpatterns = [
     url(r'^$', views.projects, name='projects'),
@@ -37,4 +41,10 @@ urlpatterns = [
     url(r'^split_payment', views.split_payment, name='split_payment'),
     url(r'^download_agreement', views.download_agreement, name='download_agreement'),
     url(r'^admin/', admin.site.urls),
+    url(r'^accounts/login/$', auth_views.login,  {
+        'template_name': 'admin/login.html',
+        'extra_context': {'site_header': 'Log In'},
+    },
+    name='login'),
+    url(r'^logout/$', views.logout_page),
 ]

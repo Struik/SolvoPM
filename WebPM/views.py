@@ -2,6 +2,8 @@ import os
 from django.conf import settings
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from django.db.models import Max, Min
@@ -17,12 +19,15 @@ import logging, json, WebPM, locale
 from WebPM.models import models
 
 logger = logging.getLogger('WebPM')
-logger.info('started');
+logger.info('Started')
 
 
-# Create your views here.
+def logout_page(request):
+    logout(request)
+    return HttpResponseRedirect('/')
 
-# Page with contracts info and button to add a new one
+# Page with contracts info and button to add new ones
+@login_required
 @never_cache
 def projects(request):
     logger.info('Projects page requested')
@@ -241,6 +246,7 @@ def get_projects_data(request):
     logger.info('Payments data:')
     logger.info(paymentsGroupedData)
     logger.info(paymentsFullData)
+    logger.info(_('Log In'))
     return HttpResponse(json.dumps({'payments': paymentsGroupedData, 'columns': columnsDicted,
                                     'paymentsFullData': paymentsFullData}), content_type='application/json')
 
