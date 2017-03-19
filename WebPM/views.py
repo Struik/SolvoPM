@@ -56,6 +56,7 @@ def getProjectFormAttrs():
 
 
 # Saving new project to the database
+@login_required
 @csrf_exempt
 def new_project(request):
     logger.info('Got new project request')
@@ -94,6 +95,7 @@ def new_project(request):
 
 
 # Saving new reference value to the database. Value can be added via project adding form
+@login_required
 @csrf_exempt
 def new_ref_value(request):
     logger.info('Got new reference value')
@@ -120,6 +122,7 @@ def new_ref_value(request):
     return HttpResponse(json.dumps({'refId': ref.id}), content_type='application/json')
 
 
+@login_required
 @never_cache
 @csrf_exempt
 def get_projects_data(request):
@@ -265,6 +268,7 @@ def getMonthList(minDate, maxDate):
 
 
 # Confirm payment
+@login_required
 @csrf_exempt
 def confirm_payment(request):
     logger.info('Confirm payment request')
@@ -281,6 +285,7 @@ def confirm_payment(request):
 
 
 # Unconfirm payment
+@login_required
 @csrf_exempt
 def unconfirm_payment(request):
     logger.info('Unconfirm payment request')
@@ -296,6 +301,7 @@ def unconfirm_payment(request):
 
 
 # Postpone payment
+@login_required
 @csrf_exempt
 def postpone_payment(request):
     logger.info('Postpone payment request')
@@ -326,6 +332,7 @@ def postpone_payment(request):
 
 
 # Cancel payment
+@login_required
 @csrf_exempt
 def cancel_payment(request):
     logger.info('Cancel payment request')
@@ -355,6 +362,7 @@ def cancel_payment(request):
 
 
 # Saving new document value to the database
+@login_required
 @csrf_exempt
 def split_payment(request):
     logger.info('Split payment request')
@@ -397,6 +405,7 @@ def split_payment(request):
 
 
 # Downloading specified agreement
+@login_required
 def download_agreement(request):
     logger.info('Download agreement request')
     logger.info(request)
