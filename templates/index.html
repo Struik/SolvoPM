@@ -78,7 +78,7 @@
                 <!--</li>-->
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="admin">{{ user.first_name }}</a></li>
+                <li><a href="admin">{{ user.first_name }} {{ user.last_name }}</a></li>
                 <li><a href="logout">{% trans 'Logout' %}</a></li>
                 {% for lang in LANGUAGES %}
                 <li style="margin-right: 10px;">

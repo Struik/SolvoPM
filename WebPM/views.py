@@ -1,4 +1,4 @@
-import os
+import os, platform
 from django.conf import settings
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -127,7 +127,11 @@ def new_ref_value(request):
 @csrf_exempt
 def get_projects_data(request):
     logger.info('Preparing projects data')
-    locale.setlocale(locale.LC_ALL, 'ru')
+
+    if platform.system() == 'Windows':
+        locale.setlocale(locale.LC_ALL, 'ru')
+    else:
+        locale.setlocale(locale.LC_ALL, 'ru_RU')
 
     paymentsObject = Payments.objects.order_by('contract', 'paymentDate')
 
