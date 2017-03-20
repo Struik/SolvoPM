@@ -80,7 +80,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="admin"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ user.first_name }} {{ user.last_name }}</a></li>
-                <li><a href="logout"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {% trans 'Logout' %}</a></li>
+                <li><a href="logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> {% trans 'Logout' %}</a></li>
                 {% for lang in LANGUAGES %}
                 <li style="padding: 15px;">
                     <form name="setLang{{ lang.1}}" action="i18n/setlang/" method="POST">
