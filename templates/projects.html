@@ -61,6 +61,7 @@
 {% block page-header %}{% trans "Payment schedule" %}{% endblock %}
 
 {% block content %}
+{% if perms.WebPM.addNewProject %}
 <div class="" style="margin-bottom: 15px;">
     <div class="btn-group">
         <!-- Button trigger modal -->
@@ -70,6 +71,7 @@
         </button>
     </div>
 </div>
+{% endif %}
 
 <table id="projectsTable" class="table table-bordered">
     <thead>
@@ -338,18 +340,21 @@
                                 </table>
                             </div>
 
+                            {% if perms.WebPM.unconfirmPayment %}
                             <div class="form-group unconfirm-action">
                                 <button type="button" class="btn btn-warning btn-block"
                                         id="unconfirmPayment">
                                     {% trans "Unconfirm payment" %}
                                 </button>
                             </div>
+                            {% endif %}
 
                         </div>
                     </div>
 
                     <div class="panel-group" id="actions">
 
+                        {% if perms.WebPM.confirmPayment %}
                         <div class="panel panel-default confirm-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a id="panel-confirm-title" data-toggle="collapse"
@@ -380,7 +385,9 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
 
+                        {% if perms.WebPM.postponePayment %}
                         <div class="panel panel-default postpone-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
@@ -429,7 +436,9 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
 
+                        {% if perms.WebPM.splitPayment %}
                         <div class="panel panel-default split-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
@@ -524,7 +533,9 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
 
+                        {% if perms.WebPM.cancelPayment %}
                         <div class="panel panel-default cancel-panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center"><a data-toggle="collapse" data-parent="#actions"
@@ -562,6 +573,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
 
                     </div>
 

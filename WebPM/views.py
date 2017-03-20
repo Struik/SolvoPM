@@ -3,7 +3,8 @@ from django.conf import settings
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User, Permission
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from django.db.models import Max, Min
@@ -28,8 +29,10 @@ def logout_page(request):
 
 # Page with contracts info and button to add new ones
 @login_required
+@permission_required('WebPM.viewProjects')
 @never_cache
 def projects(request):
+    logger.info(User.get_all_permissions(request.user))
     logger.info('Projects page requested')
     projectAttrs = getProjectFormAttrs()
     logger.info('Redirecting to main with project next attrs:')
@@ -98,6 +101,7 @@ def new_project(request):
 @login_required
 @csrf_exempt
 def new_ref_value(request):
+    logger.info(request.user)
     logger.info('Got new reference value')
     logger.info(request)
     if (request.POST):

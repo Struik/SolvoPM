@@ -7,6 +7,7 @@ class RightsSupport(models.Model):
                          # will be performed for this model.
         permissions = (
             ('addNewProject', 'Adding new project'),
+            ('addNewRefValue', 'Adding new reference value'),
         )
 
 class Companies(models.Model):
@@ -37,6 +38,11 @@ class Projects(models.Model):
     country = models.ForeignKey(Countries)
     city = models.ForeignKey(Cities)
     address = models.CharField(max_length=200)
+
+    class Meta:
+        permissions = (
+            ("viewProjects", "Access to main project's view"),
+        )
 
 class Stages(models.Model):
     name = models.CharField(max_length=200)
@@ -73,6 +79,15 @@ class Payments(models.Model):
     split = models.BooleanField(default=False)
     splitAgreement = models.ForeignKey('Agreements', null=True, related_name='split_agreement')
     parentPayment = models.ForeignKey('Payments', null=True)
+
+    class Meta:
+        permissions = (
+            ("confirmPayment", "Confirm payment"),
+            ("unconfirmPayment", "Unconfirm payment"),
+            ("postponePayment", "Postpone payment"),
+            ("splitPayment", "Split payment"),
+            ("cancelPayment", "Cancel payment"),
+        )
 
 class Agreements(models.Model):
     name =  models.CharField(max_length=200, null=False)
