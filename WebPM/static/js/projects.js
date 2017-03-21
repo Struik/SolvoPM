@@ -134,6 +134,11 @@ $(document).ready(function() {
         //(plugin datatables.js)
         //Creating datatable, table headers and table data are generated in required way (array) on server side
         projectTable = $('#projectsTable').DataTable({
+//            dom: 'Bfrtip',
+//            buttons: [
+//                'copyHtml5',
+//                'csvHtml5'
+//            ],
             processing: true,
             columns: columns,
             data: data,
