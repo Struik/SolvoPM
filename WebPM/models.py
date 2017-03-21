@@ -6,8 +6,6 @@ class RightsSupport(models.Model):
         managed = False  # No database table creation or deletion operations \
                          # will be performed for this model.
         permissions = (
-            ('addNewProject', 'Adding new project'),
-            ('addNewRefValue', 'Adding new reference value'),
         )
 
 class Companies(models.Model):
@@ -42,6 +40,7 @@ class Projects(models.Model):
     class Meta:
         permissions = (
             ("viewProjects", "Access to main project's view"),
+            ('addNewProject', 'Adding new project'),
         )
 
 class Stages(models.Model):

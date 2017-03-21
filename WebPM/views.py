@@ -18,6 +18,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
 import logging, json, WebPM, locale
 from WebPM.models import models
+from django.core.mail import send_mail
 
 logger = logging.getLogger('WebPM')
 logger.info('Started')
@@ -42,6 +43,13 @@ def projects(request):
 
 # Preparing data for project adding form
 def getProjectFormAttrs():
+    # send_mail(
+    #     'Subject here',
+    #     'Here is the message.',
+    #     'webpm@solvo.ru',
+    #     ['oignashev@solvo.ru'],
+    #     fail_silently=False,
+    # )
     logger.info('Fetching project attributes')
     data = {}
     json_serializer = serializers.get_serializer("json")()

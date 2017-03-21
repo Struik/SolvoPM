@@ -201,3 +201,12 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
+
+EMAIL_HOST = 'mail.solvo.ru'
+EMAIL_PORT = 25
+# EMAIL_HOST_USER = "webpm@solvo.ru"
+# EMAIL_HOST_PASSWORD = "password"
+# EMAIL_USE_TLS = True
+#
+# SERVER_EMAIL = EMAIL_HOST_USER
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
