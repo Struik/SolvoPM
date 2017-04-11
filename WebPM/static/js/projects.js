@@ -168,7 +168,11 @@ $(document).ready(function() {
                     $(td).addClass('payment');
                     var column = columns[col]['data'].split('.')
 
-                    if(rowData[column[0]].planned.length == 0){
+                    console.log(rowData[column[0]]);
+
+                    //Skip processing if planned and confirmed are empty
+                    if(isNaN(parseInt(rowData[column[0]].planned)) && isNaN(parseInt(rowData[column[0]].confirmed))){
+                        console.log('empty');
                         key = '';
                         return;
                     }
@@ -181,7 +185,8 @@ $(document).ready(function() {
                         }
                     }
 
-                    if(column[1] === 'confirmed' && column[0] === key){
+                    if(column[1] === 'confirmed'){
+                        console.log('OOO')
                         $(td).append(' <span class="glyphicon glyphicon-search hoverable pull-right"></span>');
                         $(td).addClass('td-confirmed').addClass('show-month').addClass('td-hoverable');
                     }
