@@ -18,16 +18,10 @@ class Cities(models.Model):
     name = models.CharField(max_length=200)
     country = models.ForeignKey(Countries)
 
-class StageTypes(models.Model):
-    name = models.CharField(max_length=200)
-
 class PaymentTypes(models.Model):
     name = models.CharField(max_length=200)
 
 class ProjectTypes(models.Model):
-    name = models.CharField(max_length=200)
-
-class AttributeTypes(models.Model):
     name = models.CharField(max_length=200)
 
 class Projects(models.Model):
@@ -43,25 +37,67 @@ class Projects(models.Model):
             ('addNewProject', 'Adding new project'),
         )
 
-class Stages(models.Model):
+class StageTypes(models.Model):
     name = models.CharField(max_length=200)
-    stageType = models.ForeignKey(StageTypes)
-    project = models.ForeignKey(Projects)
+    plannedStartDate = models.DateField(null=True)
+    plannedFinishDate = models.DateField(null=True)
+    actualStartDate = models.DateField(null=True)
+    actualFinishDate = models.DateField(null=True)
+    allowanceDuration = models.IntegerField(null=True)
 
-class ProjectAttributes(models.Model):
-    stage = models.ForeignKey(Stages)
-    attrType = models.ForeignKey(AttributeTypes)
-    attrValue = models.IntegerField()
+class Stages(models.Model):
+    stageType = models.ForeignKey(StageTypes)
+    contract = models.ForeignKey(Contracts)
 
 class ContractTypes(models.Model):
-    name =  models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
 
 class Contracts(models.Model):
-    project = models.ForeignKey(Projects)
     contractType = models.ForeignKey(ContractTypes)
+    project = models.ForeignKey(Projects)
     name =  models.CharField(max_length=200, null=False)
     fullPrice = models.IntegerField(null=True)
     startDate = models.DateField(null=True)
+
+class ContractDates(models.Model):
+    contract = models.ForeignKey(Contracts)
+    approvedDate = models.DateField(null=True)
+    sentDate = models.DateField(null=True)
+    receivedDate = models.DateField(null=True)
+    storedDate = models.DateField(null=True)
+
+class ProjectDocumentTypes(models.Model):
+    name = models.CharField(max_length=200)
+
+class ProjectDocuments(models.Model):
+    projectDocumentType = models.ForeignKey(ProjectDocumentTypes)
+    contract = models.ForeignKey(Contracts)
+
+class ProjectDocumentDates(models.Model):
+    projectDocument = models.ForeignKey(ProjectDocuments)
+    approvedDate = models.DateField(null=True)
+    sentDate = models.DateField(null=True)
+    receivedDate = models.DateField(null=True)
+    storedDate = models.DateField(null=True)
+
+class Agreements(models.Model):
+    name =  models.CharField(max_length=200, null=False)
+    document = models.FileField("Document", upload_to="documents/agreements")
+    uploadDate = models.DateTimeField(auto_now_add=True)
+
+class AgreementDates(models.Model):
+    agreement = models.ForeignKey(Agreements)
+    approvedDate = models.DateField(null=True)
+    sentDate = models.DateField(null=True)
+    receivedDate = models.DateField(null=True)
+    storedDate = models.DateField(null=True)
+
+class AccountingDocumentType(models.Model):
+    name = models.CharField(max_length=200)
+
+class AccountingDocuments(models.Model):
+    accountingDocumentType = models.ForeignKey(AccountingDocumentType)
+    contract = models.ForeignKey(Contracts)
 
 class Payments(models.Model):
     contract = models.ForeignKey(Contracts)
@@ -88,7 +124,4 @@ class Payments(models.Model):
             ("cancelPayment", "Cancel payment"),
         )
 
-class Agreements(models.Model):
-    name =  models.CharField(max_length=200, null=False)
-    document = models.FileField("Document", upload_to="documents/agreements")
-    uploadDate = models.DateTimeField(auto_now_add=True)
+
