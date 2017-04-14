@@ -37,18 +37,6 @@ class Projects(models.Model):
             ('addNewProject', 'Adding new project'),
         )
 
-class StageTypes(models.Model):
-    name = models.CharField(max_length=200)
-    plannedStartDate = models.DateField(null=True)
-    plannedFinishDate = models.DateField(null=True)
-    actualStartDate = models.DateField(null=True)
-    actualFinishDate = models.DateField(null=True)
-    allowanceDuration = models.IntegerField(null=True)
-
-class Stages(models.Model):
-    stageType = models.ForeignKey(StageTypes)
-    contract = models.ForeignKey(Contracts)
-
 class ContractTypes(models.Model):
     name = models.CharField(max_length=200)
 
@@ -58,6 +46,11 @@ class Contracts(models.Model):
     name =  models.CharField(max_length=200, null=False)
     fullPrice = models.IntegerField(null=True)
     startDate = models.DateField(null=True)
+
+    class Meta:
+        permissions = (
+            ("viewContract", "Access to contract view"),
+        )
 
 class ContractDates(models.Model):
     contract = models.ForeignKey(Contracts)
@@ -97,6 +90,18 @@ class AccountingDocumentType(models.Model):
 
 class AccountingDocuments(models.Model):
     accountingDocumentType = models.ForeignKey(AccountingDocumentType)
+    contract = models.ForeignKey(Contracts)
+
+class StageTypes(models.Model):
+    name = models.CharField(max_length=200)
+    plannedStartDate = models.DateField(null=True)
+    plannedFinishDate = models.DateField(null=True)
+    actualStartDate = models.DateField(null=True)
+    actualFinishDate = models.DateField(null=True)
+    allowanceDuration = models.IntegerField(null=True)
+
+class Stages(models.Model):
+    stageType = models.ForeignKey(StageTypes)
     contract = models.ForeignKey(Contracts)
 
 class Payments(models.Model):

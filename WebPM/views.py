@@ -10,7 +10,7 @@ from django.views.decorators.cache import never_cache
 from django.db.models import Max, Min
 from django.utils.translation import ugettext as _
 from datetime import datetime
-from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, AttributeTypes, ProjectAttributes
+from WebPM.models import Companies, Countries, Cities, StageTypes, Stages
 from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments, Agreements
 from itertools import groupby
 from operator import itemgetter, methodcaller
@@ -39,6 +39,14 @@ def projects(request):
     logger.info('Redirecting to main with project next attrs:')
     logger.info(projectAttrs)
     return render(request, 'projects.html', {'LANGUAGES': settings.LANGUAGES, 'projectAttrs': projectAttrs})
+
+# Page with contract info and related objects
+@login_required
+@permission_required('WebPM.viewContract')
+@never_cache
+def contract(request):
+    logger.info('Contract page requested')
+    return render(request, 'contract.html', {'LANGUAGES': settings.LANGUAGES})
 
 
 # Preparing data for project adding form

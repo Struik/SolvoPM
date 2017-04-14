@@ -29,8 +29,11 @@ js_info_dict = {
 
 urlpatterns = [
     url(r'^$', views.projects, name='projects'),
+    url(r'^contract$', views.contract, name='contract'),
+
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+
     url(r'^get_projects_data', views.get_projects_data, name='get_projects_data'),
     url(r'^new_project', views.new_project, name='new_project'),
     url(r'^new_ref_value', views.new_ref_value, name='new_ref_value'),

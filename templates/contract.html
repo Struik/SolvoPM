@@ -1,0 +1,125 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block extracss %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+</script>
+
+<script src="{% static 'js/selectize.js' %}"></script>
+<script src="{% static 'js/jquery.steps.js' %}"></script>
+<script src="{% static 'js/jquery.validate.js' %}"></script>
+<script src="{% static 'js/localization.fix.js' %}"></script>
+<script src="{% static 'js/additional-methods.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+<script src="{% static 'js/jquery.masknumber.js' %}"></script>
+<script src="{% static 'js/contract.js' %}"></script>
+{% endblock %}
+
+
+{% block page-header %}{% trans "Contract page" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="col-sm-12 col-md-12 col-xl">
+        <div id="summaryPanel" class="panel panel-primary">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#summaryPanelBody">
+                        {% trans "Contract summary" %}
+                        <span class="glyphicon glyphicon-chevron-up pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="summaryPanelBody" class="panel-collapse collapse in">
+                <div class="panel-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-12 col-xl">
+        <div id="schedulePanel" class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#schedulePanelBody">
+                        {% trans "Schedule" %}
+                        <span class="glyphicon glyphicon-chevron-up pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="schedulePanelBody" class="panel-collapse collapse in">
+                <div class="panel-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-12 col-xl">
+        <div id="projectDocumentsPanel" class="panel panel-info">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#projectDocumentsPanelBody">
+                        {% trans "Project documents" %}
+                        <span class="glyphicon glyphicon-chevron-up pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="projectDocumentsPanelBody" class="panel-collapse collapse in">
+                <div class="panel-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-12 col-xl">
+        <div id="agreementsPanel" class="panel panel-warning">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#agreementsPanelBody">
+                        {% trans "Agreements" %}
+                        <span class="glyphicon glyphicon-chevron-up pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="agreementsPanelBody" class="panel-collapse collapse in">
+                <div class="panel-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-12 col-xl">
+        <div id="accountingDocuments" class="panel panel-success">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#accountingDocumentsBody">
+                        {% trans "Accounting documents" %}
+                        <span class="glyphicon glyphicon-chevron-up pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="accountingDocumentsBody" class="panel-collapse collapse in">
+                <div class="panel-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+</script>
+{% endblock %}
