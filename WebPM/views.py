@@ -61,7 +61,7 @@ def getProjectFormAttrs():
     logger.info('Fetching project attributes')
     data = {}
     json_serializer = serializers.get_serializer("json")()
-    projectModels = [Projects, Companies, Countries, Cities, StageTypes, PaymentTypes, ContractTypes]
+    projectModels = [Projects, Companies, Countries, Cities, ContractTypes]
     for Model in projectModels:
         data[Model.__name__] = json.loads(json_serializer.serialize(Model.objects.all()))
         logger.info(json_serializer.serialize(Model.objects.all()))
