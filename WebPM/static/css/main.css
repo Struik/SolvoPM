@@ -78,3 +78,17 @@
 .text-inline {
     display: inline;
 }
+
+.table-borderless tbody tr td,
+.table-borderless tbody tr th,
+.table-borderless thead tr th,
+.table-borderless thead tr td,
+.table-borderless tfoot tr th,
+.table-borderless tfoot tr td {
+    border: none;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0px;
+}
+
