@@ -27,7 +27,52 @@
 {% block page-header %}{% trans "Contract page" %}{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="modal fade" id="confirmContractDateModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="clearfix modal-header">
+                <h4 class="modal-title">{% trans 'Confirm date' %}</h4>
+            </div>
+
+            <div class="content clearfix modal-body">
+                <form id="confirmContractDateForm" method="post">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <div class='input-group date' id='contractDatePicker'>
+                                    <input type="text" class="form-control datepicker" id="contractDate"
+                                           name="contractDate" placeholder="{% trans 'Contract date' %}" tabindex="">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success btn-block" id="confirmContractDate">
+                                    {% trans "Confirm date" %}
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-warning btn-block" id="rollbackContractDate">
+                                    {% trans "Rollback date" %}
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
 
     <div class="col-sm-12 col-md-12 col-xl">
         <div id="summaryPanel" class="panel panel-primary">
@@ -41,60 +86,49 @@
             </div>
             <div id="summaryPanelBody" class="panel-collapse collapse in">
                 <div class="panel-body">
-                    <div class="col-sm-2 col-md-2 col-xl">
-                        <table id="summaryTable" class="table table-condensed table-borderless no-margin-bottom">
+                    <div class="col-lg-4 col-md-6 col-xl">
+                        <table id="summaryTable" class="table table-condensed  no-margin-bottom">
                             <thead>
                             </thead>
                             <tbody id="summaryTableBody">
                             <tr>
                                 <td>{% trans "Total sum" %}:</td>
                                 <td>3800000</td>
+                                <td></td>
+                                <td>{% trans "Approved" %}:</td>
+                                <td class="td-hoverable change-contract-date">20.03.17 <span
+                                        class="glyphicon glyphicon-pencil hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Confirmed" %}:</td>
                                 <td>2300001</td>
+                                <td></td>
+                                <td>{% trans "Sent" %}:</td>
+                                <td class="td-hoverable change-contract-date">22.04.17 <span
+                                        class="glyphicon glyphicon-pencil hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Contract status" %}:</td>
                                 <td>Received</td>
+                                <td></td>
+                                <td>{% trans "Received" %}:</td>
+                                <td class="td-hoverable change-contract-date"><span
+                                        class="glyphicon glyphicon-plus hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Project status" %}:</td>
                                 <td>Configuration</td>
+                                <td></td>
+                                <td>{% trans "Stored" %}:</td>
+                                <td class="td-hoverable change-contract-date"><span
+                                        class="glyphicon glyphicon-plus hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Travel cost" %}:</td>
                                 <td>200000</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!--<div class="col-sm-1 col-md-1 col-xl">-->
-                    <!--</div>-->
-                    <div class="col-sm-2 col-md-2 col-xl">
-                        <table id="summaryTable1" class="table table-condensed table-borderless no-margin-bottom">
-                            <thead>
-                            </thead>
-                            <tbody id="summaryTableBody1">
-                            <tr>
-                                <td>{% trans "Total sum" %}:</td>
-                                <td>3800000</td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Confirmed" %}:</td>
-                                <td>2300000</td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Contract status" %}:</td>
-                                <td>Received</td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Project status" %}:</td>
-                                <td>Configuration</td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Travel cost" %}:</td>
-                                <td>200000</td>
+                                <td></td>
+                                <td>{% trans "Sign up" %}:</td>
+                                <td class="td-hoverable"><span class="glyphicon glyphicon-bell hoverable"></span></td>
                             </tr>
                             </tbody>
                         </table>
