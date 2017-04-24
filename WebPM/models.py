@@ -46,6 +46,7 @@ class Contracts(models.Model):
     name =  models.CharField(max_length=200, null=False)
     fullPrice = models.IntegerField(null=True)
     startDate = models.DateField(null=True)
+    status = models.CharField(max_length=200, null=True)
 
     class Meta:
         permissions = (

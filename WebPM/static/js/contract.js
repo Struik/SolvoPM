@@ -40,8 +40,18 @@ $(document).ready(function() {
             $('#rollbackContractDate').addClass('hidden');
             $('#contractDatePicker').data("DateTimePicker").date(currentDate.today());
         }
-
         $('#confirmContractDateModal').modal('show');
     });
+
+    //Filling fields with data from JSON
+    var contractDates = JSON.parse(contractData.contractDates)[0]['fields']
+    console.log(contractDates)
+    $('#contractTotalSum').html(contractData.contractFinance.Total);
+    $('#contractConfirmedSum').html(contractData.contractFinance.Confirmed);
+//    $('#contractTravelCostSum').html(contractData.contractFinance.Confirmed);
+    $('#contractApprovedDate').html(contractDates.approvedDate);
+    $('#contractSentDate').html(contractDates.sentDate);
+    $('#contractReceivedDate').html(contractDates.receivedDate);
+    $('#contractStoredDate').html(contractDates.storedDate);
 
 });

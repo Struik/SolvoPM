@@ -1,5 +1,7 @@
 import os, platform
 from django.conf import settings
+from django.db.models import Sum
+from django.forms.models import model_to_dict
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import logout
@@ -10,8 +12,8 @@ from django.views.decorators.cache import never_cache
 from django.db.models import Max, Min
 from django.utils.translation import ugettext as _
 from datetime import datetime
-from WebPM.models import Companies, Countries, Cities, StageTypes, Stages
-from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Payments, Agreements
+from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, Payments
+from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Agreements, ContractDates
 from itertools import groupby
 from operator import itemgetter, methodcaller
 from django.core.serializers.json import DjangoJSONEncoder
@@ -28,6 +30,7 @@ def logout_page(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+
 # Page with contracts info and button to add new ones
 @login_required
 @permission_required('WebPM.viewProjects')
@@ -40,13 +43,54 @@ def projects(request):
     logger.info(projectAttrs)
     return render(request, 'projects.html', {'LANGUAGES': settings.LANGUAGES, 'projectAttrs': projectAttrs})
 
+
 # Page with contract info and related objects
 @login_required
 @permission_required('WebPM.viewContract')
 @never_cache
 def contract(request):
     logger.info('Contract page requested')
-    return render(request, 'contract.html', {'LANGUAGES': settings.LANGUAGES})
+    contractData = get_full_contract_data(70)
+
+    return render(request, 'contract.html', {'LANGUAGES': settings.LANGUAGES, 'contractData': contractData})
+
+
+def get_full_contract_data(contractId):
+    logger.info('Preparing full contract data')
+    contractData = {}
+    contract = Contracts.objects.filter(pk=contractId)
+    logger.info(contract)
+    json_serializer = serializers.get_serializer("json")()
+    contractData['contract'] = json_serializer.serialize(contract)
+
+    contractDates = get_contract_dates_and_status(contractId)
+    contractFinance = get_contract_finance(contractId)
+
+    contractData['contractDates'] = contractDates
+    contractData['contractFinance'] = contractFinance
+    logger.info('Contract data:')
+    logger.info(contractData)
+    return contractData
+
+
+def get_contract_dates(contractId):
+    logger.info('Fetching contract dates')
+    contractDates = {}
+    contractDatesValues = ContractDates.objects.filter(contract_id=contractId).values()[0]
+    contractDates['approvedDate']
+    contractDates['sentDate']
+    contractDates['receivedDate']
+    contractDates['storedDate']
+
+    return contractDates
+
+
+def get_contract_finance(contractId):
+    logger.info('Fetching contract finance')
+    contractFinance = {}
+    contractFinance['Total'] = Payments.objects.filter(contract_id=contractId, split=False, canceled=False).aggregate(sum=Sum('paymentAmount'))['sum']
+    contractFinance['Confirmed'] = Payments.objects.filter(contract_id=contractId, confirmed=True).aggregate(sum=Sum('paymentAmount'))['sum']
+    return contractFinance
 
 
 # Preparing data for project adding form

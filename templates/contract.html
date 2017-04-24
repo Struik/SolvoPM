@@ -10,6 +10,13 @@
 
 {% block extrajs %}
 <script>
+    {% for query, x in contractData.items %}
+        console.log('{{query}}');
+        console.log({{x|safe}});
+    {% endfor %}
+
+    var contractData = {{contractData|safe }};
+    console.log(contractData);
 </script>
 
 <script src="{% static 'js/selectize.js' %}"></script>
@@ -93,39 +100,39 @@
                             <tbody id="summaryTableBody">
                             <tr>
                                 <td>{% trans "Total sum" %}:</td>
-                                <td>3800000</td>
+                                <td id="contractTotalSum"></td>
                                 <td></td>
                                 <td>{% trans "Approved" %}:</td>
-                                <td class="td-hoverable change-contract-date">20.03.17 <span
+                                <td id="contractApprovedDate" class="td-hoverable change-contract-date"><span
                                         class="glyphicon glyphicon-pencil hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Confirmed" %}:</td>
-                                <td>2300001</td>
+                                <td id="contractConfirmedSum"></td>
                                 <td></td>
                                 <td>{% trans "Sent" %}:</td>
-                                <td class="td-hoverable change-contract-date">22.04.17 <span
+                                <td id="contractSentDate" class="td-hoverable change-contract-date"><span
                                         class="glyphicon glyphicon-pencil hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Contract status" %}:</td>
-                                <td>Received</td>
+                                <td id="contractStatus">Received</td>
                                 <td></td>
                                 <td>{% trans "Received" %}:</td>
-                                <td class="td-hoverable change-contract-date"><span
+                                <td id="contractReceivedDate" class="td-hoverable change-contract-date"><span
                                         class="glyphicon glyphicon-plus hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Project status" %}:</td>
-                                <td>Configuration</td>
+                                <td id="projectStatus">Unknown</td>
                                 <td></td>
                                 <td>{% trans "Stored" %}:</td>
-                                <td class="td-hoverable change-contract-date"><span
+                                <td id="contractStoredDate" class="td-hoverable change-contract-date"><span
                                         class="glyphicon glyphicon-plus hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Travel cost" %}:</td>
-                                <td>200000</td>
+                                <td id="contractTravelCostSum"></td>
                                 <td></td>
                                 <td>{% trans "Sign up" %}:</td>
                                 <td class="td-hoverable"><span class="glyphicon glyphicon-bell hoverable"></span></td>
