@@ -85,7 +85,7 @@ function fillContractDates(elementId, value){
 }
 
 function changeContractDate(){
-    var changedData = {'contractDateId': contractDates.id, 'contractDate': $('#contractDate').val(),
+    var changedData = {'contractId': contractDates.contract_id, 'contractDate': $('#contractDate').val(),
                                 'contractDateType': $('#confirmContractDateModal').attr('contract-date-type')}
     console.log(changedData);
     $.ajax({

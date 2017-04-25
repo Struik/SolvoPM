@@ -504,13 +504,9 @@ def change_contract_date(request):
         logger.info('POST request params:')
         logger.info(params)
         contract = Contracts.objects.get(pk=params['contractId'])
-        if contract:
-            logger.info('Found contract: ' + str(contract.name))
-            contractDate = datetime.strptime(params['contractDate'], '%d.%m.%y')
-            contractDateField = getattr(ContractDates, params['contractDateId'])
-            contractDates = ContractDates(contract=contract, contractDateField = contractDate)
-            contractDates.save()
-            return HttpResponse('')
-        else:
-            logger.info('Specified contract can not be found')
-            raise Http404
+        logger.info('Found contract: ' + str(contract.name))
+        contractDate = datetime.strptime(params['contractDate'], '%d.%m.%y')
+        contractDates = ContractDates.objects.get(contract=contract)
+        setattr(contractDates, params['contractDateType'], contractDate)
+        contractDates.save()
+        return HttpResponse('')
