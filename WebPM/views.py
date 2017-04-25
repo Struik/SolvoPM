@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from django.db.models import Max, Min
 from django.utils.translation import ugettext as _
-from datetime import datetime
+from datetime import datetime, date
 from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, Payments
 from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Agreements, ContractDates
 from itertools import groupby
@@ -63,10 +63,10 @@ def get_full_contract_data(contractId):
     json_serializer = serializers.get_serializer("json")()
     contractData['contract'] = json_serializer.serialize(contract)
 
-    contractDates = get_contract_dates_and_status(contractId)
+    contractDates = get_contract_dates(contractId)
     contractFinance = get_contract_finance(contractId)
 
-    contractData['contractDates'] = contractDates
+    contractData['contractDates'] = json.dumps(contractDates)
     contractData['contractFinance'] = contractFinance
     logger.info('Contract data:')
     logger.info(contractData)
@@ -75,13 +75,10 @@ def get_full_contract_data(contractId):
 
 def get_contract_dates(contractId):
     logger.info('Fetching contract dates')
-    contractDates = {}
-    contractDatesValues = ContractDates.objects.filter(contract_id=contractId).values()[0]
-    contractDates['approvedDate']
-    contractDates['sentDate']
-    contractDates['receivedDate']
-    contractDates['storedDate']
-
+    contractDates = ContractDates.objects.filter(contract_id=contractId).values()[0]
+    #Converting dates to display-ready format
+    for key in contractDates.keys():
+        if isinstance(contractDates[key], date) : contractDates[key] = contractDates[key].strftime('%d.%m.%y')
     return contractDates
 
 
@@ -492,4 +489,28 @@ def download_agreement(request):
                 response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
                 return response
         else:
+            raise Http404
+
+
+#Changing contract date
+@login_required
+@csrf_exempt
+def change_contract_date(request):
+    logger.info('Change contract date request')
+    logger.info(request)
+    if (request.POST):
+        logger.info('Request is POST:')
+        params = request.POST
+        logger.info('POST request params:')
+        logger.info(params)
+        contract = Contracts.objects.get(pk=params['contractId'])
+        if contract:
+            logger.info('Found contract: ' + str(contract.name))
+            contractDate = datetime.strptime(params['contractDate'], '%d.%m.%y')
+            contractDateField = getattr(ContractDates, params['contractDateId'])
+            contractDates = ContractDates(contract=contract, contractDateField = contractDate)
+            contractDates.save()
+            return HttpResponse('')
+        else:
+            logger.info('Specified contract can not be found')
             raise Http404

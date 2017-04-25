@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block extracss %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom/main.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
 {% endblock %}
@@ -17,6 +17,8 @@
 
     var contractData = {{contractData|safe }};
     console.log(contractData);
+    var contractDates = JSON.parse(contractData.contractDates);
+    console.log(contractDates);
 </script>
 
 <script src="{% static 'js/selectize.js' %}"></script>
@@ -27,7 +29,7 @@
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
 <script src="{% static 'js/jquery.masknumber.js' %}"></script>
-<script src="{% static 'js/contract.js' %}"></script>
+<script src="{% static 'js/custom/contract.js' %}"></script>
 {% endblock %}
 
 
@@ -85,7 +87,7 @@
         <div id="summaryPanel" class="panel panel-primary">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="accordion-toggle" data-toggle="collapse" data-target="#summaryPanelBody">
+                    <a class="" data-toggle="collapse" data-target="#summaryPanelBody">
                         {% trans "Contract summary" %}
                         <span class="glyphicon glyphicon-chevron-up pull-right"></span>
                     </a>
@@ -103,32 +105,32 @@
                                 <td id="contractTotalSum"></td>
                                 <td></td>
                                 <td>{% trans "Approved" %}:</td>
-                                <td id="contractApprovedDate" class="td-hoverable change-contract-date"><span
-                                        class="glyphicon glyphicon-pencil hoverable"></span></td>
+                                <td class="td-hoverable change-contract-date"><a id="contractApprovedDate"></a> <span
+                                        class="glyphicon hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Confirmed" %}:</td>
                                 <td id="contractConfirmedSum"></td>
                                 <td></td>
                                 <td>{% trans "Sent" %}:</td>
-                                <td id="contractSentDate" class="td-hoverable change-contract-date"><span
-                                        class="glyphicon glyphicon-pencil hoverable"></span></td>
+                                <td class="td-hoverable change-contract-date"><a id="contractSentDate"></a> <span
+                                        class="glyphicon hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Contract status" %}:</td>
                                 <td id="contractStatus">Received</td>
                                 <td></td>
                                 <td>{% trans "Received" %}:</td>
-                                <td id="contractReceivedDate" class="td-hoverable change-contract-date"><span
-                                        class="glyphicon glyphicon-plus hoverable"></span></td>
+                                <td class="td-hoverable change-contract-date"><a id="contractReceivedDate"></a> <span
+                                        class="glyphicon hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Project status" %}:</td>
                                 <td id="projectStatus">Unknown</td>
                                 <td></td>
                                 <td>{% trans "Stored" %}:</td>
-                                <td id="contractStoredDate" class="td-hoverable change-contract-date"><span
-                                        class="glyphicon glyphicon-plus hoverable"></span></td>
+                                <td class="td-hoverable change-contract-date"><a id="contractStoredDate"></a> <span
+                                        class="glyphicon hoverable"></span></td>
                             </tr>
                             <tr>
                                 <td>{% trans "Travel cost" %}:</td>
