@@ -505,7 +505,7 @@ def change_contract_date(request):
         logger.info(params)
         contract = Contracts.objects.get(pk=params['contractId'])
         logger.info('Found contract: ' + str(contract.name))
-        contractDate = datetime.strptime(params['contractDate'], '%d.%m.%y')
+        contractDate = datetime.strptime(params['contractDate'], '%d.%m.%y') if params['contractDate'] else None
         contractDates = ContractDates.objects.get(contract=contract)
         setattr(contractDates, params['contractDateType'], contractDate)
         contractDates.save()

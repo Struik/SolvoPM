@@ -51,15 +51,25 @@
 
 .hoverable {
     color: #999999;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .hoverable:hover {
     color: #333333;
 }
 
-.hoverable {
-    cursor: pointer;
-    cursor: hand;
+.not-allowed .hoverable {
+    color: #cccccc;
+    cursor: not-allowed;
+}
+
+td:not(.not-allowed) .hoverable.glyphicon-plus {
+    color: #5cb85c;
+}
+
+td:not(.not-allowed) .hoverable.glyphicon-plus:hover {
+    color: #449d44;
 }
 
 .tr-hoverable td, .td-hoverable {
@@ -67,8 +77,16 @@
     cursor: hand;
 }
 
-.tr-hoverable:hover .hoverable, .td-hoverable:hover .hoverable{
+.tr-hoverable td.not-allowed, .td-hoverable.not-allowed {
+    cursor: not-allowed;
+}
+
+.tr-hoverable:hover .hoverable, .td-hoverable:not(.not-allowed):hover .hoverable{
     color: #333333;
+}
+
+.tr-hoverable:hover .hoverable.glyphicon-plus, .td-hoverable:not(.not-allowed):hover .hoverable.glyphicon-plus{
+    color: #449d44;
 }
 
 .modal-sm {

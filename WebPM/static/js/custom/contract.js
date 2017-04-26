@@ -8,9 +8,11 @@ $(document).ready(function() {
         return ((this.getDate() < 10) ? "0" : "") + this.getDate() + "." + (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "." + this.getFullYear().toString().substr(2);
     }
 
-
+    //Used for filling contract dates vaues and designing it depending
     var contractDateFields = {'contractApprovedDate': 'approvedDate', 'contractSentDate': 'sentDate',
-                                        'contractReceivedDate': 'receivedDate', 'contractStoredDate':'storedDate'}
+                                        'contractReceivedDate': 'receivedDate', 'contractStoredDate':'storedDate'};
+    var contractDatesSequence = ['contractApprovedDate', 'contractSentDate', 'contractReceivedDate', 'contractStoredDate'];
+    var prevContractDateValue = true;
 
 
     //Enabling datetimepicker fields
@@ -33,7 +35,7 @@ $(document).ready(function() {
 
 
     //Showing modal form with selected date confirmation or rollback
-    $("#summaryTable").on("click", ".change-contract-date", function() {
+    $(document).on("click", "td.change-contract-date:not(.not-allowed)", function() {
         var dateField = $(this).children('a');
         //Contract date type will be sent to server when added/changed/rollbacked
         $('#confirmContractDateModal').attr('contract-date-type', contractDateFields[dateField.attr('id')]);
@@ -58,9 +60,12 @@ $(document).ready(function() {
     $('#contractConfirmedSum').html(contractData.contractFinance.Confirmed);
     //    $('#contractTravelCostSum').html(contractData.contractFinance.Confirmed);
 
-    for (var key in contractDateFields) {
-        fillContractDates(key, contractDates[contractDateFields[key]]);
+    for (var i = 0; i < contractDatesSequence.length; i++){
+        var value = contractDates[contractDateFields[contractDatesSequence[i]]];
+        fillContractDates(contractDatesSequence[i], value, prevContractDateValue);
+        prevContractDateValue = value;
     }
+
 
     //Call server on contract date saving
     $('#confirmContractDate').click(function() {
@@ -68,25 +73,39 @@ $(document).ready(function() {
         if(true)
         {
             console.log('Confirming contract date');
-            changeContractDate();
+            var changedData = {'contractId': contractDates.contract_id, 'contractDate': $('#contractDate').val(),
+                                'contractDateType': $('#confirmContractDateModal').attr('contract-date-type')}
+            changeContractDate(changedData);
+        };
+    });
+
+    //Call server on contract date saving
+    $('#rollbackContractDate').click(function() {
+        //TODO. Change to form/field validation
+        if(true)
+        {
+            console.log('Confirming contract date');
+            var changedData = {'contractId': contractDates.contract_id, 'contractDate': '',
+                                'contractDateType': $('#confirmContractDateModal').attr('contract-date-type')}
+            changeContractDate(changedData);
         };
     });
 
 });
 
-function fillContractDates(elementId, value){
-    if (value){
+
+function fillContractDates(elementId, value, prevValue){
+    if(value){
         $('#' + elementId).html(value);
         $('#' + elementId).next().addClass('glyphicon-pencil');
     }
     else {
         $('#' + elementId).next().addClass('glyphicon-plus');
+        if(!prevValue) $('#' + elementId).parent().addClass('not-allowed');
     }
 }
 
-function changeContractDate(){
-    var changedData = {'contractId': contractDates.contract_id, 'contractDate': $('#contractDate').val(),
-                                'contractDateType': $('#confirmContractDateModal').attr('contract-date-type')}
+function changeContractDate(changedData){
     console.log(changedData);
     $.ajax({
         type: 'POST',
