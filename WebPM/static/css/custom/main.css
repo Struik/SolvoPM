@@ -110,3 +110,7 @@ td:not(.not-allowed) .hoverable.glyphicon-plus:hover {
     margin-bottom: 0px;
 }
 
+/*Fix for showing bootstrap tooltips and popovers on disabled elements*/
+:disabled {
+  pointer-events: none;,
+}

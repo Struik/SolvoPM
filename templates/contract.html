@@ -19,6 +19,15 @@
     console.log(contractData);
     var contractDates = JSON.parse(contractData.contractDates);
     console.log(contractDates);
+
+    //Used for filling contract dates vaues and designing it
+    var contractDateFields = {'1': {'element_id': 'contractApprovedDate', 'db_field': 'approvedDate', 'status': gettext('Approved')},
+                            '2': {'element_id': 'contractSentDate', 'db_field': 'sentDate', 'status': gettext('Sent')},
+                            '3': {'element_id': 'contractReceivedDate', 'db_field': 'receivedDate', 'status': gettext('Received')},
+                            '4': {'element_id': 'contractStoredDate', 'db_field': 'storedDate', 'status': gettext('Stored')}};
+    var prevContractDateValue = true;
+
+
 </script>
 
 <script src="{% static 'js/selectize.js' %}"></script>
@@ -66,9 +75,12 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="button" class="btn btn-warning btn-block" id="rollbackContractDate">
-                                    {% trans "Rollback date" %}
-                                </button>
+                                <div data-toggle="popover" data-placement="bottom" data-container="body"
+                                     data-content="Unavailable while next date is filled">
+                                    <button type="button" class="btn btn-warning btn-block" id="rollbackContractDate">
+                                        {% trans "Rollback date" %}
+                                    </button>
+                                </div>
                             </div>
 
                         </div>
@@ -137,7 +149,8 @@
                                 <td id="contractTravelCostSum"></td>
                                 <td></td>
                                 <td>{% trans "Sign up" %}:</td>
-                                <td class="td-hoverable"><span class="glyphicon glyphicon-bell hoverable"></span></td>
+                                <td class="td-hoverable not-allowed"><span
+                                        class="glyphicon glyphicon-bell hoverable"></span></td>
                             </tr>
                             </tbody>
                         </table>
