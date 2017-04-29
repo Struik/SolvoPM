@@ -94,16 +94,17 @@ class AccountingDocuments(models.Model):
     contract = models.ForeignKey(Contracts)
 
 class StageTypes(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, null=False)
+
+class Stages(models.Model):
+    contract = models.ForeignKey(Contracts)
+    stageType = models.ForeignKey(StageTypes)
     plannedStartDate = models.DateField(null=True)
     plannedFinishDate = models.DateField(null=True)
     actualStartDate = models.DateField(null=True)
     actualFinishDate = models.DateField(null=True)
+    status = models.CharField(max_length=200, null=True)
     allowanceDuration = models.IntegerField(null=True)
-
-class Stages(models.Model):
-    stageType = models.ForeignKey(StageTypes)
-    contract = models.ForeignKey(Contracts)
 
 class Payments(models.Model):
     contract = models.ForeignKey(Contracts)

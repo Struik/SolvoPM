@@ -5,13 +5,16 @@ $(document).ready(function() {
     var contractDatePicker = $('#contractDatePicker');
     var confirmContractDateButton = $('#confirmContractDate');
     var rollbackContractDateButton = $('#rollbackContractDate');
+    var stagesTable = $('#stagesTable');
+    var prevRow = 0;
+    var hasEmptyColumn = false;
+
 
     //For todays date
     var currentDate = new Date();
     Date.prototype.today = function() {
         return ((this.getDate() < 10) ? "0" : "") + this.getDate() + "." + (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "." + this.getFullYear().toString().substr(2);
     }
-
 
 
     //Enabling datetimepicker fields
@@ -65,9 +68,11 @@ $(document).ready(function() {
 
 
     //Filling fields with contract data from JSON
+    $('#contractStatus').html(contract.fields.status);
     $('#contractTotalSum').html(contractData.contractFinance.Total);
     $('#contractConfirmedSum').html(contractData.contractFinance.Confirmed);
     //    $('#contractTravelCostSum').html(contractData.contractFinance.Confirmed);
+
 
     for (var key in contractDateFields) {
         var value = contractDates[contractDateFields[key]['db_field']];
@@ -84,11 +89,13 @@ $(document).ready(function() {
         {
             console.log('Confirming contract date');
             var contractDateType = contractDateFields[confirmDateForm.attr('contract-date-id')]['db_field'];
+            var contractStatus = contractDateFields[confirmDateForm.attr('contract-date-id')]['status'];
             var changedData = {'contractId': contractDates.contract_id, 'contractDate': $('#contractDate').val(),
-                                                                                'contractDateType': contractDateType};
+                                            'contractStatus': contractStatus, 'contractDateType': contractDateType};
             changeContractDate(changedData);
         };
     });
+
 
     //Call server on contract date rollback. Same request as for date changing with empty value
     rollbackContractDateButton.click(function() {
@@ -97,12 +104,62 @@ $(document).ready(function() {
         {
             console.log('Rollbacking contract date');
             var contractDateType = contractDateFields[confirmDateForm.attr('contract-date-id')]['db_field'];
+            var contractStatus = '';
+            //Sending empty status if rollbacking first date
+            if (confirmDateForm.attr('contract-date-id') > 1){
+                contractStatus = contractDateFields[confirmDateForm.attr('contract-date-id') - 1]['status'];
+            }
             var changedData = {'contractId': contractDates.contract_id, 'contractDate': '',
-                                                                                'contractDateType': contractDateType};
+                                            'contractStatus': contractStatus, 'contractDateType': contractDateType};
             changeContractDate(changedData);
         };
     });
 
+
+    stagesTable.DataTable({
+        data: stagesData,
+        columns: [
+            { "data": "id" },
+            { "data": "stageType" },
+            { "data": "status" },
+            { "data": "plannedStartDate" },
+            { "data": "plannedFinishDate" },
+            { "data": "actualStartDate" },
+            { "data": "actualFinishDate" },
+            { "data": "status" },
+            { "data": "status" },
+        ],
+        paging: false,
+        ordering: false,
+        searching: false,
+        info: false,
+        columnDefs: [{
+            //Icons for date adding
+            targets: [3, 4, 5, 6],
+            createdCell: function (td, cellData, rowData, row, col) {
+                if (row != prevRow) hasEmptyColumn = false;
+                if (!cellData){
+                    if (!hasEmptyColumn && prevRow == row){
+                        hasEmptyColumn = true;
+                        $(td).append('<span class="glyphicon hoverable glyphicon-plus"></span>');
+                        $(td).addClass('text-center').addClass('change-stage-date').addClass('td-hoverable');
+                    }
+                    else{
+                        $(td).append('<span class="glyphicon hoverable glyphicon-plus"></span>');
+                        $(td).addClass('text-center').addClass('change-stage-date').addClass('td-hoverable');
+                        $(td).addClass('not-allowed').attr('data-container','body')
+                            .attr('data-container','body').attr('data-toggle','popover').attr('data-placement','bottom')
+                            .attr('data-content', gettext('Unavailable before previous date is filled'));
+                    }
+                }
+                prevRow = row;
+            },
+        }],
+    });
+
+    $('[data-toggle="popover"]').popover({
+                trigger: "hover",
+    });
 });
 
 
@@ -117,12 +174,9 @@ function fillContractDates(elementId, key, value, prevValue){
         if(!prevValue){
             $('#' + elementId).parent().addClass('not-allowed').attr('data-container','body')
                             .attr('data-container','body').attr('data-toggle','popover').attr('data-placement','right')
-                            .attr('data-content', gettext('Unavailable before previous date is not filled'));
+                            .attr('data-content', gettext('Unavailable before previous date is filled'));
              //Enabling popovers. Might use the way to move it to the start of the file
              //http://stackoverflow.com/questions/16990573/how-to-bind-bootstrap-popover-on-dynamic-elements
-            $('[data-toggle="popover"]').popover({
-                trigger: "hover",
-            });
         }
     }
 }

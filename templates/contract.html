@@ -5,6 +5,7 @@
 {% block extracss %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/custom/main.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
 {% endblock %}
 
@@ -17,8 +18,12 @@
 
     var contractData = {{contractData|safe }};
     console.log(contractData);
+    var contract = JSON.parse(contractData.contract)[0];
+    console.log(contract);
     var contractDates = JSON.parse(contractData.contractDates);
     console.log(contractDates);
+    var stagesData = JSON.parse(contractData.stagesData);
+    console.log(stagesData);
 
     //Used for filling contract dates vaues and designing it
     var contractDateFields = {'1': {'element_id': 'contractApprovedDate', 'db_field': 'approvedDate', 'status': gettext('Approved')},
@@ -28,6 +33,7 @@
     var prevContractDateValue = true;
 
 
+
 </script>
 
 <script src="{% static 'js/selectize.js' %}"></script>
@@ -35,6 +41,8 @@
 <script src="{% static 'js/jquery.validate.js' %}"></script>
 <script src="{% static 'js/localization.fix.js' %}"></script>
 <script src="{% static 'js/additional-methods.js' %}"></script>
+<script src="{% static 'js/datatables.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap.js' %}"></script>
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
 <script src="{% static 'js/jquery.masknumber.js' %}"></script>
@@ -76,7 +84,7 @@
 
                             <div class="form-group">
                                 <div data-toggle="popover" data-placement="bottom" data-container="body"
-                                     data-content="Unavailable while next date is filled">
+                                     data-content="Unavailable while next date is filled" data-trigger="hover">
                                     <button type="button" class="btn btn-warning btn-block" id="rollbackContractDate">
                                         {% trans "Rollback date" %}
                                     </button>
@@ -108,7 +116,7 @@
             <div id="summaryPanelBody" class="panel-collapse collapse in">
                 <div class="panel-body">
                     <div class="col-lg-4 col-md-6 col-xl">
-                        <table id="summaryTable" class="table table-condensed  no-margin-bottom">
+                        <table id="summaryTable" class="table table-condensed no-margin-bottom">
                             <thead>
                             </thead>
                             <tbody id="summaryTableBody">
@@ -172,6 +180,23 @@
             </div>
             <div id="schedulePanelBody" class="panel-collapse collapse in">
                 <div class="panel-body">
+                    <div class="">
+                        <table id="stagesTable" class="table table-condensed table-bordered no-margin-bottom">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>{% trans "Name" %}</th>
+                                <th>{% trans "Status" %}</th>
+                                <th>{% trans "Starting date (plan)" %}</th>
+                                <th>{% trans "Starting date (real)" %}</th>
+                                <th>{% trans "Finish date (plan)" %}</th>
+                                <th>{% trans "Finish date (real)" %}</th>
+                                <th>{% trans "Documents" %}</th>
+                                <th>{% trans "Quality" %}</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

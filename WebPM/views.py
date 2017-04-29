@@ -12,7 +12,7 @@ from django.views.decorators.cache import never_cache
 from django.db.models import Max, Min
 from django.utils.translation import ugettext as _
 from datetime import datetime, date
-from WebPM.models import Companies, Countries, Cities, StageTypes, Stages, Payments
+from WebPM.models import Companies, Countries, Cities, Stages, StageTypes, Payments
 from WebPM.models import ProjectTypes, PaymentTypes, ContractTypes, Projects, Contracts, Agreements, ContractDates
 from itertools import groupby
 from operator import itemgetter, methodcaller
@@ -65,9 +65,11 @@ def get_full_contract_data(contractId):
 
     contractDates = get_contract_dates(contractId)
     contractFinance = get_contract_finance(contractId)
+    stagesData = get_stages_data(contractId)
 
     contractData['contractDates'] = json.dumps(contractDates)
     contractData['contractFinance'] = contractFinance
+    contractData['stagesData'] = json.dumps(stagesData)
     logger.info('Contract data:')
     logger.info(contractData)
     return contractData
@@ -89,6 +91,18 @@ def get_contract_finance(contractId):
     contractFinance['Confirmed'] = Payments.objects.filter(contract_id=contractId, confirmed=True).aggregate(sum=Sum('paymentAmount'))['sum']
     return contractFinance
 
+
+def get_stages_data(contractId):
+    stagesData = []
+    stages = Stages.objects.filter(contract_id=contractId)
+    if stages:
+        stagesData = list(stages.values())
+        logger.info(stagesData)
+        for stage in stagesData:
+            stage['stageType'] = StageTypes.objects.get(pk=stage['stageType_id']).name
+            for key in stage.keys():
+                if isinstance(stage[key], date) : stage[key] = stage[key].strftime('%d.%m.%y')
+    return stagesData
 
 # Preparing data for project adding form
 def getProjectFormAttrs():
@@ -142,6 +156,8 @@ def new_project(request):
             contractObject = Contracts(name=contracts['name'], contractType_id=contracts['type'],
                                        project_id=projectId)
             contractObject.save()
+            contractDatesObject = contractDates(contract = contractObject)
+            contractDatesObject.save()
             logger.info('Contract #' + str(contractObject.id) + ' created')
             for payment in contracts['payments'].items():
                 logger.info('Adding payment:')
@@ -505,6 +521,8 @@ def change_contract_date(request):
         logger.info(params)
         contract = Contracts.objects.get(pk=params['contractId'])
         logger.info('Found contract: ' + str(contract.name))
+        contract.status = params['contractStatus']
+        contract.save();
         contractDate = datetime.strptime(params['contractDate'], '%d.%m.%y') if params['contractDate'] else None
         contractDates = ContractDates.objects.get(contract=contract)
         setattr(contractDates, params['contractDateType'], contractDate)

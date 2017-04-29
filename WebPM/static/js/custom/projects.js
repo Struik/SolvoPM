@@ -161,7 +161,7 @@ $(document).ready(function() {
                 searchable: false,
             },
             {
-                //Bootstrap popovers (tooltip) for each payment in the table
+                //Icons for payments in the table
                 targets: paymentsColumns,
                 render:     $.fn.dataTable.render.number( ' ', '.', 0 ),
                 createdCell: function (td, cellData, rowData, row, col) {
