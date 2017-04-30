@@ -528,3 +528,24 @@ def change_contract_date(request):
         setattr(contractDates, params['contractDateType'], contractDate)
         contractDates.save()
         return HttpResponse('')
+
+
+#Changing contract date
+@login_required
+@csrf_exempt
+def change_stage_date(request):
+    logger.info('Change stage date request')
+    logger.info(request)
+    if (request.POST):
+        logger.info('Request is POST:')
+        params = request.POST
+        logger.info('POST request params:')
+        logger.info(params)
+        stage = Stage.objects.get(pk=params['stageId'])
+        stage.status = params['stageStatus']
+        contract.save();
+        contractDate = datetime.strptime(params['contractDate'], '%d.%m.%y') if params['contractDate'] else None
+        contractDates = ContractDates.objects.get(contract=contract)
+        setattr(contractDates, params['contractDateType'], contractDate)
+        contractDates.save()
+        return HttpResponse('')

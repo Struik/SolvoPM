@@ -114,3 +114,9 @@ td:not(.not-allowed) .hoverable.glyphicon-plus:hover {
 :disabled {
   pointer-events: none;,
 }
+
+.dataTable th{
+    font-weight: normal;
+    background-color: #337ab7;
+    color: white;
+}

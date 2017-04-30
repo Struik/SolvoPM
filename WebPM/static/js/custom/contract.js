@@ -6,8 +6,7 @@ $(document).ready(function() {
     var confirmContractDateButton = $('#confirmContractDate');
     var rollbackContractDateButton = $('#rollbackContractDate');
     var stagesTable = $('#stagesTable');
-    var prevRow = 0;
-    var hasEmptyColumn = false;
+    var prevStageDate;
 
 
     //For todays date
@@ -16,6 +15,7 @@ $(document).ready(function() {
         return ((this.getDate() < 10) ? "0" : "") + this.getDate() + "." + (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "." + this.getFullYear().toString().substr(2);
     }
 
+    //Contract panel handling
 
     //Enabling datetimepicker fields
     contractDatePicker.datetimepicker({
@@ -115,16 +115,17 @@ $(document).ready(function() {
         };
     });
 
+    //Stages panel handling
 
-    stagesTable.DataTable({
+    var stagesDataTable = stagesTable.DataTable({
         data: stagesData,
         columns: [
             { "data": "id" },
             { "data": "stageType" },
             { "data": "status" },
             { "data": "plannedStartDate" },
-            { "data": "plannedFinishDate" },
             { "data": "actualStartDate" },
+            { "data": "plannedFinishDate" },
             { "data": "actualFinishDate" },
             { "data": "status" },
             { "data": "status" },
@@ -134,29 +135,71 @@ $(document).ready(function() {
         searching: false,
         info: false,
         columnDefs: [{
-            //Icons for date adding
-            targets: [3, 4, 5, 6],
+            //Icons for changing plan dates
+            targets: [3, 5],
             createdCell: function (td, cellData, rowData, row, col) {
-                if (row != prevRow) hasEmptyColumn = false;
-                if (!cellData){
-                    if (!hasEmptyColumn && prevRow == row){
-                        hasEmptyColumn = true;
-                        $(td).append('<span class="glyphicon hoverable glyphicon-plus"></span>');
-                        $(td).addClass('text-center').addClass('change-stage-date').addClass('td-hoverable');
-                    }
-                    else{
-                        $(td).append('<span class="glyphicon hoverable glyphicon-plus"></span>');
-                        $(td).addClass('text-center').addClass('change-stage-date').addClass('td-hoverable');
+                console.log()
+                console.log(rowData);
+                console.log(cellData);
+                $(td).append(' <span class="glyphicon hoverable glyphicon-pencil"></span>');
+                $(td).addClass('text-center').addClass('change-stage-date').addClass('plan-date')
+                                                                                            .addClass('td-hoverable');
+            },
+        },
+        {
+            //Icons for date adding
+            targets: [4, 6],
+            createdCell: function (td, cellData, rowData, row, col) {
+                $(td).addClass('text-center').addClass('change-stage-date').addClass('real-date')
+                                                                                            .addClass('td-hoverable');
+                if (cellData){
+                    $(td).append(' <span class="glyphicon hoverable glyphicon-pencil"></span>');
+                    $(td).addClass('text-center').addClass('change-stage-date').addClass('td-hoverable');
+                }
+                else {
+                    $(td).append('<span class="glyphicon hoverable glyphicon-plus"></span>');
+                    if (!prevStageDate){
                         $(td).addClass('not-allowed').attr('data-container','body')
                             .attr('data-container','body').attr('data-toggle','popover').attr('data-placement','bottom')
-                            .attr('data-content', gettext('Unavailable before previous date is filled'));
+                            .attr('data-content', gettext('Unavailable before real starting date is filled'));
                     }
                 }
-                prevRow = row;
-            },
+                prevStageDate = cellData;
+            }
         }],
     });
 
+    //Showing modal form with selected date confirmation or rollback
+    $(document).on("click", "td.change-stage-date:not(.not-allowed)", function() {
+        var cell = $(this);
+        var cellIndex = stagesDataTable.cell( cell ).index();
+        console.log(cellIndex);
+        var rowData = stagesDataTable.row( cellIndex['row'] ).data();
+        console.log(rowData);
+        var dateField = $(this);
+        //If date is already present then show it on the datepicker and enable 'Rollback date' button
+        if (dateField.text()){
+            console.log('Date is present');
+            contractDatePicker.data("DateTimePicker").date(dateField.text());
+            if (dateField.hasClass('real-date')){
+                rollbackContractDateButton.removeClass('hidden');
+            }
+            else {
+                //Not showing rollback for planned dates
+                rollbackContractDateButton.addClass('hidden');
+            }
+        }
+        //If date is empty then set current date on the datepicker and hide 'Rollback date' button
+        else {
+            console.log('Date is empty');
+            rollbackContractDateButton.addClass('hidden');
+            contractDatePicker.data("DateTimePicker").date(currentDate.today());
+        }
+        confirmDateForm.modal('show');
+    });
+
+
+    //Enabling bootstrap popovers (should be at the end)
     $('[data-toggle="popover"]').popover({
                 trigger: "hover",
     });

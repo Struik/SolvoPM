@@ -24,12 +24,6 @@ td span{
     display: block;
 }
 
-.dataTable th{
-    font-weight: normal;
-    background-color: #337ab7;
-    color: white;
-}
-
 .static-columns:first-child{
     min-width: 30px;
 }

@@ -2,6 +2,7 @@
 
 $(document).ready(function() {
     var infoForm = $("#infoForm");
+    var projectsTable = $('#projectsTable');
 
     //Enabling jquery steps addon on info form
     infoForm.steps({
@@ -63,7 +64,7 @@ $(document).ready(function() {
         $(this).parents('.panel').removeClass("panel-expanded");
     });
 
-    var projectTable;
+    var projectDataTable;
     //Global variable for storing full payments data so it's available for all functions on the page
     var paymentsFullData;
     //Drawing table with datatable plugin
@@ -133,7 +134,7 @@ $(document).ready(function() {
 //        debugger;
         //(plugin datatables.js)
         //Creating datatable, table headers and table data are generated in required way (array) on server side
-        projectTable = $('#projectsTable').DataTable({
+        projectDataTable = projectsTable.DataTable({
 //            dom: 'Bfrtip',
 //            buttons: [
 //                'copyHtml5',
@@ -304,13 +305,13 @@ $(document).ready(function() {
     $("#projectsTable").on("click", ".show-month", function() {
         $("#monthInfoPaymentsTableBody tr").remove();
         var cell = $(this);
-        var cellIndex = projectTable.cell( cell ).index();
+        var cellIndex = projectDataTable.cell( cell ).index();
         console.log(cellIndex);
-        var rowData = projectTable.row( cellIndex['row'] ).data();
+        var rowData = projectDataTable.row( cellIndex['row'] ).data();
         console.log(rowData);
-        var columnTitle = projectTable.column( cellIndex['column'] ).parentTitle().replace(' ','');
+        var columnTitle = projectDataTable.column( cellIndex['column'] ).parentTitle().replace(' ','');
         console.log(columnTitle);
-        console.log(projectTable.column( cellIndex['column'] ));
+        console.log(projectDataTable.column( cellIndex['column'] ));
         var paymentIds = rowData[columnTitle]['paymentIds'];
         var paymentClass;
         var payment;
