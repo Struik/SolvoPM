@@ -1,6 +1,6 @@
 import os, platform
 from django.conf import settings
-from django.db.models import Sum
+from django.db.models import Sum, Min, Max
 from django.forms.models import model_to_dict
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -65,11 +65,15 @@ def get_full_contract_data(contractId):
 
     contractDates = get_contract_dates(contractId)
     contractFinance = get_contract_finance(contractId)
-    stagesData = get_stages_data(contractId)
+    stagesData, stagesSummary = get_stages_data(contractId)
+    logger.info('stagesData')
+    logger.info(stagesData)
+    logger.info(stagesSummary)
 
     contractData['contractDates'] = json.dumps(contractDates)
     contractData['contractFinance'] = contractFinance
     contractData['stagesData'] = json.dumps(stagesData)
+    contractData['stagesSummary'] = stagesSummary
     logger.info('Contract data:')
     logger.info(contractData)
     return contractData
@@ -94,15 +98,21 @@ def get_contract_finance(contractId):
 
 def get_stages_data(contractId):
     stagesData = []
+    stagesSummary = {'minDate': '', 'maxDate': '', 'currentStage': ''}
     stages = Stages.objects.filter(contract_id=contractId)
     if stages:
+        stagesSummary['minDate'] = stages.aggregate(min=Min('plannedStartDate'))['min'].strftime('%d.%m.%y')
+        stagesSummary['maxDate'] = stages.aggregate(max=Max('plannedFinishDate'))['max'].strftime('%d.%m.%y')
         stagesData = list(stages.values())
         logger.info(stagesData)
         for stage in stagesData:
             stage['stageType'] = StageTypes.objects.get(pk=stage['stageType_id']).name
+            if stage['actualFinishDate'] is None and stage['actualStartDate']:
+                stagesSummary['currentStage'] = stage['stageType']
             for key in stage.keys():
                 if isinstance(stage[key], date) : stage[key] = stage[key].strftime('%d.%m.%y')
-    return stagesData
+    return stagesData, stagesSummary
+
 
 # Preparing data for project adding form
 def getProjectFormAttrs():

@@ -16,6 +16,8 @@ $(document).ready(function() {
     }
 
     //Contract panel handling
+    //
+    //
 
     //Enabling datetimepicker fields
     contractDatePicker.datetimepicker({
@@ -116,6 +118,18 @@ $(document).ready(function() {
     });
 
     //Stages panel handling
+    //
+    //
+
+    //Filling fields with stages data from JSON
+    $('#stagesTotal').html(stagesData.length);
+    var projectDates;
+    if (stagesData.length){
+        projectDates = contractData.stagesSummary.minDate + ' - ' + contractData.stagesSummary.maxDate;
+    }
+    $('#projectDates').html(projectDates);
+    $('#currentStage').html(contractData.stagesSummary.currentStage);
+    $('#allowance').html(stagesData.allowanceDuration);
 
     var stagesDataTable = stagesTable.DataTable({
         data: stagesData,
@@ -203,9 +217,10 @@ $(document).ready(function() {
     $('[data-toggle="popover"]').popover({
                 trigger: "hover",
     });
+
 });
 
-
+//Filling contract date fields and designing control elements depending on current value and preceding date
 function fillContractDates(elementId, key, value, prevValue){
     $('#' + elementId).attr('contract-date-id', key);
     if(value){

@@ -25,12 +25,15 @@
     var stagesData = JSON.parse(contractData.stagesData);
     console.log(stagesData);
 
-    //Used for filling contract dates vaues and designing it
+    //Used for filling contract dates values and designing it
     var contractDateFields = {'1': {'element_id': 'contractApprovedDate', 'db_field': 'approvedDate', 'status': gettext('Approved')},
                             '2': {'element_id': 'contractSentDate', 'db_field': 'sentDate', 'status': gettext('Sent')},
                             '3': {'element_id': 'contractReceivedDate', 'db_field': 'receivedDate', 'status': gettext('Received')},
                             '4': {'element_id': 'contractStoredDate', 'db_field': 'storedDate', 'status': gettext('Stored')}};
     var prevContractDateValue = true;
+
+
+
 
 
 
@@ -180,7 +183,39 @@
             </div>
             <div id="schedulePanelBody" class="panel-collapse collapse in">
                 <div class="panel-body">
-                    <div class="">
+                    <div class="row">
+                    <div class="col-lg-4 col-md-6 col-xl">
+                        <table id="scheduleTable" class="table table-condensed ">
+                            <thead>
+                            </thead>
+                            <tbody id="scheduleTableBody">
+                            <tr>
+                                <td>{% trans "Stages total" %}:</td>
+                                <td id="stagesTotal"></td>
+                                <td>{% trans "Project dates" %}:</td>
+                                <td id="projectDates"></td>
+                            </tr>
+                            <tr>
+                                <td>{% trans "Current stage" %}:</td>
+                                <td id="currentStage"></td>
+                                <td>{% trans "Allowance" %}:</td>
+                                <td id="allowance"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                        </div>
+                    <div class="" style="margin-bottom: 15px;">
+                        <div class="btn-group">
+                            <!-- Button trigger modal -->
+                            <button id="addStage" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#addStageModal">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                {% trans "New stage" %}
+                            </button>
+                        </div>
+                    </div>
+                    <div>
                         <table id="stagesTable" class="table table-condensed table-bordered no-margin-bottom">
                             <thead>
                             <tr>
