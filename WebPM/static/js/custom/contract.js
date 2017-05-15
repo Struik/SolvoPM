@@ -1,12 +1,14 @@
 'use strict'
 
 $(document).ready(function() {
-    var confirmDateForm = $('#confirmContractDateModal');
+    window.confirmDateForm = $('#confirmContractDateModal');
     var contractDatePicker = $('#contractDatePicker');
-    var confirmContractDateButton = $('#confirmContractDate');
-    var rollbackContractDateButton = $('#rollbackContractDate');
+    var stageStartDatePicker = $('#stageStartDatePicker');
+    var stageFinishDatePicker = $('#stageFinishDatePicker');
+    var confirmDateButton = $('#confirmDate');
+    var rollbackDateButton = $('#rollbackDate');
     var stagesTable = $('#stagesTable');
-    var prevStageDate;
+    var prevStageDateValue;
 
 
     //For todays date
@@ -15,14 +17,35 @@ $(document).ready(function() {
         return ((this.getDate() < 10) ? "0" : "") + this.getDate() + "." + (((this.getMonth() + 1) < 10) ? "0" : "") + (this.getMonth() + 1) + "." + this.getFullYear().toString().substr(2);
     }
 
-    //Contract panel handling
-    //
-    //
+
+    //Enabling select nodes with selectize plugin
+    var $selectCity = $('#selectStageType').selectize({
+        create: function (input, callback){
+            newRefValue(input, callback, this);
+        },
+    });
+
 
     //Enabling datetimepicker fields
     contractDatePicker.datetimepicker({
         format: 'DD.MM.YY',
         allowInputToggle: true,
+    });
+    stageStartDatePicker.datetimepicker({
+        format: 'DD.MM.YY',
+        allowInputToggle: true,
+    });
+    stageFinishDatePicker.datetimepicker({
+        format: 'DD.MM.YY',
+        allowInputToggle: true,
+        useCurrent: false,
+    });
+    //Linking two date inputs so Finish date cannot be earlier than Start date and vice versa
+    stageStartDatePicker.on("dp.change", function (e) {
+        stageFinishDatePicker.data("DateTimePicker").minDate(e.date);
+    });
+    stageFinishDatePicker.on("dp.change", function (e) {
+        stageStartDatePicker.data("DateTimePicker").maxDate(e.date);
     });
 
 
@@ -38,31 +61,44 @@ $(document).ready(function() {
     });
 
 
-    //Showing modal form with selected date confirmation or rollback
+    //Collapse panel when user clicked on any place within the panel header
+    $(document).on("click", ".panel-heading *", function() {
+        $(this).parents('.panel').children('.collapse').collapse('toggle')
+    });
+
+
+    //Contract panel handling
+    //
+    //
+
+
+    //Showing modal form with selected date confirmation or rollback buttons
     $(document).on("click", "td.change-contract-date:not(.not-allowed)", function() {
+        confirmDateForm.attr('form-action-type', 'saveContractDate');
         var dateField = $(this).children('a');
         confirmDateForm.attr('contract-date-id', dateField.attr('contract-date-id'));
+
         //If date is already present then show it on the datepicker and enable 'Rollback date' button
         if (dateField.text()){
             console.log('Date is present');
             contractDatePicker.data("DateTimePicker").date(dateField.text());
-            rollbackContractDateButton.removeClass('hidden');
+            rollbackDateButton.removeClass('hidden');
             //Can't rollback if next date is filled
             if ($( "a[contract-date-id='" + (parseInt(dateField.attr('contract-date-id')) + 1) + "']" ).text()){
                 console.log('Next date is not empty');
-                rollbackContractDateButton.prop('disabled', true);
-                rollbackContractDateButton.parent().popover('enable');
+                rollbackDateButton.prop('disabled', true);
+                rollbackDateButton.parent().popover('enable');
             }
             else {
                 console.log('Next date is empty');
-                rollbackContractDateButton.prop('disabled', false);
-                rollbackContractDateButton.parent().popover('disable');
+                rollbackDateButton.prop('disabled', false);
+                rollbackDateButton.parent().popover('disable');
             }
         }
         //If date is empty then set current date on the datepicker and hide 'Rollback date' button
         else {
             console.log('Date is empty');
-            rollbackContractDateButton.addClass('hidden');
+            rollbackDateButton.addClass('hidden');
             contractDatePicker.data("DateTimePicker").date(currentDate.today());
         }
         confirmDateForm.modal('show');
@@ -76,44 +112,32 @@ $(document).ready(function() {
     //    $('#contractTravelCostSum').html(contractData.contractFinance.Confirmed);
 
 
-    for (var key in contractDateFields) {
-        var value = contractDates[contractDateFields[key]['db_field']];
-        var elementId = contractDateFields[key]['element_id'];
+    for (var key in contractDateMapping) {
+        var value = contractDates[contractDateMapping[key]['db_field']];
+        var elementId = contractDateMapping[key]['element_id'];
         fillContractDates(elementId, key, value, prevContractDateValue);
         prevContractDateValue = value;
     }
 
 
     //Call server on contract date changing
-    confirmContractDateButton.click(function() {
+    confirmDateButton.click(function() {
         //TODO. Change to form/field validation
         if(true)
         {
-            console.log('Confirming contract date');
-            var contractDateType = contractDateFields[confirmDateForm.attr('contract-date-id')]['db_field'];
-            var contractStatus = contractDateFields[confirmDateForm.attr('contract-date-id')]['status'];
-            var changedData = {'contractId': contractDates.contract_id, 'contractDate': $('#contractDate').val(),
-                                            'contractStatus': contractStatus, 'contractDateType': contractDateType};
-            changeContractDate(changedData);
+            console.log ('Action type is: ' + confirmDateForm.attr('form-action-type'));
+            window[confirmDateForm.attr('form-action-type')]('change');
         };
     });
 
 
     //Call server on contract date rollback. Same request as for date changing with empty value
-    rollbackContractDateButton.click(function() {
+    rollbackDateButton.click(function() {
         //TODO. Change to form/field validation
         if(true)
         {
-            console.log('Rollbacking contract date');
-            var contractDateType = contractDateFields[confirmDateForm.attr('contract-date-id')]['db_field'];
-            var contractStatus = '';
-            //Sending empty status if rollbacking first date
-            if (confirmDateForm.attr('contract-date-id') > 1){
-                contractStatus = contractDateFields[confirmDateForm.attr('contract-date-id') - 1]['status'];
-            }
-            var changedData = {'contractId': contractDates.contract_id, 'contractDate': '',
-                                            'contractStatus': contractStatus, 'contractDateType': contractDateType};
-            changeContractDate(changedData);
+            console.log ('Action type is: ' + confirmDateForm.attr('form-action-type'));
+            window[confirmDateForm.attr('form-action-type')]('rollback');
         };
     });
 
@@ -152,9 +176,7 @@ $(document).ready(function() {
             //Icons for changing plan dates
             targets: [3, 5],
             createdCell: function (td, cellData, rowData, row, col) {
-                console.log()
-                console.log(rowData);
-                console.log(cellData);
+                $(td).attr('stage-date-db-field', stageDateMapping[col]);
                 $(td).append(' <span class="glyphicon hoverable glyphicon-pencil"></span>');
                 $(td).addClass('text-center').addClass('change-stage-date').addClass('plan-date')
                                                                                             .addClass('td-hoverable');
@@ -164,49 +186,54 @@ $(document).ready(function() {
             //Icons for date adding
             targets: [4, 6],
             createdCell: function (td, cellData, rowData, row, col) {
+                $(td).attr('stage-date-db-field', stageDateMapping[col]);
                 $(td).addClass('text-center').addClass('change-stage-date').addClass('real-date')
                                                                                             .addClass('td-hoverable');
+                //Checking wheter stage date is present or it is a first real date in stage's table
                 if (cellData){
                     $(td).append(' <span class="glyphicon hoverable glyphicon-pencil"></span>');
                     $(td).addClass('text-center').addClass('change-stage-date').addClass('td-hoverable');
                 }
                 else {
                     $(td).append('<span class="glyphicon hoverable glyphicon-plus"></span>');
-                    if (!prevStageDate){
+                    if (!prevStageDateValue && !(row == 0 && col == 4)){
                         $(td).addClass('not-allowed').attr('data-container','body')
                             .attr('data-container','body').attr('data-toggle','popover').attr('data-placement','bottom')
                             .attr('data-content', gettext('Unavailable before real starting date is filled'));
                     }
                 }
-                prevStageDate = cellData;
+                prevStageDateValue = cellData;
             }
         }],
     });
 
-    //Showing modal form with selected date confirmation or rollback
+    //Showing modal form with selected date confirmation or rollback buttons
     $(document).on("click", "td.change-stage-date:not(.not-allowed)", function() {
+        confirmDateForm.attr('form-action-type', 'saveStageDate');
+        confirmDateForm.attr('stage-date-db-field', $(this).attr('stage-date-db-field'));
         var cell = $(this);
         var cellIndex = stagesDataTable.cell( cell ).index();
         console.log(cellIndex);
         var rowData = stagesDataTable.row( cellIndex['row'] ).data();
         console.log(rowData);
+        confirmDateForm.attr('stage-id', rowData.id);
         var dateField = $(this);
         //If date is already present then show it on the datepicker and enable 'Rollback date' button
         if (dateField.text()){
             console.log('Date is present');
             contractDatePicker.data("DateTimePicker").date(dateField.text());
             if (dateField.hasClass('real-date')){
-                rollbackContractDateButton.removeClass('hidden');
+                rollbackDateButton.removeClass('hidden');
             }
             else {
                 //Not showing rollback for planned dates
-                rollbackContractDateButton.addClass('hidden');
+                rollbackDateButton.addClass('hidden');
             }
         }
         //If date is empty then set current date on the datepicker and hide 'Rollback date' button
         else {
             console.log('Date is empty');
-            rollbackContractDateButton.addClass('hidden');
+            rollbackDateButton.addClass('hidden');
             contractDatePicker.data("DateTimePicker").date(currentDate.today());
         }
         confirmDateForm.modal('show');
@@ -219,6 +246,7 @@ $(document).ready(function() {
     });
 
 });
+
 
 //Filling contract date fields and designing control elements depending on current value and preceding date
 function fillContractDates(elementId, key, value, prevValue){
@@ -239,18 +267,78 @@ function fillContractDates(elementId, key, value, prevValue){
     }
 }
 
-function changeContractDate(changedData){
-    console.log(changedData);
+//Preparing data for contract date changing
+function saveContractDate(action){
+    switch(action){
+        case 'change':
+            console.log('Confirming contract date');
+            var contractDateDbField = contractDateMapping[confirmDateForm.attr('contract-date-id')]['db_field'];
+            var contractStatus = contractDateMapping[confirmDateForm.attr('contract-date-id')]['status'];
+            var changedData = {'contractId': contractDates.contract_id, 'contractDate': $('#contractDate').val(),
+                                            'contractStatus': contractStatus, 'contractDateDbField': contractDateDbField};
+            saveDateRequest('change_contract_date', changedData);
+            break;
+        case 'rollback':
+            console.log('Rollbacking contract date');
+            var contractDateDbField = contractDateMapping[confirmDateForm.attr('contract-date-id')]['db_field'];
+            var contractStatus = '';
+            //Sending empty status if rollbacking first date else looking for previous status
+            if (confirmDateForm.attr('contract-date-id') > 1){
+                contractStatus = contractDateMapping[confirmDateForm.attr('contract-date-id') - 1]['status'];
+            }
+            var changedData = {'contractId': contractDates.contract_id, 'contractDate': '',
+                                            'contractStatus': contractStatus, 'contractDateDbField': contractDateDbField};
+            saveDateRequest('change_contract_date', changedData);
+            break;
+        default:
+            console.log('Unknown action');
+            return;
+    }
+}
+
+//Preparing data for stage date changing
+function saveStageDate(action){
+    switch(action){
+        case 'change':
+            console.log('Confirming stage date');
+            var stageId = confirmDateForm.attr('stage-id');
+            var stageStatus = gettext('Scheduled');
+            var stageDateDbField = confirmDateForm.attr('stage-date-db-field');
+            if (stageDateToStatusMapping[stageDateDbField]){
+                stageStatus = stageDateToStatusMapping[stageDateDbField];
+            }
+            var changedData = {'stageId': stageId, 'stageDate': $('#contractDate').val(),
+                                            'stageStatus': stageStatus, 'stageDateDbField': stageDateDbField};
+            saveDateRequest('change_stage_date', changedData);
+            break;
+        case 'rollback':
+            console.log('Rollbacking stage date');
+            var stageId = confirmDateForm.attr('stage-id');
+            var stageStatus = gettext('Scheduled');
+            var stageDateDbField = confirmDateForm.attr('stage-date-db-field');
+            var changedData = {'stageId': stageId, 'stageDate': '', 'stageStatus': stageStatus,
+                                                                        'stageDateDbField': stageDateDbField};
+            saveDateRequest('change_stage_date', changedData);
+            break;
+        default:
+            console.log('Unknown action');
+            return;
+    }
+}
+
+
+function saveDateRequest(url, data){
+    console.log(data);
     $.ajax({
         type: 'POST',
-        url: "change_contract_date",
-        data: changedData,
+        url: url,
+        data: data,
         success: function (response) {
-            console.log('Contract date changed successfully');
+            console.log('Date saved successfully');
             location.reload();
         },
         error: function () {
-            console.log('Contract date changing failed');
+            console.log('Date changing failed');
         },
     });
 }

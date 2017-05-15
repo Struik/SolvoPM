@@ -52,7 +52,12 @@ def contract(request):
     logger.info('Contract page requested')
     contractData = get_full_contract_data(70)
 
-    return render(request, 'contract.html', {'LANGUAGES': settings.LANGUAGES, 'contractData': contractData})
+    json_serializer = serializers.get_serializer("json")()
+    stageTypes = json.loads(json_serializer.serialize(StageTypes.objects.all()))
+    logger.info(json_serializer.serialize(StageTypes.objects.all()))
+
+    return render(request, 'contract.html',
+                  {'LANGUAGES': settings.LANGUAGES, 'contractData': contractData, 'stageTypes': stageTypes})
 
 
 def get_full_contract_data(contractId):
@@ -82,17 +87,20 @@ def get_full_contract_data(contractId):
 def get_contract_dates(contractId):
     logger.info('Fetching contract dates')
     contractDates = ContractDates.objects.filter(contract_id=contractId).values()[0]
-    #Converting dates to display-ready format
+    # Converting dates to display-ready format
     for key in contractDates.keys():
-        if isinstance(contractDates[key], date) : contractDates[key] = contractDates[key].strftime('%d.%m.%y')
+        if isinstance(contractDates[key], date): contractDates[key] = contractDates[key].strftime('%d.%m.%y')
     return contractDates
 
 
 def get_contract_finance(contractId):
     logger.info('Fetching contract finance')
     contractFinance = {}
-    contractFinance['Total'] = Payments.objects.filter(contract_id=contractId, split=False, canceled=False).aggregate(sum=Sum('paymentAmount'))['sum']
-    contractFinance['Confirmed'] = Payments.objects.filter(contract_id=contractId, confirmed=True).aggregate(sum=Sum('paymentAmount'))['sum']
+    contractFinance['Total'] = \
+    Payments.objects.filter(contract_id=contractId, split=False, canceled=False).aggregate(sum=Sum('paymentAmount'))[
+        'sum']
+    contractFinance['Confirmed'] = \
+    Payments.objects.filter(contract_id=contractId, confirmed=True).aggregate(sum=Sum('paymentAmount'))['sum']
     return contractFinance
 
 
@@ -110,7 +118,7 @@ def get_stages_data(contractId):
             if stage['actualFinishDate'] is None and stage['actualStartDate']:
                 stagesSummary['currentStage'] = stage['stageType']
             for key in stage.keys():
-                if isinstance(stage[key], date) : stage[key] = stage[key].strftime('%d.%m.%y')
+                if isinstance(stage[key], date): stage[key] = stage[key].strftime('%d.%m.%y')
     return stagesData, stagesSummary
 
 
@@ -166,7 +174,7 @@ def new_project(request):
             contractObject = Contracts(name=contracts['name'], contractType_id=contracts['type'],
                                        project_id=projectId)
             contractObject.save()
-            contractDatesObject = contractDates(contract = contractObject)
+            contractDatesObject = contractDates(contract=contractObject)
             contractDatesObject.save()
             logger.info('Contract #' + str(contractObject.id) + ' created')
             for payment in contracts['payments'].items():
@@ -226,9 +234,11 @@ def get_projects_data(request):
         return HttpResponse('No data')
 
     minDate = min(date for date in [paymentsObject.aggregate(Min('paymentDate'))['paymentDate__min'],
-                  paymentsObject.aggregate(Min('confirmedDate'))['confirmedDate__min']] if date is not None)
+                                    paymentsObject.aggregate(Min('confirmedDate'))['confirmedDate__min']] if
+                  date is not None)
     maxDate = max(date for date in [paymentsObject.aggregate(Max('paymentDate'))['paymentDate__max'],
-                  paymentsObject.aggregate(Max('confirmedDate'))['confirmedDate__max']] if date is not None)
+                                    paymentsObject.aggregate(Max('confirmedDate'))['confirmedDate__max']] if
+                  date is not None)
     logger.info('Date period from ' + minDate.strftime('%d.%m.%Y') + ' to ' + maxDate.strftime('%d.%m.%Y'))
 
     monthsDict = getMonthList(minDate, maxDate)
@@ -518,7 +528,7 @@ def download_agreement(request):
             raise Http404
 
 
-#Changing contract date
+# Changing contract date
 @login_required
 @csrf_exempt
 def change_contract_date(request):
@@ -535,12 +545,12 @@ def change_contract_date(request):
         contract.save();
         contractDate = datetime.strptime(params['contractDate'], '%d.%m.%y') if params['contractDate'] else None
         contractDates = ContractDates.objects.get(contract=contract)
-        setattr(contractDates, params['contractDateType'], contractDate)
+        setattr(contractDates, params['contractDateDbField'], contractDate)
         contractDates.save()
         return HttpResponse('')
 
 
-#Changing contract date
+# Changing contract date
 @login_required
 @csrf_exempt
 def change_stage_date(request):
@@ -551,11 +561,9 @@ def change_stage_date(request):
         params = request.POST
         logger.info('POST request params:')
         logger.info(params)
-        stage = Stage.objects.get(pk=params['stageId'])
+        stage = Stages.objects.get(pk=params['stageId'])
         stage.status = params['stageStatus']
-        contract.save();
-        contractDate = datetime.strptime(params['contractDate'], '%d.%m.%y') if params['contractDate'] else None
-        contractDates = ContractDates.objects.get(contract=contract)
-        setattr(contractDates, params['contractDateType'], contractDate)
-        contractDates.save()
+        stageDate = datetime.strptime(params['stageDate'], '%d.%m.%y') if params['stageDate'] else None
+        setattr(stage, params['stageDateDbField'], stageDate)
+        stage.save()
         return HttpResponse('')

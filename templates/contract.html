@@ -4,6 +4,7 @@
 
 {% block extracss %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/custom/main.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom/contract.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}"/>
@@ -26,12 +27,15 @@
     console.log(stagesData);
 
     //Used for filling contract dates values and designing it
-    var contractDateFields = {'1': {'element_id': 'contractApprovedDate', 'db_field': 'approvedDate', 'status': gettext('Approved')},
+    var contractDateMapping = {'1': {'element_id': 'contractApprovedDate', 'db_field': 'approvedDate', 'status': gettext('Approved')},
                             '2': {'element_id': 'contractSentDate', 'db_field': 'sentDate', 'status': gettext('Sent')},
                             '3': {'element_id': 'contractReceivedDate', 'db_field': 'receivedDate', 'status': gettext('Received')},
                             '4': {'element_id': 'contractStoredDate', 'db_field': 'storedDate', 'status': gettext('Stored')}};
     var prevContractDateValue = true;
 
+    var stageDateMapping = {'3': 'plannedStartDate', '4': 'actualStartDate', '5': 'plannedFinishDate',
+                                                                                            '6': 'actualFinishDate'};
+    var stageDateToStatusMapping = {'actualStartDate': gettext('Started'), 'actualFinishDate': gettext('Finished')};
 
 
 
@@ -49,6 +53,7 @@
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
 <script src="{% static 'js/jquery.masknumber.js' %}"></script>
+<script src="{% static 'js/custom/common.js' %}"></script>
 <script src="{% static 'js/custom/contract.js' %}"></script>
 {% endblock %}
 
@@ -80,7 +85,7 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="button" class="btn btn-success btn-block" id="confirmContractDate">
+                                <button type="button" class="btn btn-success btn-block" id="confirmDate">
                                     {% trans "Confirm date" %}
                                 </button>
                             </div>
@@ -88,10 +93,69 @@
                             <div class="form-group">
                                 <div data-toggle="popover" data-placement="bottom" data-container="body"
                                      data-content="Unavailable while next date is filled" data-trigger="hover">
-                                    <button type="button" class="btn btn-warning btn-block" id="rollbackContractDate">
+                                    <button type="button" class="btn btn-warning btn-block" id="rollbackDate">
                                         {% trans "Rollback date" %}
                                     </button>
                                 </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addNewStageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="clearfix modal-header">
+                <h4 class="modal-title">{% trans 'New stage' %}</h4>
+            </div>
+
+            <div class="content clearfix modal-body">
+                <form id="addNewStageForm" method="post">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <select class="form-control" id="selectStageType" name="selectStageType"
+                                        placeholder="{% trans 'Select or add stage' %}" reference_id="StageTypes"
+                                        tabindex="1">
+                                    <option value="">Select a project</option>
+                                    {% for query in stageTypes %}
+                                    <option value="{{query.pk}}">{{query.fields.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <div class='input-group date' id='stageStartDatePicker'>
+                                    <input type="text" class="form-control datepicker" id="stageStartDate"
+                                           name="contractDate" placeholder="{% trans 'Start date' %}" tabindex="">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class='input-group date' id='stageFinishDatePicker'>
+                                    <input type="text" class="form-control datepicker" id="stageFinishDate"
+                                           name="contractDate" placeholder="{% trans 'Finish date' %}" tabindex="">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success btn-block" id="addStage">
+                                    {% trans "Add stage" %}
+                                </button>
                             </div>
 
                         </div>
@@ -118,53 +182,57 @@
             </div>
             <div id="summaryPanelBody" class="panel-collapse collapse in">
                 <div class="panel-body">
-                    <div class="col-lg-4 col-md-6 col-xl">
-                        <table id="summaryTable" class="table table-condensed no-margin-bottom">
-                            <thead>
-                            </thead>
-                            <tbody id="summaryTableBody">
-                            <tr>
-                                <td>{% trans "Total sum" %}:</td>
-                                <td id="contractTotalSum"></td>
-                                <td></td>
-                                <td>{% trans "Approved" %}:</td>
-                                <td class="td-hoverable change-contract-date"><a id="contractApprovedDate"></a> <span
-                                        class="glyphicon hoverable"></span></td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Confirmed" %}:</td>
-                                <td id="contractConfirmedSum"></td>
-                                <td></td>
-                                <td>{% trans "Sent" %}:</td>
-                                <td class="td-hoverable change-contract-date"><a id="contractSentDate"></a> <span
-                                        class="glyphicon hoverable"></span></td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Contract status" %}:</td>
-                                <td id="contractStatus">Received</td>
-                                <td></td>
-                                <td>{% trans "Received" %}:</td>
-                                <td class="td-hoverable change-contract-date"><a id="contractReceivedDate"></a> <span
-                                        class="glyphicon hoverable"></span></td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Project status" %}:</td>
-                                <td id="projectStatus">Unknown</td>
-                                <td></td>
-                                <td>{% trans "Stored" %}:</td>
-                                <td class="td-hoverable change-contract-date"><a id="contractStoredDate"></a> <span
-                                        class="glyphicon hoverable"></span></td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Travel cost" %}:</td>
-                                <td id="contractTravelCostSum"></td>
-                                <td></td>
-                                <td>{% trans "Sign up" %}:</td>
-                                <td class="td-hoverable not-allowed"><span
-                                        class="glyphicon glyphicon-bell hoverable"></span></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-xl">
+                            <table id="summaryTable" class="table table-condensed no-margin-bottom">
+                                <thead>
+                                </thead>
+                                <tbody id="summaryTableBody">
+                                <tr>
+                                    <td>{% trans "Total sum" %}:</td>
+                                    <td id="contractTotalSum"></td>
+                                    <td></td>
+                                    <td>{% trans "Approved" %}:</td>
+                                    <td class="td-hoverable change-contract-date"><a id="contractApprovedDate"></a>
+                                        <span
+                                                class="glyphicon hoverable"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans "Confirmed" %}:</td>
+                                    <td id="contractConfirmedSum"></td>
+                                    <td></td>
+                                    <td>{% trans "Sent" %}:</td>
+                                    <td class="td-hoverable change-contract-date"><a id="contractSentDate"></a> <span
+                                            class="glyphicon hoverable"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans "Contract status" %}:</td>
+                                    <td id="contractStatus">Received</td>
+                                    <td></td>
+                                    <td>{% trans "Received" %}:</td>
+                                    <td class="td-hoverable change-contract-date"><a id="contractReceivedDate"></a>
+                                        <span
+                                                class="glyphicon hoverable"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans "Project status" %}:</td>
+                                    <td id="projectStatus">Unknown</td>
+                                    <td></td>
+                                    <td>{% trans "Stored" %}:</td>
+                                    <td class="td-hoverable change-contract-date"><a id="contractStoredDate"></a> <span
+                                            class="glyphicon hoverable"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans "Travel cost" %}:</td>
+                                    <td id="contractTravelCostSum"></td>
+                                    <td></td>
+                                    <td>{% trans "Sign up" %}:</td>
+                                    <td class="td-hoverable not-allowed"><span
+                                            class="glyphicon glyphicon-bell hoverable"></span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -184,32 +252,32 @@
             <div id="schedulePanelBody" class="panel-collapse collapse in">
                 <div class="panel-body">
                     <div class="row">
-                    <div class="col-lg-4 col-md-6 col-xl">
-                        <table id="scheduleTable" class="table table-condensed ">
-                            <thead>
-                            </thead>
-                            <tbody id="scheduleTableBody">
-                            <tr>
-                                <td>{% trans "Stages total" %}:</td>
-                                <td id="stagesTotal"></td>
-                                <td>{% trans "Project dates" %}:</td>
-                                <td id="projectDates"></td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Current stage" %}:</td>
-                                <td id="currentStage"></td>
-                                <td>{% trans "Allowance" %}:</td>
-                                <td id="allowance"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        <div class="col-lg-4 col-md-6 col-xl">
+                            <table id="scheduleTable" class="table table-condensed ">
+                                <thead>
+                                </thead>
+                                <tbody id="scheduleTableBody">
+                                <tr>
+                                    <td>{% trans "Stages total" %}:</td>
+                                    <td id="stagesTotal"></td>
+                                    <td>{% trans "Project dates" %}:</td>
+                                    <td id="projectDates"></td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans "Current stage" %}:</td>
+                                    <td id="currentStage"></td>
+                                    <td>{% trans "Allowance" %}:</td>
+                                    <td id="allowance"></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
                     <div class="" style="margin-bottom: 15px;">
                         <div class="btn-group">
                             <!-- Button trigger modal -->
-                            <button id="addStage" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#addStageModal">
+                            <button id="addNewStage" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#addNewStageModal">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                 {% trans "New stage" %}
                             </button>

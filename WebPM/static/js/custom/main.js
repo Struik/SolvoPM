@@ -76,7 +76,7 @@ $(document).ready(function(){
     });
 
 
-    //Enabled dynamic and static (values wise) select nodes with selectize plugin
+    //Enabling dynamic and static (values wise) select nodes with selectize plugin
     //At 15.03.2017 only one such field left, other select fields are having own initialisation due to special handling
     $('.selectize.fixed-values').selectize({
         sortField: 'text',
@@ -471,33 +471,6 @@ $(document).ready(function(){
         return o;
     };
 
-    //Function to add new value in DB references when it's added via select field on the form
-    //parentReference is an extra argument for references which have foreign key to other reference
-    var newRefValue = function(input, callback, object, parentReference){
-        var selectId = object.$input[0].id;
-        console.log(selectId);
-        var referenceName = $('#' + selectId).attr('reference_id');
-        var newValue = {'referenceName': referenceName, 'value': input}
-        if (parentReference){
-            console.log('Parent ref: ' + JSON.stringify(parentReference));
-            newValue['parentReference'] = JSON.stringify(parentReference);
-        }
-        console.log('Adding new value to the reference');
-        console.log(newValue);
-        $.ajax({
-            type: 'POST',
-            url: "new_ref_value",
-            data: newValue,
-            dataType: "json",
-            success: function (result) {
-                console.log('Response on adding new value to reference request:');
-                console.log(result['refId']);
-                if (result) {
-                    callback({ 'value': result['refId'], 'text': input });
-                }
-            }
-        });
-    };
 
     //Got to next form field when pressing Enter
     $(document).on("keypress", "input" , function(e){
