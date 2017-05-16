@@ -480,22 +480,7 @@ $(document).ready(function() {
         });
     });
 
-    $.fn.serializeObject = function(){
-        console.log('Serializing');
-        var o = {};
-        var a = this.serializeArray();
-        $.each(a, function() {
-            if (o[this.name] !== undefined) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
-            }
-        });
-        return o;
-    };
+
 
     //Plugin for datatables to implement title() function which gets certain column's title
     $.fn.dataTable.Api.register( 'column().title()', function () {

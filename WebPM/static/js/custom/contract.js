@@ -8,6 +8,8 @@ $(document).ready(function() {
     var confirmDateButton = $('#confirmDate');
     var rollbackDateButton = $('#rollbackDate');
     var stagesTable = $('#stagesTable');
+    var addNewStageForm = $('#addNewStageForm');
+    var addStageButton = $('#addStage');
     var prevStageDateValue;
 
 
@@ -83,14 +85,18 @@ $(document).ready(function() {
             console.log('Date is present');
             contractDatePicker.data("DateTimePicker").date(dateField.text());
             rollbackDateButton.removeClass('hidden');
-            //Can't rollback if next date is filled
+            //Can't change or rollback date if next date is filled
             if ($( "a[contract-date-id='" + (parseInt(dateField.attr('contract-date-id')) + 1) + "']" ).text()){
                 console.log('Next date is not empty');
+                confirmDateButton.prop('disabled', true);
+                confirmDateButton.parent().popover('enable');
                 rollbackDateButton.prop('disabled', true);
                 rollbackDateButton.parent().popover('enable');
             }
             else {
                 console.log('Next date is empty');
+                confirmDateButton.prop('disabled', false);
+                confirmDateButton.parent().popover('disable');
                 rollbackDateButton.prop('disabled', false);
                 rollbackDateButton.parent().popover('disable');
             }
@@ -131,7 +137,6 @@ $(document).ready(function() {
     });
 
 
-    //Call server on contract date rollback. Same request as for date changing with empty value
     rollbackDateButton.click(function() {
         //TODO. Change to form/field validation
         if(true)
@@ -207,6 +212,58 @@ $(document).ready(function() {
         }],
     });
 
+
+    addNewStageForm.validate({
+        //Fix to make selectize and validation working together.
+        ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+        onsubmit: false,
+        debug: true,
+        rules: {
+            selectStageType: {
+                required: true,
+            },
+            stageStartDate: {
+                required: true,
+            },
+            stageFinishDate: {
+                required: true,
+            },
+        },
+        //Playing with highlighting error fields. Some effects might be excess and should be removed
+        highlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').addClass("has-error has-danger");
+            $(element).parents('.form-group').removeClass("has-success");
+            if ($(element).hasClass("selectized")){
+                $(element).siblings('.selectize-control').fadeOut(function() {
+                    $(element).siblings('.selectize-control').fadeIn();
+                });
+            }
+            else
+            {
+                $(element).fadeOut(function() {
+                    $(element).fadeIn();
+                });
+            }
+        },
+        //Changing red lightning border on corrected error field to green
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').removeClass("has-error has-danger").addClass("has-success");
+        },
+        //Fix for selectized and datepicker fields so labels with error description are placed under the field
+        errorPlacement: function(error, element) {
+            if (element.hasClass("selectized")){
+                element.parents('.form-group').append(error);
+            }
+            else if (element.hasClass("datepicker")){
+                element.parents('.form-group').append(error);
+            }
+            else
+            {
+                error.insertAfter(element);
+            }
+        },
+    });
+
     //Showing modal form with selected date confirmation or rollback buttons
     $(document).on("click", "td.change-stage-date:not(.not-allowed)", function() {
         confirmDateForm.attr('form-action-type', 'saveStageDate');
@@ -240,9 +297,20 @@ $(document).ready(function() {
     });
 
 
+    //Adding new stage
+    addStageButton.click(function() {
+        if(addNewStageForm.valid())
+        {
+            console.log ('Adding new stage');
+            var stageData = addNewStageForm.serializeObject();
+            addNewStageRequest(stageData);
+        };
+    });
+
+
     //Enabling bootstrap popovers (should be at the end)
     $('[data-toggle="popover"]').popover({
-                trigger: "hover",
+        trigger: "hover",
     });
 
 });
@@ -339,6 +407,22 @@ function saveDateRequest(url, data){
         },
         error: function () {
             console.log('Date changing failed');
+        },
+    });
+}
+
+function addNewStageRequest(data){
+    console.log(data);
+    $.ajax({
+        type: 'POST',
+        url: 'add_new_stage',
+        data: data,
+        success: function (response) {
+            console.log('Stage added successfully');
+            location.reload();
+        },
+        error: function () {
+            console.log('Stage adding failed');
         },
     });
 }

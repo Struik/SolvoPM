@@ -187,14 +187,6 @@ $(document).ready(function(){
 
     var $selectContractType = $('#selectContractType').selectize();
 
-    //Fix for jquery validate highlightning ("has-success" class). Bootstrap classes "has-success" and "has-error"
-    //require a node to have "form-control" class (or other combo of conditions which are not my case).
-    //Selectize plugin generates own nodes including <div> with class "selectize-input" which is shown when any value
-    //is selected. When there is no value selected then <select> is shown which has "form-control" class from the base
-    //html. Thus "has-error" (plus "has-danger") class works correctly and lights borders with red but "has-success"
-    //wasn't visible
-    //It's fun reading comments few weeks later and getting no clue what do they mean
-    $('div .selectize-input').addClass('form-control');
 
     //Enabling jquery validation addon on project adding form
     addContractForm.validate({
@@ -452,24 +444,6 @@ $(document).ready(function(){
         contractsQty++;
         console.log(contracts);
     });
-
-    $.fn.serializeObject = function(){
-        console.log('Serializing');
-        var o = {};
-        var a = this.serializeArray();
-        console.log(a);
-        $.each(a, function() {
-            if (o[this.name] !== undefined) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
-            }
-        });
-        return o;
-    };
 
 
     //Got to next form field when pressing Enter

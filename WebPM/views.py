@@ -115,7 +115,7 @@ def get_stages_data(contractId):
         logger.info(stagesData)
         for stage in stagesData:
             stage['stageType'] = StageTypes.objects.get(pk=stage['stageType_id']).name
-            if stage['actualFinishDate'] is None and stage['actualStartDate']:
+            if (stage['actualFinishDate'] is None or stage['actualFinishDate'] == date.today()) and stage['actualStartDate']:
                 stagesSummary['currentStage'] = stage['stageType']
             for key in stage.keys():
                 if isinstance(stage[key], date): stage[key] = stage[key].strftime('%d.%m.%y')

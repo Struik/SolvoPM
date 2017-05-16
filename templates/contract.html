@@ -41,6 +41,7 @@
 
 
 
+
 </script>
 
 <script src="{% static 'js/selectize.js' %}"></script>
@@ -85,9 +86,12 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="button" class="btn btn-success btn-block" id="confirmDate">
-                                    {% trans "Confirm date" %}
-                                </button>
+                                <div data-toggle="popover" data-placement="bottom" data-container="body"
+                                     data-content="Unavailable while next date is filled" data-trigger="hover">
+                                    <button type="button" class="btn btn-success btn-block" id="confirmDate">
+                                        {% trans "Confirm date" %}
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -135,7 +139,7 @@
                             <div class="form-group">
                                 <div class='input-group date' id='stageStartDatePicker'>
                                     <input type="text" class="form-control datepicker" id="stageStartDate"
-                                           name="contractDate" placeholder="{% trans 'Start date' %}" tabindex="">
+                                           name="stageStartDate" placeholder="{% trans 'Start date' %}" tabindex="">
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -145,7 +149,7 @@
                             <div class="form-group">
                                 <div class='input-group date' id='stageFinishDatePicker'>
                                     <input type="text" class="form-control datepicker" id="stageFinishDate"
-                                           name="contractDate" placeholder="{% trans 'Finish date' %}" tabindex="">
+                                           name="stageFinishDate" placeholder="{% trans 'Finish date' %}" tabindex="">
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
