@@ -49,6 +49,7 @@ urlpatterns = [
 
     #Contract actions
     url(r'^change_contract_date', views.change_contract_date, name='change_contract_date'),
+    url(r'^add_new_stage', views.add_new_stage, name='add_new_stage'),
     url(r'^change_stage_date', views.change_stage_date, name='change_stage_date'),
 
     #System urls

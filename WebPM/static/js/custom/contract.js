@@ -303,6 +303,7 @@ $(document).ready(function() {
         {
             console.log ('Adding new stage');
             var stageData = addNewStageForm.serializeObject();
+            stageData['contract_id'] = contractDates.contract_id;
             addNewStageRequest(stageData);
         };
     });

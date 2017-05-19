@@ -97,17 +97,18 @@ def get_contract_finance(contractId):
     logger.info('Fetching contract finance')
     contractFinance = {}
     contractFinance['Total'] = \
-    Payments.objects.filter(contract_id=contractId, split=False, canceled=False).aggregate(sum=Sum('paymentAmount'))[
-        'sum']
+        Payments.objects.filter(contract_id=contractId, split=False, canceled=False).aggregate(
+            sum=Sum('paymentAmount'))[
+            'sum']
     contractFinance['Confirmed'] = \
-    Payments.objects.filter(contract_id=contractId, confirmed=True).aggregate(sum=Sum('paymentAmount'))['sum']
+        Payments.objects.filter(contract_id=contractId, confirmed=True).aggregate(sum=Sum('paymentAmount'))['sum']
     return contractFinance
 
 
 def get_stages_data(contractId):
     stagesData = []
     stagesSummary = {'minDate': '', 'maxDate': '', 'currentStage': ''}
-    stages = Stages.objects.filter(contract_id=contractId)
+    stages = Stages.objects.filter(contract_id=contractId).order_by('pk')
     if stages:
         stagesSummary['minDate'] = stages.aggregate(min=Min('plannedStartDate'))['min'].strftime('%d.%m.%y')
         stagesSummary['maxDate'] = stages.aggregate(max=Max('plannedFinishDate'))['max'].strftime('%d.%m.%y')
@@ -115,7 +116,8 @@ def get_stages_data(contractId):
         logger.info(stagesData)
         for stage in stagesData:
             stage['stageType'] = StageTypes.objects.get(pk=stage['stageType_id']).name
-            if (stage['actualFinishDate'] is None or stage['actualFinishDate'] == date.today()) and stage['actualStartDate']:
+            if (stage['actualFinishDate'] is None or stage['actualFinishDate'] == date.today()) and stage[
+                'actualStartDate']:
                 stagesSummary['currentStage'] = stage['stageType']
             for key in stage.keys():
                 if isinstance(stage[key], date): stage[key] = stage[key].strftime('%d.%m.%y')
@@ -550,7 +552,26 @@ def change_contract_date(request):
         return HttpResponse('')
 
 
-# Changing contract date
+# Adding new stage
+@login_required
+@csrf_exempt
+def add_new_stage(request):
+    logger.info('Stage adding request')
+    logger.info(request)
+    if (request.POST):
+        logger.info('Request is POST:')
+        params = request.POST
+        logger.info('POST request params:')
+        logger.info(params)
+        newStage = Stages(stageType_id=params['selectStageType'], contract_id=params['contract_id'], status='Scheduled',
+                          plannedStartDate=datetime.strptime(params['stageStartDate'], '%d.%m.%y'),
+                          plannedFinishDate=datetime.strptime(params['stageFinishDate'], '%d.%m.%y'))
+        newStage.save()
+        logger.info('Saved new stage with id: ' + str(newStage.id))
+        return HttpResponse('')
+
+
+# Changing stage date
 @login_required
 @csrf_exempt
 def change_stage_date(request):
